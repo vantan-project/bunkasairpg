@@ -14,7 +14,7 @@ type Props = {
 export function MainLayout({ children }: Props) {
   const pathname = usePathname();
   const allowedPaths = ["/admin", "/login", "/guide"];
-  if (allowedPaths.some(path => pathname.startsWith(path))) {
+  if (allowedPaths.some((path) => pathname.startsWith(path))) {
     return <>{children}</>;
   }
 
@@ -56,7 +56,11 @@ export function MainLayout({ children }: Props) {
   }, []);
 
   if (!user || !weapons || !items) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen flex justify-center items-center text-4xl">
+        Loading...
+      </div>
+    );
   }
 
   return (
