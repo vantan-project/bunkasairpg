@@ -12,8 +12,9 @@ type Props = {
 };
 
 export function MainLayout({ children }: Props) {
-  const patnname = usePathname();
-  if (patnname.startsWith("/admin") || patnname.startsWith("/guide")) {
+  const pathname = usePathname();
+  const allowedPaths = ["/admin", "/login", "/guide"];
+  if (allowedPaths.some(path => pathname.startsWith(path))) {
     return <>{children}</>;
   }
 
