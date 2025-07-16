@@ -1,7 +1,7 @@
 import { MeIndexResponse } from "@/api/me-index";
 import { MeItemResponse } from "@/api/me-item";
 import { MeWeaponResponse } from "@/api/me-weapon";
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 
 type GlobalContextType = {
   user: MeIndexResponse;
