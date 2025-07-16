@@ -10,6 +10,7 @@ export type MeItemResponse = (
       imageUrl: string;
       effectType: "heal";
       amount: number;
+      count: number;
     }
   | {
       id: number;
@@ -18,6 +19,7 @@ export type MeItemResponse = (
       effectType: "buff";
       rate: number;
       target: PhysicsType | ElementType;
+      count: number;
     }
   | {
       id: number;
@@ -26,6 +28,7 @@ export type MeItemResponse = (
       effectType: "debuff";
       rate: number;
       target: PhysicsType | ElementType;
+      count: number;
     }
 )[];
 
