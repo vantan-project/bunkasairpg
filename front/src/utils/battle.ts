@@ -257,6 +257,8 @@ export class Battle {
     experiencePoint: number;
     message: string;
   } {
+    this.user.experiencePoint += this.monster.experiencePoint;
+
     return {
       experiencePoint: this.monster.experiencePoint,
       message: `${this.monster.experiencePoint}の経験値を獲得した！`,
