@@ -234,7 +234,7 @@ export class Battle {
           id: this.monster.weapon.id,
           type: "weapon",
         },
-        message: `${this.monster.weapon?.name}を落とした！`,
+        message: `${this.monster.weapon.name}を落とした！`,
       };
     }
 
@@ -244,7 +244,7 @@ export class Battle {
           id: this.monster.item.id,
           type: "item",
         },
-        message: `${this.monster.item?.name}を落とした！`,
+        message: `${this.monster.item.name}を落とした！`,
       };
 
     return {
