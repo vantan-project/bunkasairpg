@@ -29,7 +29,7 @@ export function monsterStore(
   req: MonsterStoreRequest
 ): Promise<MonsterStoreResponse> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/monster`;
-  const authToken = localStorage.getItem("authToken");
+  const authToken = Cookies.get("authToken");
 
   return axios
     .post<MonsterStoreResponse>(apiUrl, req, {

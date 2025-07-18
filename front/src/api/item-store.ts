@@ -1,6 +1,7 @@
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 type ItemStoreRequest =
   | {
@@ -31,7 +32,7 @@ type ItemStoreResponse = {
 
 export function itemStore(req: ItemStoreRequest): Promise<ItemStoreResponse> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/item`;
-  const authToken = localStorage.getItem("authToken");
+  const authToken = Cookies.get("authToken");
 
   return axios
     .post<ItemStoreResponse>(apiUrl, req, {

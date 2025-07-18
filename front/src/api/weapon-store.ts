@@ -1,6 +1,7 @@
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 type WeaponStoreRequest = {
   name: string;
@@ -20,13 +21,12 @@ export function weaponStore(
   req: WeaponStoreRequest
 ): Promise<WeaponStoreResponse> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/weapon`;
-  const authToken = localStorage.getItem("authToken");
+  const authToken = Cookies.get("authToken");
 
   return axios
     .post<WeaponStoreResponse>(apiUrl, req, {
       headers: {
         Authorization: `Bearer ${authToken}`,
-        "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => res.data)
