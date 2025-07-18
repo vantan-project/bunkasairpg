@@ -3,7 +3,7 @@ import { PhysicsType } from "@/types/physics-type";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-type WeaponStoreRequest = {
+export type WeaponStoreRequest = {
   name: string;
   imageFile: File | null;
   physicsAttack: number;
@@ -12,7 +12,7 @@ type WeaponStoreRequest = {
   elementType: ElementType;
 };
 
-type WeaponStoreResponse = {
+export type WeaponStoreResponse = {
   success: boolean;
   messages: string[];
 };

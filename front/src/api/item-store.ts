@@ -3,7 +3,7 @@ import { PhysicsType } from "@/types/physics-type";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-type ItemStoreRequest =
+export type ItemStoreRequest =
   | {
       name: string;
       imageFile: File | null;
@@ -25,7 +25,7 @@ type ItemStoreRequest =
       target: PhysicsType | ElementType;
     };
 
-type ItemStoreResponse = {
+export type ItemStoreResponse = {
   success: boolean;
   messages: string[];
 };

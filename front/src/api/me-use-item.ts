@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookie from "js-cookie";
 
-type meUseItemRequest = {
+export type meUseItemRequest = {
   itemId: number;
 };
 
