@@ -1,1 +1,1 @@
-export type ElementType = "neutral" | "flame" | "water" | "ice" | "thunder";
+export type ElementType = "neutral" | "flame" | "water" | "wood" | "shine" | "dark";

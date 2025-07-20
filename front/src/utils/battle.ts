@@ -16,8 +16,9 @@ type Monster = {
   neutral: number;
   flame: number;
   water: number;
-  ice: number;
-  thunder: number;
+  wood: number;
+  shine: number;
+  dark: number;
 
   // ドロップアイテム
   weapon: {
@@ -77,8 +78,9 @@ export class Battle {
     neutral: 0.0,
     flame: 0.0,
     water: 0.0,
-    ice: 0.0,
-    thunder: 0.0,
+    wood: 0.0,
+    shine: 0.0,
+    dark: 0.0,
   };
   private debuffs = {
     slash: 0.0,
@@ -87,8 +89,9 @@ export class Battle {
     neutral: 0.0,
     flame: 0.0,
     water: 0.0,
-    ice: 0.0,
-    thunder: 0.0,
+    wood: 0.0,
+    shine: 0.0,
+    dark: 0.0,
   };
 
   constructor(user: User, monster: Monster) {
