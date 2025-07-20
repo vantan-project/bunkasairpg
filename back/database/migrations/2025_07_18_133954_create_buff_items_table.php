@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('buff_items', function (Blueprint $table) {
-            $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('item_id')->primary();
             $table->decimal('rate', 2, 1);
             $table->enum('target', ["slash", "blow", "shoot",  "neutral", "flame", "water", "wood", "shine", 'dark']);
             $table->timestamps();
