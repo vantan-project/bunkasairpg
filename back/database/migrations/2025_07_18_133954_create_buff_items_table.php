@@ -12,11 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('buff_items', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('item_id');
             $table->decimal('rate', 2, 1);
-            $table->enum('target', ["slash", "blow", "shoot",  "neutral", "flame", "water", "ice", "thunder"]);
+            $table->enum('target', ["slash", "blow", "shoot",  "neutral", "flame", "water", "wood", "shine", 'dark']);
             $table->timestamps();
+
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
         });
     }
 

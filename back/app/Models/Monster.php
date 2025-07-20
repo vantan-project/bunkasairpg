@@ -20,7 +20,8 @@ class Monster extends Model
         'neutral',
         'flame',
         'water',
-        'ice',
-        'thunder',
+        'wood',
+        'shine',
+        'dark',
     ];
 }

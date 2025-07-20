@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('physics_attack');
             $table->unsignedInteger('element_attack')->nullable();
             $table->enum('physics_type', ['slash', 'blow', 'shoot']);
-            $table->enum('element_type', ['neutral', 'flame', 'water', 'ice', 'thunder']);
+            $table->enum('element_type', ['neutral', 'flame', 'water', 'wood', 'shine','dark']);
             $table->timestamps();
         });
     }

@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('heal_items', function (Blueprint $table) {
-            $table->unsignedBigInteger('item_id');
-            $table->unsignedInteger('amount');
-            $table->timestamps();
-
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreign('weapon_id')->references('id')->on('weapons')->onDelete('set null');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('heal_items');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['weapon_id']);
+        });
     }
 };
