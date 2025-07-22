@@ -1,7 +1,5 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { ElementType } from "@/types/element-type";
-import { PhysicsType } from "@/types/physics-type";
 import { EffectType } from "@/types/effect-type";
 
 export type ItemIndexRequest = {
