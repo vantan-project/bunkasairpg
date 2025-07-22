@@ -12,7 +12,6 @@ export type ItemIndexRequest = {
 
 export type ItemIndexResponse = {
   id: number;
-  name: string;
   imageUrl: string;
   effectType: EffectType;
 }[];
