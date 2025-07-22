@@ -12,20 +12,23 @@ export type ItemIndexRequest = {
 
 export type ItemIndexResponse = (
   | {
-      name: number;
+      id: number;
+      name: string;
       imageUrl: string;
       effectType: "heal";
       amount: number;
     }
   | {
-      name: number;
+      id: number;
+      name: string;
       imageUrl: string;
       effectType: "buff";
       rate: number;
       target: PhysicsType | ElementType;
     }
   | {
-      name: number;
+      id: number;
+      name: string;
       imageUrl: string;
       effectType: "debuff";
       rate: number;
