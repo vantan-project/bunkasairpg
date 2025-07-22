@@ -12,7 +12,7 @@ export type WeaponIndexRequest = {
 
 export type WeaponIndexResponse = {
   id: number;
-  imageFile: File | null;
+  imageUrl: string;
   physicsType: PhysicsType;
   elementType: ElementType;
 }[];
