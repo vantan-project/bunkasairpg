@@ -3,9 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Monster extends Model
 {
+    /**
+     * UUIDを主キーとして使用
+     */
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
         'weapon_id',
         'item_id',
@@ -24,4 +31,18 @@ class Monster extends Model
         'shine',
         'dark',
     ];
+
+    /**
+     * モデル作成時に自動でUUIDを生成
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->getKey()) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
 }
