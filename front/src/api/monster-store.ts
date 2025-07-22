@@ -13,8 +13,9 @@ export type MonsterStoreRequest = {
   neutral: number;
   flame: number;
   water: number;
-  ice: number;
-  thunder: number;
+  wood: number;
+  shine: number;
+  dack: number;
 
   weaponId: number | null;
   itemId: number | null;

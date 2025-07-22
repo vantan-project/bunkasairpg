@@ -34,5 +34,5 @@ export function meIndex(): Promise<MeIndexResponse> {
     })
     .then((res) => {
       return res.data;
-    })
+    });
 }
