@@ -10,31 +10,12 @@ export type ItemIndexRequest = {
   effectType: EffectType;
 };
 
-export type ItemIndexResponse = (
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "heal";
-      amount: number;
-    }
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "buff";
-      rate: number;
-      target: PhysicsType | ElementType;
-    }
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "debuff";
-      rate: number;
-      target: PhysicsType | ElementType;
-    }
-)[];
+export type ItemIndexResponse = {
+  id: number;
+  name: string;
+  imageUrl: string;
+  effectType: EffectType;
+}[];
 
 export function itemIndex(req: ItemIndexRequest): Promise<{
   data: ItemIndexResponse;
