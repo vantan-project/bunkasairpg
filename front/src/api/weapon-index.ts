@@ -14,6 +14,7 @@ export type WeaponIndexRequest = {
 
 export type WeaponIndexResponse = {
   id: number;
+  name: string;
   imageUrl: string;
   physicsType: PhysicsType;
   elementType: ElementType;
