@@ -1,9 +1,9 @@
-import { Modal, ModalProps } from "@mantine/core";
+import { Drawer, DrawerProps } from "@mantine/core";
 import clsx from "clsx";
 
-export function MantineModal(props: ModalProps) {
+export function MantineDrawer(props: DrawerProps) {
   return (
-    <Modal
+    <Drawer
       {...props}
       classNames={{
         ...props.classNames,
