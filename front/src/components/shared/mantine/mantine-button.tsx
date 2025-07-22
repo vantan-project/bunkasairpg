@@ -1,9 +1,9 @@
 import { Button, ButtonProps, PolymorphicComponentProps } from "@mantine/core";
 
-type Props =
+export type MantineButtonProps =
   | PolymorphicComponentProps<"button", ButtonProps>
   | (PolymorphicComponentProps<"link", ButtonProps> & { type: "link" });
 
-export function MantineButton(props: Props) {
+export function MantineButton(props: MantineButtonProps) {
   return <Button {...props} />;
 }

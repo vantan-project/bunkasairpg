@@ -6,8 +6,10 @@ import { PhysicsType } from "@/types/physics-type";
 export type WeaponIndexRequest = {
   currentPage: number;
   name: string;
-  physicsType: PhysicsType;
-  elementType: ElementType;
+  physicsType: PhysicsType | null;
+  elementType: ElementType | null;
+  sort: "createdAt" | "name" | "physicsAttack" | "elementType" | "updatedAt";
+  desc: boolean;
 };
 
 export type WeaponIndexResponse = {

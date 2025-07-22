@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 export type MonsterIndexRequest = {
   currentPage: number;
   name: string;
+  sort: "createdAt" | "name" | "attack" | "hitPoint" | "experiencePoint" | "updatedAt";
+  desc: boolean;
 };
 
 export type MonsterIndexResponse = {

@@ -4,8 +4,11 @@ import { EffectType } from "@/types/effect-type";
 
 export type ItemIndexRequest = {
   currentPage: number;
+
   name: string;
-  effectType: EffectType;
+  effectType: EffectType | null;
+  sort: "createdAt" | "name" | "updatedAt";
+  desc: boolean;
 };
 
 export type ItemIndexResponse = {
