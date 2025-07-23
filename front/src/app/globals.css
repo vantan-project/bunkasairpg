@@ -7,3 +7,7 @@
   --color-black: oklch(12.9% 0.042 264.695);
   --color-white: #ffffff;
 }
+
+body::-webkit-scrollbar {
+  display: none;
+}
