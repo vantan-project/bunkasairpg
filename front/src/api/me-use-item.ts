@@ -9,7 +9,7 @@ export function meUseItem(req: meUseItemRequest): Promise<void> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/me/use-item`;
   const authToken = Cookie.get("authToken");
 
-  return axios.post(apiUrl, req, {
+  return axios.patch(apiUrl, req, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
