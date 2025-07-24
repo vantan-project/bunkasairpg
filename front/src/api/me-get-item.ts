@@ -1,11 +1,11 @@
 import axios from "axios";
 import Cookie from "js-cookie";
 
-export type meGetItemRequest = {
+export type MeGetItemRequest = {
   itemId: number;
 };
 
-export function meGetItem(req: meGetItemRequest): Promise<void> {
+export function meGetItem(req: MeGetItemRequest): Promise<void> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/me/get-item`;
   const authToken = Cookie.get("authToken");
 
