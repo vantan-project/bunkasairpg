@@ -10,4 +10,9 @@ class HealItem extends Model
         'item_id',
         'amount',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
 }
