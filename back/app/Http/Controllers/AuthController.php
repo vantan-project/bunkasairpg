@@ -60,6 +60,7 @@ class AuthController extends Controller
                 ], 401);
             }
         } catch (Exception $e) {
+            dd($e);
             return response()->json([
                 'success' => false,
                 'messages' => ['ログインに失敗しました'],

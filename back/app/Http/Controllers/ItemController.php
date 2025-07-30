@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Http\Requests\ItemIndexRequest;
 use App\Http\Requests\ItemStoreRequest;
+use Illuminate\Support\Facades\Storage;
+
 
 class ItemController extends Controller
 {
@@ -33,7 +35,7 @@ class ItemController extends Controller
         $query->orderBy($sortColumn, $sortDirection);
         //ページネーション
         $currentPage = $validated['currentPage'] ?? 1;
-        $items = $query->paginate(件数, ['*'], 'page', $currentPage);
+        $items = $query->paginate(40, ['*'], 'page', $currentPage);
         $formattedItems = $items->map(function ($item) {
             return[
                 'id' => $item->id,
@@ -57,7 +59,7 @@ class ItemController extends Controller
         $item = Item::create([
             'name' => $validated['name'],
             'image_url' => $url ?? null,
-            'effect_type' => $validated['effect_type'],
+            'effect_type' => $validated['effectType'],
         ]);
         if ($item->effect_type === 'heal') {
             $item->healItem()->create([

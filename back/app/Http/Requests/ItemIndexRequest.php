@@ -11,7 +11,7 @@ class ItemIndexRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,8 @@ class ItemIndexRequest extends FormRequest
     {
         return [
             'currentPage' => ['required', 'integer', 'min:1'],
-            'name' => ['required', 'string', 'max:255'],//微妙
-            'effectType' => ['nullable', 'in:heal,buff,defuff'],//null許可のはず
+            'name' => ['nullable', 'string', 'max:255'],
+            'effectType' => ['nullable', 'in:heal,buff,defuff'],
             'sort' => ['required', 'in:createdAt,name,updatedAt'],
             'desc' => ['required', 'boolean'],
         ];
