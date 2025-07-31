@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ItemStoreRequest extends FormRequest
+class WeaponIndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,12 +23,12 @@ class ItemStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'imageFile' => ['required', 'file', 'image', 'max:2048'],
-            'effectType' => ['required', 'string', 'in:heal,buff,debuff'],
-            'amount' => ['required_if:effectType,heal', 'integer', 'min:0'],
-            'rate' => ['required_if:effectType,buff,debuff', 'numeric', 'between:0,1'],
-            'target' => ['required_if:effectType,buff,debuff', 'string', 'in:slash,blow,shoot,neutral,flame,water,wood,shine,dark'],
+            'currentPage' => ['required', 'integer', 'min:1'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'physicsType' => ['nullable', 'in:slash,blow,shoot'],
+            'elementType' => ['nullable', 'in:neutral,flame,water,wood,shine,dark'],
+            'sort' => ['required', 'in:physicsAttack,elementType,createdAt,name,updatedAt'],
+            'desc' => ['required', 'boolean'],
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class ItemStoreRequest extends FormRequest
+class WeaponStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,10 @@ class ItemStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'imageFile' => ['required', 'file', 'image', 'max:2048'],
-            'effectType' => ['required', 'string', 'in:heal,buff,debuff'],
-            'amount' => ['required_if:effectType,heal', 'integer', 'min:0'],
-            'rate' => ['required_if:effectType,buff,debuff', 'numeric', 'between:0,1'],
-            'target' => ['required_if:effectType,buff,debuff', 'string', 'in:slash,blow,shoot,neutral,flame,water,wood,shine,dark'],
+            'physicsAttack' => ['required', 'integer', 'min:0'],
+            'elementAttack' => ['nullable', 'integer', 'min:0'],
+            'physicsType' => ['required', 'in:slash,blow,shoot'],
+            'elementType' => ['required', 'in:neutral,flame,water,wood,shine,dark'],
         ];
     }
 }

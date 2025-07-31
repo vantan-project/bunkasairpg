@@ -44,8 +44,6 @@ class AuthController extends Controller
                 'password' => $validated['password'],
             ])) {
                 $user = Auth::guard('admin')->user();
-
-                $user->tokens()->delete();
                 $token = $user->createToken('token')->plainTextToken;
 
                 return response()->json([
@@ -60,7 +58,6 @@ class AuthController extends Controller
                 ], 401);
             }
         } catch (Exception $e) {
-            dd($e);
             return response()->json([
                 'success' => false,
                 'messages' => ['ログインに失敗しました'],
