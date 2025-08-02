@@ -26,4 +26,26 @@ class AdminLoginRequest extends FormRequest
             'password' => ['required', 'string', 'min:8'],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'メールアドレスは必須です。',
+            'email.email' => '有効なメールアドレス形式で入力してください。',
+            'password.required' => 'パスワードは必須です。',
+            'password.string' => 'パスワードは文字列である必要があります。',
+            'password.min' => 'パスワードは8文字以上で入力してください。',
+        ];
+    }
+
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'messages' => collect($validator->errors()->messages())
+                    ->flatten()
+                    ->toArray()
+            ], 422)
+        );
+    }
 }

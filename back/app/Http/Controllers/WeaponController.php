@@ -52,9 +52,8 @@ class WeaponController extends Controller
                     'elementType' => $weapon->element_type,
                 ];
             });
-            return response()->json([
-                'weapons' => $formattedWeapons
-            ]);
+            return response()->json($formattedWeapons)
+              ->header('X-TOTAL-PAGE', $totalPage);
         } catch (Exception $e) {
             return response()->json([
                 'messages' => ['武器一覧の取得に失敗しました'],
@@ -83,10 +82,11 @@ class WeaponController extends Controller
             });
             return response()->json([
                 'success' => true,
-                'message' => '武器を作成しました。'
+                'message' => ['武器を作成しました。']
             ]);
         } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'messages' => ['武器の作成に失敗しました。'],
             ], 500);
         }

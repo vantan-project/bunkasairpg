@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class UserStoreRequest extends FormRequest
 {
@@ -12,7 +11,7 @@ class UserStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::guard('sanctum')->user() instanceof \App\Models\Admin;
+        return true;
     }
 
     /**
@@ -25,5 +24,25 @@ class UserStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'unique:users,name'],
         ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => '名前は必須です。',
+            'name.string' => '名前は文字列で入力してください。',
+            'name.max' => '名前は255文字以内で入力してください。',
+            'name.unique' => 'この名前はすでに使用されています。',
+        ];
+    }
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'messages' => collect($validator->errors()->messages())
+                    ->flatten()
+                    ->toArray()
+            ], 422)
+        );
     }
 }

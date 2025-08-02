@@ -16,14 +16,16 @@ class UserController extends Controller
     {
         $validated = $request->validated();
         try {
-            User::create([
+            $user = User::create([
                 'name' => $validated['name'],
                 'max_hit_point' => $this->DEFAULT_MAX_HIT_POINT,
                 'hit_point' => $this->DEFAULT_HIT_POINT,
             ]);
+
             return response()->json([
+                'id' => $user->id,
                 'success' => true,
-                'messages' => ['ユーザーを作成しました。']
+                'messages' => ['ユーザーを作成しました。'],
             ]);
         } catch (Exception $e) {
             return response()->json([

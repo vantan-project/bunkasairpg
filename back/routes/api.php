@@ -11,8 +11,8 @@ Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/user', [UserController::class, 'store']);
-    Route::get('/item/index', [ItemController::class, 'index']);
+    Route::get('/item', [ItemController::class, 'index']);
     Route::post('/item', [ItemController::class, 'store']);
-    Route::get('/weapon/index', [WeaponController::class, 'index']);
+    Route::get('/weapon', [WeaponController::class, 'index']);
     Route::post('/weapon', [WeaponController::class, 'store']);
 });

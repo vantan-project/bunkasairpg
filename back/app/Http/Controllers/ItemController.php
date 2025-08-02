@@ -89,10 +89,11 @@ class ItemController extends Controller
             });
             return response()->json([
                 'success' => true,
-                'message' => 'アイテムを作成しました。'
+                'messages' => ['アイテムを作成しました。']
             ]);
         } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'messages' => ['アイテムの作成に失敗しました。'],
             ], 500);
         }

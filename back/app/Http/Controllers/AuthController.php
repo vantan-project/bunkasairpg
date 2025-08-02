@@ -26,10 +26,13 @@ class AuthController extends Controller
             $token = $user->createToken('token')->plainTextToken;
 
             return response()->json([
-                'authToken' => $token
+                'success' => true,
+                'messages' => ['ログインに成功しました。'],
+                'authToken' => $token,
             ]);
         } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'messages' => ['ログインに失敗しました'],
             ], 500);
         }

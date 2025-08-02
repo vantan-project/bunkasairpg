@@ -25,4 +25,23 @@ class UserLoginRequest extends FormRequest
             'id' => ['required', 'string', 'exists:users,id'],
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'id.required' => 'IDは必須です。',
+            'id.string' => 'IDは文字列で指定してください。',
+            'id.exists' => '指定されたIDのユーザーが存在しません。',
+        ];
+    }
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'messages' => collect($validator->errors()->messages())
+                    ->flatten()
+                    ->toArray()
+            ], 422)
+        );
+    }
 }
