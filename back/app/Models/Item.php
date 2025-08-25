@@ -13,18 +13,18 @@ class Item extends Model
         'effect_type',
     ];
 
-    public function healItem(): HasOne
+    public function healItem()
     {
-        return $this->hasOne(HealItem::class);
+        return $this->hasOne(HealItem::class, 'item_id');
     }
 
-    public function buffItem(): HasOne
+    public function buffItem()
     {
-        return $this->hasOne(BuffItem::class);
+        return $this->hasOne(BuffItem::class, 'item_id');
     }
 
-    public function debuffItem(): HasOne
+    public function debuffItem()
     {
-        return $this->hasOne(DebuffItem::class);
+        return $this->hasOne(DebuffItem::class, 'item_id');
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('image_url');
-            $table->enum('effect_type', ['heal', 'buff', 'defuff']);
+            $table->enum('effect_type', ['heal', 'buff', 'debuff']);
             $table->timestamps();
         });
     }

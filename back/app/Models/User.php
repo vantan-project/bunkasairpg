@@ -70,4 +70,20 @@ class User extends Authenticatable
             }
         });
     }
+
+    public function weapon()
+    {
+        return $this->belongsTo(Weapon::class, 'weapon_id');
+    }
+
+    public function userItems()
+    {
+        return $this->hasMany(UserItem::class, 'user_id');
+    }
+
+    public function ownedWeapons()
+    {
+        return $this->belongsToMany(Weapon::class, 'user_weapons', 'user_id', 'weapon_id');
+    }
+
 }

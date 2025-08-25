@@ -13,8 +13,8 @@ class DebuffItem extends Model
         'target',
     ];
 
-    public function item(): BelongsTo
+    public function item()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Item::class, 'item_id');
     }
 }
