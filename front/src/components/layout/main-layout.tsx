@@ -4,6 +4,7 @@ import { MeIndexResponse, meIndex } from "@/api/me-index";
 import { MeItemResponse, meItem } from "@/api/me-item";
 import { MeWeaponResponse, meWeapon } from "@/api/me-weapon";
 import { GlobalContext } from "@/hooks/use-global-context";
+import { HeroUIProvider } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -74,7 +75,7 @@ export function MainLayout({ children }: Props) {
         setItems,
       }}
     >
-      {children}
+      <HeroUIProvider>{children}</HeroUIProvider>
     </GlobalContext.Provider>
   );
 }

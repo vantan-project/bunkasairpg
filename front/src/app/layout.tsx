@@ -31,8 +31,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MantineProvider>
-          <MainLayout>{children}</MainLayout>
-          <Notifications position="top-center" />
+            <MainLayout>{children}</MainLayout>
+            <Notifications position="top-center" />
         </MantineProvider>
       </body>
     </html>

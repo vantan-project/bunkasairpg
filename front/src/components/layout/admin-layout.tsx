@@ -12,6 +12,13 @@ import { AddIcon } from "../shared/icons/add-icon";
 import { useDisclosure } from "@mantine/hooks";
 import { AdminContext } from "@/hooks/use-admin-context";
 import clsx from "clsx";
+import {
+  Dropdown,
+  DropdownTrigger,
+  Button,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/react";
 
 type Props = {
   children: React.ReactNode;
@@ -19,6 +26,15 @@ type Props = {
 
 export function AdminLayout({ children }: Props) {
   const router = useRouter();
+  // const {
+  //   isMonsterDrawerOpen,
+  //   onMonsterDrawerOpen,
+  //   onMonsterDrawerOpenChange,
+  // } = useDisclosure();
+  // const { isWeaponDrawerOpen, onWeaponDrawerOpen, onWeaponDrawerOpenChange } =
+  //   useDisclosure();
+  // const { isItemDrawerOpen, onItemDrawerOpen, onItemDrawerOpenChange } =
+  //   useDisclosure();
   const [monsterDrawerOpened, monsterDrawerHandlers] = useDisclosure(false);
   const [weaponDrawerOpened, weaponDrawerHandlers] = useDisclosure(false);
   const [itemDrawerOpened, itemDrawerHandlers] = useDisclosure(false);
@@ -32,10 +48,7 @@ export function AdminLayout({ children }: Props) {
   } | null>(null);
   const [isSelected, setIsSelected] = useState(false);
 
-  useEffect(() => {
-    document.body.style.backgroundColor = "var(--color-black)";
-  }, []);
-
+  const iconClassName = "w-4 h-4";
   return (
     <AdminContext.Provider
       value={{
@@ -57,44 +70,91 @@ export function AdminLayout({ children }: Props) {
             "w-56 flex flex-col text-black fixed top-0 left-0 z-20 m-4 bg-white p-2 rounded-2xl shadow-lg shadow-violet-400"
           )}
         >
-          <h1 className="text-lg font-bold pl-2">メニュー</h1>
+          <h1 className="text-xl font-bold pl-2">メニュー</h1>
 
-          <MantineNavLink label="モンスター管理" leftSection={<MonsterIcon />}>
-            <MantineNavLink
-              onClick={() => router.push("/admin/monster")}
-              label="モンスター一覧"
-              leftSection={<ListIcon />}
-            />
-            <MantineNavLink
-              onClick={monsterDrawerHandlers.open}
-              label="モンスター追加"
-              leftSection={<AddIcon />}
-            />
-          </MantineNavLink>
-          <MantineNavLink label="武器管理" leftSection={<WeaponIcon />}>
-            <MantineNavLink
-              onClick={() => router.push("/admin/weapon")}
-              label="武器一覧"
-              leftSection={<ListIcon />}
-            />
-            <MantineNavLink
-              onClick={weaponDrawerHandlers.open}
-              label="武器追加"
-              leftSection={<AddIcon />}
-            />
-          </MantineNavLink>
-          <MantineNavLink label="アイテム管理" leftSection={<ItemIcon />}>
-            <MantineNavLink
-              onClick={() => router.push("/admin/item")}
-              label="アイテム一覧"
-              leftSection={<ListIcon />}
-            />
-            <MantineNavLink
-              onClick={itemDrawerHandlers.open}
-              label="アイテム追加"
-              leftSection={<AddIcon />}
-            />
-          </MantineNavLink>
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                startContent={<MonsterIcon />}
+                variant="light"
+                className="justify-start text-left gap-4"
+              >
+                モンスター管理
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Link Actions">
+              <DropdownItem
+                endContent={<ListIcon className={iconClassName} />}
+                key="index"
+                href="/admin/monster"
+              >
+                モンスター一覧
+              </DropdownItem>
+              <DropdownItem
+                endContent={<AddIcon className={iconClassName} />}
+                key="store"
+                onPress={() => {}}
+              >
+                モンスター追加
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                startContent={<WeaponIcon />}
+                variant="light"
+                className="justify-start text-left gap-4"
+              >
+                武器管理
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Link Actions">
+              <DropdownItem
+                endContent={<ListIcon className={iconClassName} />}
+                key="index"
+                href="/admin/weapon"
+              >
+                武器一覧
+              </DropdownItem>
+              <DropdownItem
+                endContent={<AddIcon className={iconClassName} />}
+                key="store"
+                onPress={() => {}}
+              >
+                武器追加
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                startContent={<ItemIcon />}
+                variant="light"
+                className="justify-start text-left gap-4"
+              >
+                アイテム管理
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Link Actions">
+              <DropdownItem
+                endContent={<ListIcon className={iconClassName} />}
+                key="index"
+                href="/admin/item"
+              >
+                アイテム一覧
+              </DropdownItem>
+              <DropdownItem
+                endContent={<AddIcon className={iconClassName} />}
+                key="store"
+                onPress={() => {}}
+              >
+                アイテム追加
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </header>
         {children}
       </div>
@@ -110,8 +170,8 @@ export function AdminLayout({ children }: Props) {
         close={weaponDrawerHandlers.close}
       />
       <ItemStoreDrawer
-        opened={itemDrawerOpened}
-        close={itemDrawerHandlers.close}
+        isOpen={true}
+        onOpenChange={itemDrawerHandlers.close}
       />
     </AdminContext.Provider>
   );
