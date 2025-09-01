@@ -5,6 +5,7 @@ export type MonsterStoreRequest = {
   name: string;
   imageFile: File | null;
   attack: number;
+  maxHitPoint: number;
   hitPoint: number;
   experiencePoint: number;
   slash: number;
@@ -15,7 +16,7 @@ export type MonsterStoreRequest = {
   water: number;
   wood: number;
   shine: number;
-  dack: number;
+  dark: number;
 
   weaponId: number | null;
   itemId: number | null;

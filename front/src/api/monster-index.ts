@@ -8,10 +8,10 @@ export type MonsterIndexRequest = {
   desc: boolean;
 };
 
-export type MonsterIndexResponse = {
+export type MonsterIndexResponse = [{
   id: string;
   imageUrl: string;
-}[];
+}];
 
 export function monsetrIndex(req: MonsterIndexRequest): Promise<{
   data: MonsterIndexResponse;

@@ -1,7 +1,7 @@
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 
-type Monster = {
+export type Monster = {
   attack: number;
   maxHitPoint: number;
   hitPoint: number;
@@ -50,20 +50,20 @@ type Weapon = {
 
 type HeelItem = {
   name: string;
-  logicType: "heal";
+  effectType: "heal";
   amount: number;
 };
 
 type BuffItem = {
   name: string;
-  logicType: "buff";
+  effectType: "buff";
   rate: number; // 何%増加するか
   target: PhysicsType | ElementType;
 };
 
 type DebuffItem = {
   name: string;
-  logicType: "debuff";
+  effectType: "debuff";
   rate: number; // 何%減少するか
   target: PhysicsType | ElementType;
 };
@@ -133,7 +133,7 @@ export class Battle {
       return {
         monsterHitPoint: this.monster.hitPoint,
         isFinished: true,
-        message: "モンスターを倒した！",
+        message: `${damage}のダメージを与えた！`,
       };
 
     if (damage === 0)
@@ -206,7 +206,7 @@ export class Battle {
   } {
     // モンスター攻撃力 * (100/レベル) * 乱数
     const random = 0.95 + Math.random() * 0.1;
-    const damage = this.monster.attack * (100 / this.user.level) * random;
+    const damage = Math.floor(this.monster.attack * (100 / this.user.level) * random);
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
 
@@ -214,7 +214,7 @@ export class Battle {
       return {
         userHitPoint: this.user.hitPoint,
         isFinished: true,
-        message: "モンスターに倒された！",
+        message: `${damage}のダメージを受けた！`,
       };
 
     return {
