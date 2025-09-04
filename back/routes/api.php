@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/me/use-item', [MeController::class, 'useItem']);
     Route::get('/me/weapon', [MeController::class, 'weapon']);
     Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
-
+});
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::get('/item', [ItemController::class, 'index']);
