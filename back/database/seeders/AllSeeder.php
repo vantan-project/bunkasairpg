@@ -66,7 +66,7 @@ class AllSeeder extends Seeder
             [
                 'id' => $user2Id,
                 'weapon_id' => 1,
-                'name' => 'テストくん',
+                'name' => 'ふくしなさん',
                 'level' => 1,
                 'max_hit_point' => 35,
                 'hit_point' => 35,
@@ -77,10 +77,10 @@ class AllSeeder extends Seeder
             [
                 'id' => $user3Id,
                 'weapon_id' => null,
-                'name' => 'ふくしなさん',
+                'name' => 'テストくん',
                 'level' => 10,
-                'max_hit_point' => 20,
-                'hit_point' => 150,
+                'max_hit_point' => 150,
+                'hit_point' => 20,
                 'experience_point' => 900,
                 'created_at' => now(),
                 'updated_at' => now(),
