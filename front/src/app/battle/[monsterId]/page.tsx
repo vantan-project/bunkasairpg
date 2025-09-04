@@ -6,7 +6,7 @@ import { Battle } from "@/utils/battle";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/hooks/use-global-context";
 import { WeaponDrawer } from "@/components/feature/battle/weapon-drawer";
-import { MonsterShowRequest } from "@/api/monster-show";
+import { MonsterShowResponse } from "@/api/monster-show";
 import { ItemDrawer } from "@/components/feature/battle/item-drawer";
 import { Modal } from "@/components/layout/modal";
 
@@ -19,9 +19,9 @@ export type BattleLog = {
 
 export default function Page() {
   const { user, setUser, weapons, items } = useGlobalContext()
-  const initialMonster: MonsterShowRequest = {
+  const initialMonster: MonsterShowResponse = {
     name: "",
-    imageFile: null,
+    imageUrl: null,
     attack: 1,
     maxHitPoint: 200,
     hitPoint: 200,

@@ -1,9 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export type MonsterShowRequest = {
+export type MonsterShowResponse = {
     name: string;
-    imageFile: File | null;
+    imageUrl: string | null;
     attack: number;
     maxHitPoint: number;
     hitPoint: number;
@@ -27,7 +27,17 @@ export type MonsterShowRequest = {
     } | null;
 };
 
+export function monsterShow(id: number): Promise<MonsterShowResponse> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/monsters/${id}`;
+    const authToken = Cookies.get("authToken");
 
-export function monsetrShow(){
-
+    return axios
+        .get<MonsterShowResponse>(apiUrl, {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+        })
+        .then((res) => {
+            return res.data;
+        });
 }
