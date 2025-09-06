@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/me/use-item', [MeController::class, 'useItem']);
     Route::get('/me/weapon', [MeController::class, 'weapon']);
     Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
+    Route::get('/monster/{monster}', [MonsterController::class, 'show']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {

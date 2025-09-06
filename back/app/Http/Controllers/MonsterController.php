@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Monster;
 use App\Http\Requests\MonsterIndexRequest;
 use App\Http\Requests\MonsterStoreRequest;
+use App\Models\Weapon;
+use App\Models\Item;
 use Exception;
 
 class MonsterController extends Controller
@@ -55,7 +57,8 @@ class MonsterController extends Controller
             });
 
             return response()->json($formattedMonsters)
-                ->header('X-TOTAL-PAGE', $monsters->lastPage());
+                ->header('X-Total-Page', $monsters->lastPage())
+                ->header('Access-Control-Expose-Headers', 'X-Total-Page');
 
         } catch (Exception $e) {
             return response()->json([
@@ -110,6 +113,63 @@ class MonsterController extends Controller
             return response()->json([
                 'success' => false,
                 'messages' => ['モンスターの作成に失敗しました。'],
+            ], 500);
+        }
+    }
+
+    /**
+     * モンスター詳細取得（バトル画面用）
+     *
+     * @param Monster $monster
+     * @return JsonResponse
+     */
+    public function show(Monster $monster): JsonResponse
+    {
+        try {
+            $weapon = null;
+            if (isset($monster->weapon_id)) {
+                $weaponModel = Weapon::query()->select(['id', 'name'])->find($monster->weapon_id);
+                if ($weaponModel) {
+                    $weapon = [
+                        'id' => (int) $weaponModel->id,
+                        'name' => $weaponModel->name,
+                    ];
+                }
+            }
+
+            $item = null;
+            if (isset($monster->item_id)) {
+                $itemModel = Item::query()->select(['id', 'name'])->find($monster->item_id);
+                if ($itemModel) {
+                    $item = [
+                        'id' => (int) $itemModel->id,
+                        'name' => $itemModel->name,
+                    ];
+                }
+            }
+
+            return response()->json([
+                'name' => $monster->name,
+                'imageUrl' => $monster->image_url,
+                'attack' => (int) $monster->attack,
+                'maxHitPoint' => (int) $monster->hit_point,
+                'hitPoint' => (int) $monster->hit_point,
+                'experiencePoint' => (int) $monster->experience_point,
+                'slash' => (float) $monster->slash,
+                'blow' => (float) $monster->blow,
+                'shoot' => (float) $monster->shoot,
+                'neutral' => (float) $monster->neutral,
+                'flame' => (float) $monster->flame,
+                'water' => (float) $monster->water,
+                'wood' => (float) $monster->wood,
+                'shine' => (float) $monster->shine,
+                'dark' => (float) $monster->dark,
+                'weapon' => $weapon,
+                'item' => $item,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'messages' => ['モンスター情報の取得に失敗しました'],
             ], 500);
         }
     }
