@@ -8,13 +8,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\WeaponController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 Route::post('/auth/user-login', [AuthController::class, 'userLogin']);
 Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 
+// ユーザー系
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [MeController::class, 'index']);
     Route::get('/me/item', [MeController::class, 'items']);
@@ -25,6 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me/weapon', [MeController::class, 'weapon']);
     Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
 });
+
+// 管理者系
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::get('/item', [ItemController::class, 'index']);
