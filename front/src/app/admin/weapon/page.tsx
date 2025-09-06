@@ -19,6 +19,7 @@ import {
 } from "@/api/weapon-index";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
 import { SortIcon } from "@/components/shared/icons/sort-icon";
+import { assetBgColor } from "@/utils/asset-bg-color";
 
 export default function Page() {
   const [weapons, setWeapons] = useState<WeaponIndexResponse>([]);
@@ -32,17 +33,16 @@ export default function Page() {
     setPaginationContent,
   } = useAdminContext();
 
-  const { register, setValue, watch } =
-    useForm<WeaponIndexRequest>({
-      defaultValues: {
-        name: "",
-        physicsType: undefined,
-        elementType: undefined,
-        sort: "updatedAt",
-        desc: 1,
-        currentPage: 1,
-      },
-    });
+  const { register, setValue, watch } = useForm<WeaponIndexRequest>({
+    defaultValues: {
+      name: "",
+      physicsType: undefined,
+      elementType: undefined,
+      sort: "updatedAt",
+      desc: 1,
+      currentPage: 1,
+    },
+  });
 
   const form = watch();
   const desc = watch("desc");
@@ -131,7 +131,10 @@ export default function Page() {
       {weapons.map((weapon) => (
         <div
           key={weapon.id}
-          className="relative bg-white p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          className={clsx(
+            assetBgColor(weapon.elementType),
+            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          )}
         >
           <Image
             className="object-cover w-full h-auto"

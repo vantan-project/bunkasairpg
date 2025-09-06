@@ -3,7 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { Button, Image, Input, Pagination, Select, SelectItem } from "@heroui/react";
+import {
+  Button,
+  Image,
+  Input,
+  Pagination,
+  Select,
+  SelectItem,
+} from "@heroui/react";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import {
   itemIndex,
@@ -12,6 +19,7 @@ import {
 } from "@/api/item-index";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
 import { SortIcon } from "@/components/shared/icons/sort-icon";
+import { assetBgColor } from "@/utils/asset-bg-color";
 
 export default function Page() {
   const [items, setItems] = useState<ItemIndexResponse>([]);
@@ -105,37 +113,38 @@ export default function Page() {
 
   return (
     <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
-      {items.map(
-        (item) => (
-          <div
-            key={item.id}
-            className="relative bg-white p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
-          >
-            <Image
-              className="object-cover w-full h-auto"
-              radius="lg"
-              src={item.imageUrl}
-              removeWrapper
-            />
-            <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
-              <AssetTypeIcon type={item.effectType} size="35%" />
-            </div>
-            {isSelected && (
-              <div
-                className="absolute top-0 right-0 w-full h-full flex justify-end items-start z-10"
-                onClick={() => {
-                  setMonsterItem({
-                    id: item.id,
-                    name: item.name,
-                  });
-                  onMonsterDrawerOpenChange();
-                  setIsSelected(false);
-                }}
-              />
-            )}
+      {items.map((item) => (
+        <div
+          key={item.id}
+          className={clsx(
+            assetBgColor(item.effectType),
+            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          )}
+        >
+          <Image
+            className="object-cover w-full h-auto"
+            radius="lg"
+            src={item.imageUrl}
+            removeWrapper
+          />
+          <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
+            <AssetTypeIcon type={item.effectType} size="35%" />
           </div>
-        )
-      )}
+          {isSelected && (
+            <div
+              className="absolute top-0 right-0 w-full h-full flex justify-end items-start z-10"
+              onClick={() => {
+                setMonsterItem({
+                  id: item.id,
+                  name: item.name,
+                });
+                onMonsterDrawerOpenChange();
+                setIsSelected(false);
+              }}
+            />
+          )}
+        </div>
+      ))}
     </div>
   );
 }

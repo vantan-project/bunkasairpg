@@ -9,6 +9,19 @@
   --color-gray-dark: oklch(92% 0.004 286.32);
 
   --color-white: #ffffff;
+
+  --color-slash: var(--color-gray-400);
+  --color-blow: var(--color-gray-400);
+  --color-shoot: var(--color-gray-400);
+  --color-neutral: var(--color-gray-400);
+  --color-flame: var(--color-red-400);
+  --color-water: var(--color-blue-400);
+  --color-wood: var(--color-green-400);
+  --color-shine: var(--color-yellow-400);
+  --color-dark: var(--color-violet-400);
+  --color-heal: var(--color-pink-400);
+  --color-buff: var(--color-red-400);
+  --color-debuff: var(--color-sky-400);
 }
 
 body::-webkit-scrollbar {
