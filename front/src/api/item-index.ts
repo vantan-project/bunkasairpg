@@ -8,7 +8,7 @@ export type ItemIndexRequest = {
   name: string;
   effectType: EffectType | null;
   sort: "createdAt" | "name" | "updatedAt";
-  desc: boolean;
+  desc: number; // boolean
 };
 
 export type ItemIndexResponse = {

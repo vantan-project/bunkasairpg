@@ -1,100 +1,120 @@
 "use client";
 
-import { MonsterIndexRequest, MonsterIndexResponse } from "@/api/monster-index";
-import { SearchIcon } from "@/components/shared/icons/search-icon";
-import { SortIcon } from "@/components/shared/icons/sort-icon";
-import { MantineButton } from "@/components/shared/mantine/mantine-button";
-import { MantineImage } from "@/components/shared/mantine/mantine-image";
-import { MantinePagination } from "@/components/shared/mantine/mantine-pagination";
-import { MantineSelect } from "@/components/shared/mantine/mantine-select";
-import { MantineTextInput } from "@/components/shared/mantine/mantine-text-input";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { useState } from "react";
+import {
+  Button,
+  Image,
+  Input,
+  Pagination,
+  Select,
+  SelectItem,
+} from "@heroui/react";
+import { useAdminContext } from "@/hooks/use-admin-context";
+import {
+  monsterIndex,
+  MonsterIndexRequest,
+  MonsterIndexResponse,
+} from "@/api/monster-index";
+import { SortIcon } from "@/components/shared/icons/sort-icon";
 
 export default function Page() {
-  const [search, setSearch] = useState<MonsterIndexRequest>({
-    name: "",
-    currentPage: 7,
-    sort: "updatedAt",
-    desc: true,
-  });
-  const [monsters, setMonsters] = useState<MonsterIndexResponse>([
-    {
-      id: "1",
-      imageUrl: "https://placehold.jp/150x150.png",
-    },
-  ]);
-  const [totalPage, setTotalPage] = useState(10);
+  const [monsters, setMonsters] = useState<MonsterIndexResponse>([]);
+  const [totalPage, setTotalPage] = useState(1);
+  const { setFilterChildren, setPaginationContent } = useAdminContext();
 
-  return (
-    <>
-      <div className="fixed w-[calc(100vw-270px)] flex justify-between items-end gap-2 bg-white p-2 rounded-lg shadow-lg shadow-violet-400 z-20">
-        <div className="flex gap-2 items-end">
-          <MantineTextInput
-            label="名前"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[200px]",
-            }}
-            rightSection={<SearchIcon />}
-            value={search.name || ""}
-            onChange={(e) => setSearch({ ...search, name: e.target.value })}
-          />
-          <MantineSelect
-            label="ソート"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[120px]",
-            }}
-            data={[
-              { value: "createAt", label: "作成日時" },
-              { value: "name", label: "名前" },
-              { value: "hitPoint", label: "HP" },
-              { value: "attack", label: "攻撃力" },
-              { value: "experiencePoint", label: "獲得経験値" },
-              { value: "createdAt", label: "作成日時" },
-              { value: "updatedAt", label: "更新日時" },
-            ]}
-            value={search.sort}
-            onChange={(v, _) =>
-              setSearch({
-                ...search,
-                sort: (v as MonsterIndexRequest["sort"]) ?? null,
-              })
-            }
-            clearable
-          />
-          <MantineButton
-            type="button"
-            onClick={() => setSearch({ ...search, desc: !search.desc })}
-            color="var(--color-black)"
+  const { register, setValue, watch } = useForm<MonsterIndexRequest>({
+    defaultValues: {
+      name: "",
+      sort: "updatedAt",
+      desc: 1,
+      currentPage: 1,
+    },
+  });
+
+  const form = watch();
+  const desc = watch("desc");
+  const currentPage = watch("currentPage");
+  const filterChildren = useMemo(
+    () => (
+      <div className="flex flex-col gap-2">
+        <Input label="名前" variant="bordered" {...register("name")} />
+        <div className="grid grid-cols-[1fr_80px] gap-2">
+          <Select label="ソート" variant="bordered" {...register("sort")}>
+            <SelectItem key="name">名前</SelectItem>
+            <SelectItem key="attack">攻撃力</SelectItem>
+            <SelectItem key="hitPoint">HP</SelectItem>
+            <SelectItem key="experiencePoint">獲得経験値</SelectItem>
+            <SelectItem key="createdAt">作成日時</SelectItem>
+            <SelectItem key="updatedAt">更新日時</SelectItem>
+          </Select>
+
+          <Button
+            className="bg-black text-white h-full"
+            onPress={() => setValue("desc", +!desc)}
           >
             <SortIcon
               className={clsx(
                 "text-white transition-transform duration-300",
-                search.desc && "rotate-180"
+                desc && "rotate-180"
               )}
             />
-          </MantineButton>
+          </Button>
         </div>
-        <MantinePagination
-          total={totalPage}
-          value={search.currentPage}
-          radius="xl"
-          color="var(--color-black)"
-          onChange={(v) => setSearch({ ...search, currentPage: v ?? 1 })}
-        />
       </div>
-      <div className="grid grid-cols-8 gap-4 pt-24">
-        {monsters.map((monster) => (
-          <div
-            key={monster.id}
-            className="relative transition-transform duration-200 ease-in-out shadow shadow-violet-400 hover:-translate-y-1 hover:shadow-xl bg-white p-1 rounded-2xl"
-          >
-            <MantineImage radius="lg" src={monster.imageUrl} />
-          </div>
-        ))}
-      </div>
-    </>
+    ),
+    [register, setValue, desc]
+  );
+  const paginationContent = useMemo(
+    () => (
+      <Pagination
+        classNames={{
+          item: "bg-white text-black shadow-[0_7px_10px_-2px_rgba(0,0,0,0.08),0_3px_5px_-1px_rgba(0,0,0,0.04)] shadow-white",
+          cursor: "bg-black text-white border border-white",
+        }}
+        total={totalPage}
+        page={currentPage}
+        onChange={(v) => setValue("currentPage", v)}
+      />
+    ),
+    [totalPage, currentPage, setValue]
+  );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      monsterIndex(form).then(({ data, totalPage }) => {
+        setMonsters(data);
+        setTotalPage(totalPage);
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [form]);
+
+  useEffect(() => {
+    setFilterChildren(filterChildren);
+  }, [filterChildren, setFilterChildren]);
+
+  useEffect(() => {
+    setPaginationContent(paginationContent);
+  }, [paginationContent, setPaginationContent]);
+
+  return (
+    <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+      {monsters.map((monster) => (
+        <div
+          key={monster.id}
+          className="bg-neutral relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+        >
+          <Image
+            className="object-cover w-full h-auto"
+            radius="lg"
+            src={monster.imageUrl}
+            removeWrapper
+          />
+        </div>
+      ))}
+    </div>
   );
 }

@@ -1,183 +1,150 @@
 "use client";
 
-import { ItemIndexRequest, ItemIndexResponse } from "@/api/item-index";
-import { BuffIcon } from "@/components/shared/icons/buff-icon";
-import { DebuffIcon } from "@/components/shared/icons/debuff-icon";
-import { HealIcon } from "@/components/shared/icons/heal-icon";
-import { SearchIcon } from "@/components/shared/icons/search-icon";
-import { SortIcon } from "@/components/shared/icons/sort-icon";
-import { MantineButton } from "@/components/shared/mantine/mantine-button";
-import { MantineImage } from "@/components/shared/mantine/mantine-image";
-import { MantinePagination } from "@/components/shared/mantine/mantine-pagination";
-import { MantineSelect } from "@/components/shared/mantine/mantine-select";
-import { MantineTextInput } from "@/components/shared/mantine/mantine-text-input";
-import { useAdminContext } from "@/hooks/use-admin-context";
-import { EffectType } from "@/types/effect-type";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { useState } from "react";
+import {
+  Button,
+  Image,
+  Input,
+  Pagination,
+  Select,
+  SelectItem,
+} from "@heroui/react";
+import { useAdminContext } from "@/hooks/use-admin-context";
+import {
+  itemIndex,
+  ItemIndexRequest,
+  ItemIndexResponse,
+} from "@/api/item-index";
+import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
+import { SortIcon } from "@/components/shared/icons/sort-icon";
+import { assetBgColor } from "@/utils/asset-bg-color";
 
 export default function Page() {
-  const [search, setSearch] = useState<ItemIndexRequest>({
-    currentPage: 7,
-
-    name: "",
-    effectType: null,
-    sort: "updatedAt",
-    desc: true,
-  });
-  const [items, setItems] = useState<ItemIndexResponse>([
-    {
-      id: 1,
-      name: "テストアイテム",
-      imageUrl: "https://placehold.jp/150x150.png",
-      effectType: "heal",
-    },
-    {
-      id: 2,
-      name: "テストアイテム",
-      imageUrl: "https://placehold.jp/150x150.png",
-      effectType: "buff",
-    },
-    {
-      id: 3,
-      name: "テストアイテム",
-      imageUrl: "https://placehold.jp/150x150.png",
-      effectType: "debuff",
-    },
-  ]);
-  const [totalPage, setTotalPage] = useState(10);
+  const [items, setItems] = useState<ItemIndexResponse>([]);
+  const [totalPage, setTotalPage] = useState(1);
   const {
-    monsterDrawerOpen,
+    onMonsterDrawerOpenChange,
     isSelected,
     setIsSelected,
-    monsterItem,
     setMonsterItem,
+    setFilterChildren,
+    setPaginationContent,
   } = useAdminContext();
 
-  const iconClassName =
-    "w-8 h-8 flex justify-center items-center rounded-full text-white";
-  const getEffectIcon = (effectType: string) => {
-    switch (effectType) {
-      case "heal":
-        return (
-          <div className={clsx("bg-pink-300", iconClassName)}>
-            <HealIcon />
-          </div>
-        );
-      case "buff":
-        return (
-          <div className={clsx("bg-red-300", iconClassName)}>
-            <BuffIcon />
-          </div>
-        );
-      case "debuff":
-        return (
-          <div className={clsx("bg-sky-300", iconClassName)}>
-            <DebuffIcon />
-          </div>
-        );
-    }
-  };
+  const { register, setValue, watch } = useForm<ItemIndexRequest>({
+    defaultValues: {
+      name: "",
+      effectType: null,
+      sort: "updatedAt",
+      desc: 1,
+      currentPage: 1,
+    },
+  });
 
-  return (
-    <>
-      <div className="fixed w-[calc(100vw-270px)] flex justify-between items-end gap-2 bg-white p-2 rounded-lg shadow-lg shadow-violet-400 z-20">
-        <div className="flex gap-2 items-end">
-          <MantineTextInput
-            label="名前"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[200px]",
-            }}
-            rightSection={<SearchIcon />}
-            value={search.name || ""}
-            onChange={(e) => setSearch({ ...search, name: e.target.value })}
-          />
-          <MantineSelect
-            label="カテゴリ"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[100px]",
-            }}
-            data={[
-              { value: "heal", label: "回復" },
-              { value: "buff", label: "バフ" },
-              { value: "debuff", label: "デバフ" },
-            ]}
-            value={search.effectType}
-            onChange={(v, _) =>
-              setSearch({ ...search, effectType: (v as EffectType) ?? null })
-            }
-            clearable
-          />
-          <MantineSelect
-            label="ソート"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[120px]",
-            }}
-            data={[
-              { value: "name", label: "名前" },
-              { value: "createAt", label: "作成日時" },
-              { value: "updatedAt", label: "更新日時" },
-            ]}
-            value={search.sort}
-            onChange={(v, _) =>
-              setSearch({
-                ...search,
-                sort: (v as ItemIndexRequest["sort"]) ?? null,
-              })
-            }
-            clearable
-          />
-          <MantineButton
-            type="button"
-            onClick={() => setSearch({ ...search, desc: !search.desc })}
-            color="var(--color-black)"
+  const form = watch();
+  const desc = watch("desc");
+  const currentPage = watch("currentPage");
+  const filterChildren = useMemo(
+    () => (
+      <div className="flex flex-col gap-2">
+        <Input label="名前" variant="bordered" {...register("name")} />
+        <Select label="カテゴリ" variant="bordered" {...register("effectType")}>
+          <SelectItem key="heal">回復</SelectItem>
+          <SelectItem key="buff">バフ</SelectItem>
+          <SelectItem key="debuff">デバフ</SelectItem>
+        </Select>
+        <div className="grid grid-cols-[1fr_80px] gap-2">
+          <Select label="ソート" variant="bordered" {...register("sort")}>
+            <SelectItem key="name">名前</SelectItem>
+            <SelectItem key="createdAt">作成日時</SelectItem>
+            <SelectItem key="updatedAt">更新日時</SelectItem>
+          </Select>
+
+          <Button
+            className="bg-black text-white h-full"
+            onPress={() => setValue("desc", +!desc)}
           >
             <SortIcon
               className={clsx(
                 "text-white transition-transform duration-300",
-                search.desc && "rotate-180"
+                desc && "rotate-180"
               )}
             />
-          </MantineButton>
+          </Button>
         </div>
-        <MantinePagination
-          total={totalPage}
-          value={search.currentPage}
-          radius="xl"
-          color="var(--color-black)"
-          onChange={(v) => setSearch({ ...search, currentPage: v ?? 1 })}
-        />
       </div>
-      <div className="grid grid-cols-8 gap-4 pt-24">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="relative transition-transform duration-200 ease-in-out shadow shadow-violet-400 hover:-translate-y-1 hover:shadow-xl bg-white p-1 rounded-2xl"
-          >
-            <MantineImage radius="lg" src={item.imageUrl} />
-            <div className="absolute bottom-2 right-2">
-              {getEffectIcon(item.effectType)}
-            </div>
+    ),
+    [register, setValue, desc]
+  );
+  const paginationContent = useMemo(
+    () => (
+      <Pagination
+        classNames={{
+          item: "bg-white text-black shadow-[0_7px_10px_-2px_rgba(0,0,0,0.08),0_3px_5px_-1px_rgba(0,0,0,0.04)] shadow-white",
+          cursor: "bg-black text-white border border-white",
+        }}
+        total={totalPage}
+        page={currentPage}
+        onChange={(v) => setValue("currentPage", v)}
+      />
+    ),
+    [totalPage, currentPage, setValue]
+  );
 
-            {isSelected && (
-              <div
-                className="absolute top-0 right-0 w-full h-full flex justify-end items-start"
-                onClick={() => {
-                  setMonsterItem({
-                    id: item.id,
-                    name: item.name,
-                  });
-                  monsterDrawerOpen();
-                  setIsSelected(false);
-                }}
-              />
-            )}
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      itemIndex(form).then(({ data, totalPage }) => {
+        setItems(data);
+        setTotalPage(totalPage);
+      });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [form]);
+
+  useEffect(() => {
+    setFilterChildren(filterChildren);
+  }, [filterChildren, setFilterChildren]);
+
+  useEffect(() => {
+    setPaginationContent(paginationContent);
+  }, [paginationContent, setPaginationContent]);
+
+  return (
+    <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+      {items.map((item) => (
+        <div
+          key={item.id}
+          className={clsx(
+            assetBgColor(item.effectType),
+            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          )}
+        >
+          <Image
+            className="object-cover w-full h-auto"
+            radius="lg"
+            src={item.imageUrl}
+            removeWrapper
+          />
+          <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
+            <AssetTypeIcon type={item.effectType} size="35%" />
           </div>
-        ))}
-      </div>
-    </>
+          {isSelected && (
+            <div
+              className="absolute top-0 right-0 w-full h-full flex justify-end items-start z-10"
+              onClick={() => {
+                setMonsterItem({
+                  id: item.id,
+                  name: item.name,
+                });
+                onMonsterDrawerOpenChange();
+                setIsSelected(false);
+              }}
+            />
+          )}
+        </div>
+      ))}
+    </div>
   );
 }

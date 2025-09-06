@@ -1,276 +1,166 @@
 "use client";
 
-import { WeaponIndexRequest, WeaponIndexResponse } from "@/api/weapon-index";
-import { BlowIcon } from "@/components/shared/icons/blow-icon";
-import { DarkIcon } from "@/components/shared/icons/dark-icon";
-import { FlameIcon } from "@/components/shared/icons/flame-icon";
-import { NeutralIcon } from "@/components/shared/icons/neutral-icon";
-import { SearchIcon } from "@/components/shared/icons/search-icon";
-import { ShineIcon } from "@/components/shared/icons/shine-icon";
-import { ShootIcon } from "@/components/shared/icons/shoot-icon";
-import { SlashIcon } from "@/components/shared/icons/slash-icon";
-import { SortIcon } from "@/components/shared/icons/sort-icon";
-import { WaterIcon } from "@/components/shared/icons/water-icon";
-import { WoodIcon } from "@/components/shared/icons/wood-icon";
-import { MantineButton } from "@/components/shared/mantine/mantine-button";
-import { MantineImage } from "@/components/shared/mantine/mantine-image";
-import { MantinePagination } from "@/components/shared/mantine/mantine-pagination";
-import { MantineSelect } from "@/components/shared/mantine/mantine-select";
-import { MantineTextInput } from "@/components/shared/mantine/mantine-text-input";
-import { useAdminContext } from "@/hooks/use-admin-context";
-import { ElementType } from "@/types/element-type";
-import { PhysicsType } from "@/types/physics-type";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import clsx from "clsx";
-import { useState } from "react";
+import {
+  Button,
+  Image,
+  Input,
+  Pagination,
+  Select,
+  SelectItem,
+} from "@heroui/react";
+import { useAdminContext } from "@/hooks/use-admin-context";
+import {
+  weaponIndex,
+  WeaponIndexRequest,
+  WeaponIndexResponse,
+} from "@/api/weapon-index";
+import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
+import { SortIcon } from "@/components/shared/icons/sort-icon";
+import { assetBgColor } from "@/utils/asset-bg-color";
 
 export default function Page() {
-  const [search, setSearch] = useState<WeaponIndexRequest>({
-    name: "",
-    currentPage: 7,
-    physicsType: null,
-    elementType: null,
-    sort: "updatedAt",
-    desc: true,
-  });
-  const [weapons, setWeapons] = useState<WeaponIndexResponse>([
-    {
-      id: 1,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "slash",
-      elementType: "neutral",
-    },
-    {
-      id: 2,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "blow",
-      elementType: "flame",
-    },
-    {
-      id: 3,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "shoot",
-      elementType: "water",
-    },
-    {
-      id: 4,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "slash",
-      elementType: "wood",
-    },
-    {
-      id: 5,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "blow",
-      elementType: "shine",
-    },
-    {
-      id: 6,
-      name: "テスト",
-      imageUrl: "https://placehold.jp/150x150.png",
-      physicsType: "shoot",
-      elementType: "dark",
-    },
-  ]);
-  const [totalPage, setTotalPage] = useState(10);
+  const [weapons, setWeapons] = useState<WeaponIndexResponse>([]);
+  const [totalPage, setTotalPage] = useState(1);
   const {
-    monsterDrawerOpen,
+    onMonsterDrawerOpenChange,
     isSelected,
     setIsSelected,
-    monsterWeapon,
     setMonsterWeapon,
+    setFilterChildren,
+    setPaginationContent,
   } = useAdminContext();
 
-  const iconClassName =
-    "w-8 h-8 flex justify-center items-center rounded-full text-white";
-  const getPhysicsTypeIcon = (physicsType: string) => {
-    switch (physicsType) {
-      case "slash":
-        return (
-          <div className={clsx("bg-gray-300", iconClassName)}>
-            <SlashIcon />
-          </div>
-        );
-      case "blow":
-        return (
-          <div className={clsx("bg-gray-300", iconClassName)}>
-            <BlowIcon />
-          </div>
-        );
-      case "shoot":
-        return (
-          <div className={clsx("bg-gray-300", iconClassName)}>
-            <ShootIcon />
-          </div>
-        );
-    }
-  };
-  const getElementTypeIcon = (elementType: string) => {
-    switch (elementType) {
-      case "neutral":
-        return (
-          <div className={clsx("bg-gray-300", iconClassName)}>
-            <NeutralIcon />
-          </div>
-        );
-      case "flame":
-        return (
-          <div className={clsx("bg-red-300", iconClassName)}>
-            <FlameIcon />
-          </div>
-        );
-      case "water":
-        return (
-          <div className={clsx("bg-blue-300", iconClassName)}>
-            <WaterIcon />
-          </div>
-        );
-      case "wood":
-        return (
-          <div className={clsx("bg-green-300", iconClassName)}>
-            <WoodIcon />
-          </div>
-        );
-      case "shine":
-        return (
-          <div className={clsx("bg-yellow-300", iconClassName)}>
-            <ShineIcon />
-          </div>
-        );
-      case "dark":
-        return (
-          <div className={clsx("bg-violet-300", iconClassName)}>
-            <DarkIcon />
-          </div>
-        );
-    }
-  };
+  const { register, setValue, watch } = useForm<WeaponIndexRequest>({
+    defaultValues: {
+      name: "",
+      physicsType: undefined,
+      elementType: undefined,
+      sort: "updatedAt",
+      desc: 1,
+      currentPage: 1,
+    },
+  });
 
-  return (
-    <>
-      <div className="fixed w-[calc(100vw-270px)] flex justify-between items-end gap-2 bg-white p-2 rounded-lg shadow-lg shadow-violet-400 z-20">
-        <div className="flex gap-2 items-end">
-          <MantineTextInput
-            label="名前"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[200px]",
-            }}
-            rightSection={<SearchIcon />}
-            value={search.name}
-            onChange={(e) => setSearch({ ...search, name: e.target.value })}
-          />
-          <MantineSelect
-            label="物理タイプ"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[100px]",
-            }}
-            data={[
-              { value: "slash", label: "斬撃" },
-              { value: "blow", label: "打撃" },
-              { value: "shoot", label: "射撃" },
-            ]}
-            value={search.physicsType}
-            onChange={(v, _) =>
-              setSearch({ ...search, physicsType: (v as PhysicsType) ?? "" })
-            }
-            clearable
-          />
-          <MantineSelect
-            label="属性"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[100px]",
-            }}
-            data={[
-              { value: "neutral", label: "無属性" },
-              { value: "flame", label: "炎属性" },
-              { value: "water", label: "水属性" },
-              { value: "wood", label: "木属性" },
-              { value: "shine", label: "光属性" },
-              { value: "dark", label: "闇属性" },
-            ]}
-            value={search.elementType}
-            onChange={(v, _) =>
-              setSearch({ ...search, elementType: (v as ElementType) ?? "" })
-            }
-            clearable
-          />
-          <MantineSelect
-            label="ソート"
-            classNames={{
-              label: "text-sm",
-              input: "!w-[120px]",
-            }}
-            data={[
-              { value: "name", label: "名前" },
-              { value: "physicsAttack", label: "物理攻撃力" },
-              { value: "elementAttack", label: "属性攻撃力" },
-              { value: "createAt", label: "作成日時" },
-              { value: "updatedAt", label: "更新日時" },
-            ]}
-            value={search.sort}
-            onChange={(v, _) =>
-              setSearch({
-                ...search,
-                sort: (v as WeaponIndexRequest["sort"]) ?? null,
-              })
-            }
-            clearable
-          />
-          <MantineButton
-            type="button"
-            onClick={() => setSearch({ ...search, desc: !search.desc })}
-            color="var(--color-black)"
+  const form = watch();
+  const desc = watch("desc");
+  const currentPage = watch("currentPage");
+  const filterChildren = useMemo(
+    () => (
+      <div className="flex flex-col gap-2">
+        <Input label="名前" variant="bordered" {...register("name")} />
+        <Select
+          label="攻撃タイプ"
+          variant="bordered"
+          {...register("physicsType")}
+        >
+          <SelectItem key="slash">斬撃</SelectItem>
+          <SelectItem key="blow">打撃</SelectItem>
+          <SelectItem key="shoot">射撃</SelectItem>
+        </Select>
+        <Select label="属性" variant="bordered" {...register("elementType")}>
+          <SelectItem key="neutral">無属性</SelectItem>
+          <SelectItem key="flame">炎属性</SelectItem>
+          <SelectItem key="water">水属性</SelectItem>
+          <SelectItem key="wood">木属性</SelectItem>
+          <SelectItem key="shine">光属性</SelectItem>
+          <SelectItem key="dark">闇属性</SelectItem>
+        </Select>
+        <div className="grid grid-cols-[1fr_80px] gap-2">
+          <Select label="ソート" variant="bordered" {...register("sort")}>
+            <SelectItem key="name">名前</SelectItem>
+            <SelectItem key="physicsAttack">物理攻撃力</SelectItem>
+            <SelectItem key="elementAttack">属性攻撃力</SelectItem>
+            <SelectItem key="createdAt">作成日時</SelectItem>
+            <SelectItem key="updatedAt">更新日時</SelectItem>
+          </Select>
+
+          <Button
+            className="bg-black text-white h-full"
+            onPress={() => setValue("desc", +!desc)}
           >
             <SortIcon
               className={clsx(
                 "text-white transition-transform duration-300",
-                search.desc && "rotate-180"
+                desc && "rotate-180"
               )}
             />
-          </MantineButton>
+          </Button>
         </div>
-        <MantinePagination
-          total={totalPage}
-          value={search.currentPage}
-          radius="xl"
-          color="var(--color-black)"
-          onChange={(v) => setSearch({ ...search, currentPage: v ?? 1 })}
-        />
       </div>
-      <div className="grid grid-cols-8 gap-4 pt-24">
-        {weapons.map((weapon) => (
-          <div
-            key={weapon.id}
-            className="relative transition-transform duration-200 ease-in-out shadow shadow-violet-400 hover:-translate-y-1 hover:shadow-xl bg-white p-1 rounded-2xl"
-          >
-            <MantineImage radius="lg" src={weapon.imageUrl} />
-            <div className="absolute bottom-2 right-2 flex gap-2">
-              {getPhysicsTypeIcon(weapon.physicsType)}
-              {getElementTypeIcon(weapon.elementType)}
-            </div>
-            {isSelected && (
-              <div
-                className="absolute top-0 right-0 w-full h-full flex justify-end items-start"
-                onClick={() => {
-                  setMonsterWeapon({
-                    id: weapon.id,
-                    name: weapon.name,
-                  });
-                  monsterDrawerOpen();
-                  setIsSelected(false);
-                }}
-              />
-            )}
+    ),
+    [register, setValue, desc]
+  );
+  const paginationContent = useMemo(
+    () => (
+      <Pagination
+        classNames={{
+          item: "bg-white text-black shadow-[0_7px_10px_-2px_rgba(0,0,0,0.08),0_3px_5px_-1px_rgba(0,0,0,0.04)] shadow-white",
+          cursor: "bg-black text-white border border-white",
+        }}
+        total={totalPage}
+        page={currentPage}
+        onChange={(v) => setValue("currentPage", v)}
+      />
+    ),
+    [totalPage, currentPage, setValue]
+  );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      weaponIndex(form).then(({ data, totalPage }) => {
+        setWeapons(data);
+        setTotalPage(totalPage);
+      });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [form]);
+
+  useEffect(() => {
+    setFilterChildren(filterChildren);
+  }, [filterChildren, setFilterChildren]);
+
+  useEffect(() => {
+    setPaginationContent(paginationContent);
+  }, [paginationContent, setPaginationContent]);
+
+  return (
+    <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+      {weapons.map((weapon) => (
+        <div
+          key={weapon.id}
+          className={clsx(
+            assetBgColor(weapon.elementType),
+            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          )}
+        >
+          <Image
+            className="object-cover w-full h-auto"
+            radius="lg"
+            src={weapon.imageUrl}
+            removeWrapper
+          />
+          <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
+            <AssetTypeIcon type={weapon.physicsType} size="35%" />
+            <AssetTypeIcon type={weapon.elementType} size="35%" />
           </div>
-        ))}
-      </div>
-    </>
+          {isSelected && (
+            <div
+              className="absolute top-0 right-0 w-full h-full flex justify-end items-start z-10"
+              onClick={() => {
+                setMonsterWeapon({
+                  id: weapon.id,
+                  name: weapon.name,
+                });
+                onMonsterDrawerOpenChange();
+                setIsSelected(false);
+              }}
+            />
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
