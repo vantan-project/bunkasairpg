@@ -2,12 +2,12 @@
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
-@import "@mantine/core/styles.layer.css";
-@import "@mantine/notifications/styles.css";
-@import "@mantine/dropzone/styles.css";
-
 @theme {
-  --color-black: oklch(12.9% 0.042 264.695);
+  --color-black: black;
+
+  --color-gray: oklch(96.7% 0.001 286.375);
+  --color-gray-dark: oklch(92% 0.004 286.32);
+
   --color-white: #ffffff;
 }
 

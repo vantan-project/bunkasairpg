@@ -4,8 +4,14 @@ import Cookies from "js-cookie";
 export type MonsterIndexRequest = {
   currentPage: number;
   name: string;
-  sort: "createdAt" | "name" | "attack" | "hitPoint" | "experiencePoint" | "updatedAt";
-  desc: boolean;
+  sort:
+    | "createdAt"
+    | "name"
+    | "attack"
+    | "hitPoint"
+    | "experiencePoint"
+    | "updatedAt";
+  desc: number; // boolean
 };
 
 export type MonsterIndexResponse = {
@@ -13,7 +19,7 @@ export type MonsterIndexResponse = {
   imageUrl: string;
 }[];
 
-export function monsetrIndex(req: MonsterIndexRequest): Promise<{
+export function monsterIndex(req: MonsterIndexRequest): Promise<{
   data: MonsterIndexResponse;
   totalPage: number;
 }> {
