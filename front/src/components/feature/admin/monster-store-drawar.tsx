@@ -49,11 +49,24 @@ type FormValues = {
 type Props = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  weapon: {
+    id: number;
+    name: string;
+  } | null;
+  item: {
+    id: number;
+    name: string;
+  } | null;
 };
 
-export function MonsterStoreDrawer({ isOpen, onOpenChange }: Props) {
+export function MonsterStoreDrawer({
+  isOpen,
+  onOpenChange,
+  weapon,
+  item,
+}: Props) {
   const router = useRouter();
-  const { setIsSelected, monsterWeapon, monsterItem } = useAdminContext();
+  const { setIsSelected } = useAdminContext();
 
   const {
     register,
@@ -189,7 +202,7 @@ export function MonsterStoreDrawer({ isOpen, onOpenChange }: Props) {
                   <div className="relative">
                     <Input
                       label="ドロップ武器"
-                      value={monsterWeapon?.name || ""}
+                      value={weapon?.name || ""}
                       isReadOnly
                     />
                     <div
@@ -207,7 +220,7 @@ export function MonsterStoreDrawer({ isOpen, onOpenChange }: Props) {
                   <div className="relative">
                     <Input
                       label="ドロップアイテム"
-                      value={monsterItem?.name || ""}
+                      value={item?.name || ""}
                       isReadOnly
                     />
                     <div

@@ -93,21 +93,16 @@ export function AdminLayout({ children }: Props) {
   return (
     <AdminContext.Provider
       value={{
-        // モンスター追加ドロワー管理
-        isMonsterDrawerOpen,
-        onMonsterDrawerOpenChange,
-
-        // モンスター追加時の武器管理
-        monsterWeapon,
-        setMonsterWeapon,
-
-        // モンスター追加時のアイテム管理
-        monsterItem,
-        setMonsterItem,
-
         // 選択中かどうか
         isSelected,
         setIsSelected,
+
+        // モンスター追加ドロワー管理
+        onMonsterDrawerOpenChange,
+
+        // モンスター追加時の武器, アイテム管理
+        setMonsterWeapon,
+        setMonsterItem,
 
         // サイドバーコンテンツ
         setFilterChildren,
@@ -241,6 +236,8 @@ export function AdminLayout({ children }: Props) {
       <MonsterStoreDrawer
         isOpen={isMonsterDrawerOpen}
         onOpenChange={onMonsterDrawerOpenChange}
+        weapon={monsterWeapon}
+        item={monsterItem}
       />
       <WeaponStoreDrawer
         isOpen={isWeaponDrawerOpen}
