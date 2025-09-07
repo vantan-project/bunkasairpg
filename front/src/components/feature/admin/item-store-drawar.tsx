@@ -68,7 +68,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
   const effectType = watch("effectType");
   return (
     <Drawer
-      size="2xl"
+      size="xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"

@@ -107,7 +107,7 @@ export function MonsterStoreDrawer({
   const imageFile = watch("imageFile");
   return (
     <Drawer
-      size="2xl"
+      size="xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
@@ -153,7 +153,7 @@ export function MonsterStoreDrawer({
                 </label>
               </div>
 
-              <div className="flex flex-col gap-4 lg:overflow-y-auto lg:h-[400px] [scrollbar-color:var(--color-black)_transparent]">
+              <div className="flex flex-col gap-4 lg:overflow-y-auto lg:h-[380px] [scrollbar-color:var(--color-black)_transparent]">
                 <div className="grid grid-cols-2 gap-4 h-fit">
                   <Input label="名前" {...register("name")} />
                   <NumberInput

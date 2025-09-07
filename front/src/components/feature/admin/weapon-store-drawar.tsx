@@ -51,7 +51,7 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
 
   return (
     <Drawer
-      size="2xl"
+      size="xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
