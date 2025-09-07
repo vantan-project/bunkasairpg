@@ -18,33 +18,8 @@ import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import { useRouter } from "next/navigation";
-
-type FormValues = {
-  name: string;
-  imageFile: File | null;
-  attack: number;
-  hitPoint: number;
-  experiencePoint: number;
-
-  slash: number;
-  blow: number;
-  shoot: number;
-  neutral: number;
-  flame: number;
-  water: number;
-  wood: number;
-  shine: number;
-  dark: number;
-
-  weapon: {
-    id: number;
-    name: string;
-  } | null;
-  item: {
-    id: number;
-    name: string;
-  } | null;
-};
+import { MonsterStoreRequest } from "@/api/monster-store";
+import { useEffect } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -74,7 +49,10 @@ export function MonsterStoreDrawer({
     formState: { errors },
     watch,
     setValue,
-  } = useForm<FormValues>();
+  } = useForm<MonsterStoreRequest>();
+
+  useEffect(() => setValue("weaponId", weapon?.id ?? null), [weapon]);
+  useEffect(() => setValue("itemId", item?.id ?? null), [item]);
 
   const sliderMarks = [
     { value: -1.0, label: "弱点\n200%" },
@@ -202,6 +180,7 @@ export function MonsterStoreDrawer({
                   <div className="relative">
                     <Input
                       label="ドロップ武器"
+                      {...register("weaponId")}
                       value={weapon?.name || ""}
                       isClearable
                       onClear={() => setMonsterWeapon(null)}
@@ -224,6 +203,7 @@ export function MonsterStoreDrawer({
                   <div className="relative">
                     <Input
                       label="ドロップアイテム"
+                      {...register("itemId")}
                       value={item?.name || ""}
                       isClearable
                       onClear={() => setMonsterItem(null)}
