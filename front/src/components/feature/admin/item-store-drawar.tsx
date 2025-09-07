@@ -17,6 +17,7 @@ import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
 import { EffectType } from "@/types/effect-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
+import { CloseIcon } from "@/components/shared/icons/close-icon";
 
 type FormValues = {
   name: string;
@@ -67,17 +68,17 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
   const effectType = watch("effectType");
   return (
     <Drawer
-      size="xl"
+      size="2xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>アイテム追加</DrawerHeader>
-        <DrawerBody>
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
           <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_1fr] gap-4 w-full">
+            <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -156,6 +157,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                       onChange={(v) =>
                         typeof v === "number" && setValue("buff.rate", v)
                       }
+                      color="foreground"
                     />
                   </>
                 )}
@@ -185,6 +187,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                       onChange={(v) =>
                         typeof v === "number" && setValue("debuff.rate", v)
                       }
+                      color="foreground"
                     />
                   </>
                 )}

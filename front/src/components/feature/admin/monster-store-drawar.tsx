@@ -126,17 +126,17 @@ export function MonsterStoreDrawer({
   const imageFile = watch("imageFile");
   return (
     <Drawer
-      size="xl"
+      size="2xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>モンスター追加</DrawerHeader>
-        <DrawerBody>
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
           <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_1fr] gap-4 w-full">
+            <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -172,8 +172,8 @@ export function MonsterStoreDrawer({
                 </label>
               </div>
 
-              <div className="px-1 flex flex-col gap-4 overflow-y-auto max-h-[400px] [scrollbar-color:var(--color-black)_transparent]">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-4 lg:overflow-y-auto lg:h-[400px] [scrollbar-color:var(--color-black)_transparent]">
+                <div className="grid grid-cols-2 gap-4 h-fit">
                   <Input label="名前" {...register("name")} />
                   <NumberInput
                     label="攻撃力"
@@ -219,7 +219,7 @@ export function MonsterStoreDrawer({
                     />
                   </div>
                 </div>
-                <div className="flex flex-col gap-12 px-8">
+                <div className="flex flex-col gap-12 px-2">
                   {resistanceFields.map((field) => (
                     <div key={field.label}>
                       <Slider

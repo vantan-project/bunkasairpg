@@ -47,7 +47,49 @@ export function AdminLayout({ children }: Props) {
   const [paginationContent, setPaginationContent] =
     useState<React.ReactNode>(null);
 
-  const iconClassName = "w-6 h-6";
+  const MonsterDropdownMenu = () => (
+    <DropdownMenu aria-label="Link Actions">
+      <DropdownItem endContent={<ListIcon />} key="index" href="/admin/monster">
+        モンスター一覧
+      </DropdownItem>
+      <DropdownItem
+        endContent={<AddIcon />}
+        key="store"
+        onPress={onMonsterDrawerOpenChange}
+      >
+        モンスター追加
+      </DropdownItem>
+    </DropdownMenu>
+  );
+  const WeaponDropdownMenu = () => (
+    <DropdownMenu aria-label="Link Actions">
+      <DropdownItem endContent={<ListIcon />} key="index" href="/admin/weapon">
+        武器一覧
+      </DropdownItem>
+      <DropdownItem
+        endContent={<AddIcon />}
+        key="store"
+        onPress={onWeaponDrawerOpenChange}
+      >
+        武器追加
+      </DropdownItem>
+    </DropdownMenu>
+  );
+  const ItemDropdownMenu = () => (
+    <DropdownMenu aria-label="Link Actions">
+      <DropdownItem endContent={<ListIcon />} key="index" href="/admin/item">
+        アイテム一覧
+      </DropdownItem>
+      <DropdownItem
+        endContent={<AddIcon />}
+        key="store"
+        onPress={onItemDrawerOpenChange}
+      >
+        アイテム追加
+      </DropdownItem>
+    </DropdownMenu>
+  );
+
   return (
     <AdminContext.Provider
       value={{
@@ -98,22 +140,7 @@ export function AdminLayout({ children }: Props) {
                     モンスター管理
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu aria-label="Link Actions">
-                  <DropdownItem
-                    endContent={<ListIcon className={iconClassName} />}
-                    key="index"
-                    href="/admin/monster"
-                  >
-                    モンスター一覧
-                  </DropdownItem>
-                  <DropdownItem
-                    endContent={<AddIcon className={iconClassName} />}
-                    key="store"
-                    onPress={onMonsterDrawerOpenChange}
-                  >
-                    モンスター追加
-                  </DropdownItem>
-                </DropdownMenu>
+                <MonsterDropdownMenu />
               </Dropdown>
 
               <Dropdown placement="right-start">
@@ -127,22 +154,7 @@ export function AdminLayout({ children }: Props) {
                     武器管理
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu aria-label="Link Actions">
-                  <DropdownItem
-                    endContent={<ListIcon className={iconClassName} />}
-                    key="index"
-                    href="/admin/weapon"
-                  >
-                    武器一覧
-                  </DropdownItem>
-                  <DropdownItem
-                    endContent={<AddIcon className={iconClassName} />}
-                    key="store"
-                    onPress={onWeaponDrawerOpenChange}
-                  >
-                    武器追加
-                  </DropdownItem>
-                </DropdownMenu>
+                <WeaponDropdownMenu />
               </Dropdown>
 
               <Dropdown placement="right-start">
@@ -156,22 +168,7 @@ export function AdminLayout({ children }: Props) {
                     アイテム管理
                   </Button>
                 </DropdownTrigger>
-                <DropdownMenu aria-label="Link Actions">
-                  <DropdownItem
-                    endContent={<ListIcon className={iconClassName} />}
-                    key="index"
-                    href="/admin/item"
-                  >
-                    アイテム一覧
-                  </DropdownItem>
-                  <DropdownItem
-                    endContent={<AddIcon className={iconClassName} />}
-                    key="store"
-                    onPress={onItemDrawerOpenChange}
-                  >
-                    アイテム追加
-                  </DropdownItem>
-                </DropdownMenu>
+                <ItemDropdownMenu />
               </Dropdown>
             </div>
           </header>
@@ -188,6 +185,58 @@ export function AdminLayout({ children }: Props) {
         </div>
 
         <div>{children}</div>
+      </div>
+
+      <div className="lg:hidden">
+        <div className="fixed left-1/2 bottom-4">{paginationContent}</div>
+
+        <div className="fixed left-4 top-1/2 flex flex-col gap-2">
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                fullWidth
+                variant="light"
+                className="bg-white"
+                radius="full"
+                size="lg"
+              >
+                <MonsterIcon />
+              </Button>
+            </DropdownTrigger>
+            <MonsterDropdownMenu />
+          </Dropdown>
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                fullWidth
+                variant="light"
+                className="bg-white"
+                radius="full"
+                size="lg"
+              >
+                <WeaponIcon />
+              </Button>
+            </DropdownTrigger>
+            <WeaponDropdownMenu />
+          </Dropdown>
+          <Dropdown placement="right-start">
+            <DropdownTrigger>
+              <Button
+                isIconOnly
+                fullWidth
+                variant="light"
+                className="bg-white"
+                radius="full"
+                size="lg"
+              >
+                <ItemIcon />
+              </Button>
+            </DropdownTrigger>
+            <ItemDropdownMenu />
+          </Dropdown>
+        </div>
       </div>
 
       <MonsterStoreDrawer

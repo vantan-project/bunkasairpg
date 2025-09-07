@@ -51,17 +51,17 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
 
   return (
     <Drawer
-      size="xl"
+      size="2xl"
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>武器追加</DrawerHeader>
-        <DrawerBody>
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
           <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_auto] gap-4 w-full">
+            <div className="grid lg:grid-cols-[300px_auto] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -97,7 +97,7 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                 </label>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="grid grid-cols-2 gap-4 h-fit">
                 <Input label="名前" {...register("name")} />
                 <NumberInput
                   label="物理攻撃力"

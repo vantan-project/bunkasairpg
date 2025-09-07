@@ -127,7 +127,7 @@ export default function Page() {
   }, [paginationContent, setPaginationContent]);
 
   return (
-    <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+    <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
       {weapons.map((weapon) => (
         <div
           key={weapon.id}
