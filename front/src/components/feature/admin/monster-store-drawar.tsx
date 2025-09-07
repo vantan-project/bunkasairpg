@@ -16,6 +16,7 @@ import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useAdminContext } from "@/hooks/use-admin-context";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   name: string;
@@ -63,7 +64,8 @@ export function MonsterStoreDrawer({
   weapon,
   item,
 }: Props) {
-  const { monsterWeapon, monsterItem } = useAdminContext();
+  const router = useRouter();
+  const { setIsSelected, monsterWeapon, monsterItem } = useAdminContext();
 
   const {
     register,
@@ -204,7 +206,11 @@ export function MonsterStoreDrawer({
                     />
                     <div
                       className="absolute top-0 w-full h-full"
-                      onClick={() => onOpenChange(false)}
+                      onClick={() => {
+                        setIsSelected(true);
+                        router.push("/admin/weapon");
+                        onOpenChange(false);
+                      }}
                     />
                   </div>
                   <div className="relative">
@@ -215,7 +221,11 @@ export function MonsterStoreDrawer({
                     />
                     <div
                       className="absolute top-0 w-full h-full"
-                      onClick={() => onOpenChange(false)}
+                      onClick={() => {
+                        setIsSelected(true);
+                        router.push("/admin/item");
+                        onOpenChange(false);
+                      }}
                     />
                   </div>
                 </div>
