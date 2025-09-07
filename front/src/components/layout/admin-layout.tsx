@@ -1,4 +1,5 @@
-import { useRouter } from "next/navigation";
+"use client";
+
 import { MonsterStoreDrawer } from "../feature/admin/monster-store-drawar";
 import { useState } from "react";
 import { ItemStoreDrawer } from "../feature/admin/item-store-drawar";
@@ -24,7 +25,6 @@ type Props = {
 };
 
 export function AdminLayout({ children }: Props) {
-  const router = useRouter();
   const {
     isOpen: isMonsterDrawerOpen,
     onOpenChange: onMonsterDrawerOpenChange,
@@ -241,8 +241,6 @@ export function AdminLayout({ children }: Props) {
       <MonsterStoreDrawer
         isOpen={isMonsterDrawerOpen}
         onOpenChange={onMonsterDrawerOpenChange}
-        weapon={monsterWeapon}
-        item={monsterItem}
       />
       <WeaponStoreDrawer
         isOpen={isWeaponDrawerOpen}

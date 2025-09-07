@@ -11,6 +11,7 @@ import {
   NumberInput,
   Slider,
   SliderProps,
+  addToast,
 } from "@heroui/react";
 import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
@@ -48,22 +49,9 @@ type FormValues = {
 type Props = {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
-  weapon: {
-    id: number;
-    name: string;
-  } | null;
-  item: {
-    id: number;
-    name: string;
-  } | null;
 };
 
-export function MonsterStoreDrawer({
-  isOpen,
-  onOpenChange,
-  weapon,
-  item,
-}: Props) {
+export function MonsterStoreDrawer({ isOpen, onOpenChange }: Props) {
   const router = useRouter();
   const { setIsSelected, monsterWeapon, monsterItem } = useAdminContext();
 
@@ -208,6 +196,9 @@ export function MonsterStoreDrawer({
                       className="absolute top-0 w-full h-full"
                       onClick={() => {
                         setIsSelected(true);
+                        addToast({
+                          title: "武器を選択してください",
+                        });
                         router.push("/admin/weapon");
                         onOpenChange(false);
                       }}
@@ -223,6 +214,9 @@ export function MonsterStoreDrawer({
                       className="absolute top-0 w-full h-full"
                       onClick={() => {
                         setIsSelected(true);
+                        addToast({
+                          title: "アイテムを選択してください",
+                        });
                         router.push("/admin/item");
                         onOpenChange(false);
                       }}
