@@ -52,7 +52,12 @@ export default function Page() {
     () => (
       <div className="flex flex-col gap-2">
         <Input label="名前" variant="bordered" {...register("name")} />
-        <Select label="カテゴリ" variant="bordered" {...register("effectType")}>
+        <Select
+          isClearable
+          label="カテゴリ"
+          variant="bordered"
+          {...register("effectType")}
+        >
           <SelectItem key="heal">回復</SelectItem>
           <SelectItem key="buff">バフ</SelectItem>
           <SelectItem key="debuff">デバフ</SelectItem>

@@ -66,7 +66,7 @@ export function MonsterStoreDrawer({
   item,
 }: Props) {
   const router = useRouter();
-  const { setIsSelected } = useAdminContext();
+  const { setIsSelected, setMonsterWeapon, setMonsterItem } = useAdminContext();
 
   const {
     register,
@@ -203,10 +203,14 @@ export function MonsterStoreDrawer({
                     <Input
                       label="ドロップ武器"
                       value={weapon?.name || ""}
-                      isReadOnly
+                      isClearable
+                      onClear={() => setMonsterWeapon(null)}
+                      classNames={{
+                        clearButton: "z-20",
+                      }}
                     />
                     <div
-                      className="absolute top-0 w-full h-full"
+                      className="absolute top-0 w-full h-full z-10"
                       onClick={() => {
                         setIsSelected(true);
                         addToast({
@@ -221,10 +225,14 @@ export function MonsterStoreDrawer({
                     <Input
                       label="ドロップアイテム"
                       value={item?.name || ""}
-                      isReadOnly
+                      isClearable
+                      onClear={() => setMonsterItem(null)}
+                      classNames={{
+                        clearButton: "z-20",
+                      }}
                     />
                     <div
-                      className="absolute top-0 w-full h-full"
+                      className="absolute top-0 w-full h-full z-10"
                       onClick={() => {
                         setIsSelected(true);
                         addToast({

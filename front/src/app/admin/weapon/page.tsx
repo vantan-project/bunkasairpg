@@ -54,6 +54,7 @@ export default function Page() {
       <div className="flex flex-col gap-2">
         <Input label="名前" variant="bordered" {...register("name")} />
         <Select
+          isClearable
           label="攻撃タイプ"
           variant="bordered"
           {...register("physicsType")}
@@ -62,7 +63,12 @@ export default function Page() {
           <SelectItem key="blow">打撃</SelectItem>
           <SelectItem key="shoot">射撃</SelectItem>
         </Select>
-        <Select label="属性" variant="bordered" {...register("elementType")}>
+        <Select
+          isClearable
+          label="属性"
+          variant="bordered"
+          {...register("elementType")}
+        >
           <SelectItem key="neutral">無属性</SelectItem>
           <SelectItem key="flame">炎属性</SelectItem>
           <SelectItem key="water">水属性</SelectItem>
