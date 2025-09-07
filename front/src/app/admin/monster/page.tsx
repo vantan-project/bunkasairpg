@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Skeleton,
 } from "@heroui/react";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import {
@@ -22,6 +23,7 @@ import { SortIcon } from "@/components/shared/icons/sort-icon";
 export default function Page() {
   const [monsters, setMonsters] = useState<MonsterIndexResponse>([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const { setFilterChildren, setPaginationContent } = useAdminContext();
 
   const { register, setValue, watch } = useForm<MonsterIndexRequest>({
@@ -83,14 +85,16 @@ export default function Page() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      setIsLoading(true);
       monsterIndex(form).then(({ data, totalPage }) => {
         setMonsters(data);
         setTotalPage(totalPage);
+        setIsLoading(false);
       });
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [form]);
+  }, [JSON.stringify(form)]);
 
   useEffect(() => {
     setFilterChildren(filterChildren);
@@ -100,8 +104,20 @@ export default function Page() {
     setPaginationContent(paginationContent);
   }, [paginationContent, setPaginationContent]);
 
+  const containerClassName =
+    "grid grid-cols-3 sm:grid-cols-6 gap-4 h-fit max-h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden";
+  if (isLoading) {
+    return (
+      <div className={containerClassName}>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <Skeleton className="aspect-square rounded-2xl" key={i} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+    <div className={containerClassName}>
       {monsters.map((monster) => (
         <div
           key={monster.id}

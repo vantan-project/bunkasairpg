@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Skeleton,
 } from "@heroui/react";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import {
@@ -24,6 +25,7 @@ import { assetBgColor } from "@/utils/asset-bg-color";
 export default function Page() {
   const [items, setItems] = useState<ItemIndexResponse>([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const {
     onMonsterDrawerOpenChange,
     isSelected,
@@ -95,13 +97,15 @@ export default function Page() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      setIsLoading(true);
       itemIndex(form).then(({ data, totalPage }) => {
         setItems(data);
         setTotalPage(totalPage);
+        setIsLoading(false);
       });
     }, 500);
     return () => clearTimeout(timer);
-  }, [form]);
+  }, [JSON.stringify(form)]);
 
   useEffect(() => {
     setFilterChildren(filterChildren);
@@ -111,8 +115,20 @@ export default function Page() {
     setPaginationContent(paginationContent);
   }, [paginationContent, setPaginationContent]);
 
+  const containerClassName =
+    "grid grid-cols-3 sm:grid-cols-6 gap-4 h-fit max-h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden";
+  if (isLoading) {
+    return (
+      <div className={containerClassName}>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <Skeleton className="aspect-square rounded-2xl" key={i} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+    <div className={containerClassName}>
       {items.map((item) => (
         <div
           key={item.id}

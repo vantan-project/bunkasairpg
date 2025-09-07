@@ -115,18 +115,17 @@ export function AdminLayout({ children }: Props) {
       }}
     >
       <div className="lg:grid grid-cols-[300px_1fr]">
-        <div
-          className={clsx(
-            isSelected && "opacity-50",
-            "relative hidden lg:flex flex-col gap-4 items-center pt-4"
-          )}
-        >
-          {isSelected && (
-            <div className="absolute w-full h-full hover:cursor-not-allowed z-20" />
-          )}
-          <header className="w-full text-black bg-white rounded-r-xl overflow-hidden shadow-lg shadow-white">
+        <div className="hidden lg:flex flex-col gap-4 items-center pt-4">
+          <header
+            className={clsx(
+              isSelected && "opacity-50",
+              "relative w-full text-black bg-white rounded-r-xl overflow-hidden shadow-lg shadow-white"
+            )}
+          >
+            {isSelected && (
+              <div className="absolute w-full h-full hover:cursor-not-allowed z-20" />
+            )}
             <div className="h-2 bg-[linear-gradient(90deg,hsl(194,74%,56%),hsl(266,74%,56%),hsl(338,74%,56%),hsl(50,74%,56%),hsl(122,74%,56%))]" />
-
             <div className="p-2 pl-4">
               <h1 className="text-lg font-bold pl-2 pb-2">メニュー</h1>
               <Dropdown placement="right-start">
