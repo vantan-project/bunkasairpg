@@ -110,7 +110,7 @@ export function AdminLayout({ children }: Props) {
       }}
     >
       <div className="lg:grid grid-cols-[300px_1fr]">
-        <div className="hidden lg:flex flex-col gap-4 items-center pt-4">
+        <div className="hidden lg:flex flex-col gap-4 items-center pt-4 h-screen">
           <header
             className={clsx(
               isSelected && "opacity-50",
