@@ -4,6 +4,7 @@ import { MeIndexResponse, meIndex } from "@/api/me-index";
 import { MeItemResponse, meItem } from "@/api/me-item";
 import { MeWeaponResponse, meWeapon } from "@/api/me-weapon";
 import { GlobalContext } from "@/hooks/use-global-context";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,7 +16,12 @@ export function MainLayout({ children }: Props) {
   const pathname = usePathname();
   const allowedPaths = ["/admin", "/login", "/guide"];
   if (allowedPaths.some((path) => pathname.startsWith(path))) {
-    return <>{children}</>;
+    return (
+      <HeroUIProvider>
+        <ToastProvider placement="top-center" />
+        {children}
+      </HeroUIProvider>
+    );
   }
 
   const [user, _setUser] = useState<MeIndexResponse>();
@@ -74,7 +80,10 @@ export function MainLayout({ children }: Props) {
         setItems,
       }}
     >
-      {children}
+      <HeroUIProvider>
+        <ToastProvider placement="top-center" />
+        {children}
+      </HeroUIProvider>
     </GlobalContext.Provider>
   );
 }

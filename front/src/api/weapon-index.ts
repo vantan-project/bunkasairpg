@@ -9,7 +9,7 @@ export type WeaponIndexRequest = {
   physicsType: PhysicsType | null;
   elementType: ElementType | null;
   sort: "createdAt" | "name" | "physicsAttack" | "elementType" | "updatedAt";
-  desc: boolean;
+  desc: number; // boolean
 };
 
 export type WeaponIndexResponse = {

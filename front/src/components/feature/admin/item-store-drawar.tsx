@@ -1,17 +1,25 @@
-import { MantineSlider } from "@/components/shared/mantine/mantine-slider";
+import { useForm } from "react-hook-form";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  Button,
+  Form,
+  Input,
+  Select,
+  SelectItem,
+  Image,
+  NumberInput,
+  Slider,
+} from "@heroui/react";
 import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
 import { EffectType } from "@/types/effect-type";
-import { MantineDropzone } from "@/components/shared/mantine/mantine-dropzone";
-import { MantineImage } from "@/components/shared/mantine/mantine-image";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
-import { useForm } from "@mantine/form";
-import { AdminSelect } from "@/components/feature/admin/admin-select";
-import { MantineDrawer } from "@/components/shared/mantine/mantine-drawer";
-import { MantineTextInput } from "@/components/shared/mantine/mantine-text-input";
-import { AdminButton } from "./admin-button";
+import { CloseIcon } from "@/components/shared/icons/close-icon";
 
-type Form = {
+type FormValues = {
   name: string;
   imageFile: File | null;
   effectType: EffectType;
@@ -29,11 +37,11 @@ type Form = {
 };
 
 type Props = {
-  opened: boolean;
-  close: () => void;
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
 };
 
-export function ItemStoreDrawer({ opened, close }: Props) {
+export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
   const sliderMarks = [
     { value: 0.0, label: "0%" },
     { value: 0.1, label: "10%" },
@@ -48,169 +56,149 @@ export function ItemStoreDrawer({ opened, close }: Props) {
     { value: 1.0, label: "100%" },
   ];
 
-  const form = useForm<Form>({
-    initialValues: {
-      name: "",
-      imageFile: null as File | null,
-      effectType: "heal",
-      heal: {
-        amount: 0,
-      },
-      buff: {
-        rate: 0.0,
-        target: "slash",
-      },
-      debuff: {
-        rate: 0.0,
-        target: "slash",
-      },
-    },
-    validate: {
-      name: (value) => (value.length === 0 ? "名前は必須です" : null),
-      heal: (_, v) =>
-        v.effectType === "heal" && v.heal.amount <= 0
-          ? "回復量を入力してください"
-          : null,
-      buff: (_, v) =>
-        v.effectType === "buff" && v.buff.rate <= 0
-          ? "バフ量を入力してください"
-          : null,
-      debuff: (_, v) =>
-        v.effectType === "debuff" && v.debuff.rate <= 0
-          ? "デバフ量を入力してください"
-          : null,
-    },
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<FormValues>();
 
+  const imageFile = watch("imageFile");
+  const effectType = watch("effectType");
   return (
-    <MantineDrawer
-      opened={opened}
-      onClose={close}
-      title="アイテム追加"
-      position="bottom"
-      size="lg"
-      radius="lg"
-      classNames={{
-        title: "!font-bold text-black",
-      }}
+    <Drawer
+      size="xl"
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      placement="bottom"
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <form className="p-4 flex flex-col gap-12">
-        <div className="grid grid-cols-[300px_auto] gap-4">
-          <div>
-            画像
-            <MantineDropzone
-              onDrop={(f) => form.setFieldValue("imageFile", f[0])}
-              classNames={{
-                root: "aspect-square !p-0",
-                inner: "h-full",
-              }}
-            >
-              {form.values.imageFile === null ? (
-                <div className="h-full flex justify-center items-center">
-                  <ImageIcon className="w-12 h-12 text-black" />
-                </div>
-              ) : (
-                <MantineImage
-                  src={URL.createObjectURL(form.values.imageFile)}
+      <DrawerContent className="pb-4">
+        <DrawerHeader>アイテム追加</DrawerHeader>
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
+          <Form className="flex flex-col gap-12">
+            <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
+              <div>
+                <input
+                  className="hidden"
+                  type="file"
+                  id="file"
+                  {...register("imageFile", {
+                    onChange: (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setValue("imageFile", file);
+                      }
+                    },
+                  })}
                 />
-              )}
-            </MantineDropzone>
-          </div>
+                <label
+                  className="block aspect-square rounded-2xl bg-gray hover:bg-gray-dark overflow-hidden"
+                  htmlFor="file"
+                >
+                  {imageFile instanceof File ? (
+                    <div className="w-full h-full aspect-square bg-gray flex items-center justify-center">
+                      <Image
+                        className="object-cover w-full h-auto"
+                        src={URL.createObjectURL(imageFile)}
+                        radius="none"
+                        removeWrapper
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-full flex justify-center items-center">
+                      <ImageIcon className="w-12 h-12 text-black" />
+                    </div>
+                  )}
+                </label>
+              </div>
 
-          <div className="flex flex-col gap-4">
-            <MantineTextInput label="名前" {...form.getInputProps("name")} />
-            <AdminSelect
-              label="カテゴリー"
-              data={[
-                { value: "heal", label: "ヒール" },
-                { value: "buff", label: "バフ" },
-                { value: "debuff", label: "デバフ" },
-              ]}
-              {...form.getInputProps("effectType")}
-            />
+              <div className="flex flex-col gap-4">
+                <Input label="名前" {...register("name")} />
+                <Select label="カテゴリー" {...register("effectType")}>
+                  <SelectItem key="heal">ヒール</SelectItem>
+                  <SelectItem key="buff">バフ</SelectItem>
+                  <SelectItem key="debuff">デバフ</SelectItem>
+                </Select>
 
-            {form.values.effectType === "heal" && (
-              <MantineTextInput
-                label="回復量"
-                type="number"
-                {...form.getInputProps("heal.amount")}
-              />
-            )}
-
-            {form.values.effectType === "buff" && (
-              <>
-                <AdminSelect
-                  label="バフ対象"
-                  data={[
-                    { value: "slash", label: "斬撃威力" },
-                    { value: "blow", label: "打撃威力" },
-                    { value: "shoot", label: "射撃威力" },
-                    { value: "neutral", label: "無属性威力" },
-                    { value: "flame", label: "炎属性威力" },
-                    { value: "water", label: "水属性威力" },
-                    { value: "wood", label: "木属性威力" },
-                    { value: "shine", label: "光属性威力" },
-                    { value: "dark", label: "闇属性威力" },
-                  ]}
-                  {...form.getInputProps("buff.target")}
-                />
-
-                <div>
-                  バフ量
-                  <MantineSlider
-                    label={(v) =>
-                      sliderMarks.find(({ value }) => value === v)?.label
+                {effectType === "heal" && (
+                  <NumberInput
+                    label="回復量"
+                    {...register("heal.amount")}
+                    onChange={(v) =>
+                      typeof v === "number" && setValue("heal.amount", v)
                     }
-                    color="gray"
-                    step={0.1}
-                    min={0.0}
-                    max={1.0}
-                    marks={sliderMarks}
-                    {...form.getInputProps("buff.rate")}
                   />
-                </div>
-              </>
-            )}
+                )}
 
-            {form.values.effectType === "debuff" && (
-              <>
-                <AdminSelect
-                  label="デバフ対象"
-                  data={[
-                    { value: "slash", label: "斬撃耐性" },
-                    { value: "blow", label: "打撃耐性" },
-                    { value: "shoot", label: "射撃耐性" },
-                    { value: "neutral", label: "無属性耐性" },
-                    { value: "flame", label: "炎属性耐性" },
-                    { value: "water", label: "水属性耐性" },
-                    { value: "wood", label: "木属性耐性" },
-                    { value: "shine", label: "光属性耐性" },
-                    { value: "dark", label: "闇属性耐性" },
-                  ]}
-                  {...form.getInputProps("debuff.target")}
-                />
+                {effectType === "buff" && (
+                  <>
+                    <Select label="バフ対象" {...register("buff.target")}>
+                      <SelectItem key="slash">斬撃威力</SelectItem>
+                      <SelectItem key="blow">打撃威力</SelectItem>
+                      <SelectItem key="shoot">射撃威力</SelectItem>
+                      <SelectItem key="neutral">無属性威力</SelectItem>
+                      <SelectItem key="flame">炎属性威力</SelectItem>
+                      <SelectItem key="water">水属性威力</SelectItem>
+                      <SelectItem key="wood">木属性威力</SelectItem>
+                      <SelectItem key="shine">光属性威力</SelectItem>
+                      <SelectItem key="dark">闇属性威力</SelectItem>
+                    </Select>
+                    <Slider
+                      formatOptions={{ style: "percent" }}
+                      label="バフ量"
+                      maxValue={1.0}
+                      minValue={0.0}
+                      showSteps={true}
+                      step={0.1}
+                      marks={sliderMarks}
+                      {...register("buff.rate")}
+                      onChange={(v) =>
+                        typeof v === "number" && setValue("buff.rate", v)
+                      }
+                      color="foreground"
+                    />
+                  </>
+                )}
 
-                <div>
-                  デバフ量
-                  <MantineSlider
-                    label={(v) =>
-                      sliderMarks.find(({ value }) => value === v)?.label
-                    }
-                    color="gray"
-                    step={0.1}
-                    min={0.0}
-                    max={1.0}
-                    marks={sliderMarks}
-                    {...form.getInputProps("debuff.rate")}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        <AdminButton type="submit">追加</AdminButton>
-      </form>
-    </MantineDrawer>
+                {effectType === "debuff" && (
+                  <>
+                    <Select label="デバフ対象" {...register("debuff.target")}>
+                      <SelectItem key="slash">斬撃耐性</SelectItem>
+                      <SelectItem key="blow">打撃耐性</SelectItem>
+                      <SelectItem key="shoot">射撃耐性</SelectItem>
+                      <SelectItem key="neutral">無属性耐性</SelectItem>
+                      <SelectItem key="flame">炎属性耐性</SelectItem>
+                      <SelectItem key="water">水属性耐性</SelectItem>
+                      <SelectItem key="wood">木属性耐性</SelectItem>
+                      <SelectItem key="shine">光属性耐性</SelectItem>
+                      <SelectItem key="dark">闇属性耐性</SelectItem>
+                    </Select>
+                    <Slider
+                      formatOptions={{ style: "percent" }}
+                      label="デバフ量"
+                      maxValue={1.0}
+                      minValue={0.0}
+                      showSteps={true}
+                      step={0.1}
+                      marks={sliderMarks}
+                      {...register("debuff.rate")}
+                      onChange={(v) =>
+                        typeof v === "number" && setValue("debuff.rate", v)
+                      }
+                      color="foreground"
+                    />
+                  </>
+                )}
+              </div>
+            </div>
+            <Button className="bg-black text-white" fullWidth type="submit">
+              追加
+            </Button>
+          </Form>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 }

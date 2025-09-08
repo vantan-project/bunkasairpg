@@ -9,13 +9,10 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\WeaponController;
 use App\Http\Controllers\MonsterController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 Route::post('/auth/user-login', [AuthController::class, 'userLogin']);
 Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 
+// ユーザー系
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [MeController::class, 'index']);
     Route::get('/me/item', [MeController::class, 'items']);
@@ -28,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/monster/{monster}', [MonsterController::class, 'show']);
 });
 
+// 管理者系
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/user', [UserController::class, 'store']);
     Route::get('/item', [ItemController::class, 'index']);
