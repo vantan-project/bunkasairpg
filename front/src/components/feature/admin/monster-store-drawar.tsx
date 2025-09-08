@@ -18,8 +18,9 @@ import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import { useRouter } from "next/navigation";
-import { MonsterStoreRequest } from "@/api/monster-store";
+import { MonsterStoreRequest, monsterStore } from "@/api/monster-store";
 import { useEffect } from "react";
+import { addToasts } from "@/utils/add-toasts";
 
 type Props = {
   isOpen: boolean;
@@ -46,10 +47,18 @@ export function MonsterStoreDrawer({
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
     setValue,
   } = useForm<MonsterStoreRequest>();
+
+  const onSubmit = (data:MonsterStoreRequest) => {
+    monsterStore(data).then(({ success, messages }) => {
+      addToasts(success, messages);
+      if (success) {
+        window.location.href = "/admin/monster";
+      }
+    })
+  }
 
   useEffect(() => setValue("weaponId", weapon?.id ?? null), [weapon]);
   useEffect(() => setValue("itemId", item?.id ?? null), [item]);
@@ -116,7 +125,7 @@ export function MonsterStoreDrawer({
       <DrawerContent className="pb-4">
         <DrawerHeader>モンスター追加</DrawerHeader>
         <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
-          <Form className="flex flex-col gap-12">
+          <Form className="flex flex-col gap-12" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input

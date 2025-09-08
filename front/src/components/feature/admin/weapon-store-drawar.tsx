@@ -12,19 +12,10 @@ import {
   Image,
   NumberInput,
 } from "@heroui/react";
-import { PhysicsType } from "@/types/physics-type";
-import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useEffect } from "react";
-
-type FormValues = {
-  name: string;
-  imageFile: File | null;
-  physicsAttack: number;
-  elementAttack: number | null;
-  physicsType: PhysicsType;
-  elementType: ElementType;
-};
+import { WeaponStoreRequest, weaponStore } from "@/api/weapon-store";
+import { addToasts } from "@/utils/add-toasts";
 
 type Props = {
   isOpen: boolean;
@@ -35,19 +26,29 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
     setValue,
-  } = useForm<FormValues>();
+  } = useForm<WeaponStoreRequest>();
+
+  const onSubmit = (data: WeaponStoreRequest) => {
+    weaponStore(data).then(({ success, messages }) => {
+      addToasts(success, messages);
+      if (success) {
+        window.location.href = "/admin/weapon";
+      }
+    })
+  }
 
   const imageFile = watch("imageFile");
   const elementType = watch("elementType");
 
   useEffect(() => {
     if (elementType === "neutral") {
-      setValue("elementAttack", null);
+      setValue("elementAttack", 0);
     }
   }, [elementType]);
+
+
 
   return (
     <Drawer
@@ -60,7 +61,7 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
       <DrawerContent className="pb-4">
         <DrawerHeader>武器追加</DrawerHeader>
         <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
-          <Form className="flex flex-col gap-12">
+          <Form className="flex flex-col gap-12" onSubmit={handleSubmit(onSubmit)}>
             <div className="grid lg:grid-cols-[300px_auto] gap-4 w-full">
               <div>
                 <input

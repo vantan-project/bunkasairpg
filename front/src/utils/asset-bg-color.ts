@@ -1,7 +1,3 @@
-import { EffectType } from "@/types/effect-type";
-import { PhysicsType } from "@/types/physics-type";
-import { ElementType } from "react";
-
 const assetBgColorMap = {
   slash: "bg-slash",
   blow: "bg-blow",
