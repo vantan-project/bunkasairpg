@@ -121,14 +121,16 @@ export default function Page() {
       {monsters.map((monster) => (
         <div
           key={monster.id}
-          className="bg-neutral relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+          className="bg-neutral relative p-1 rounded-2xl shadow-lg shadow-white hover:-translate-y-1"
         >
-          <Image
-            className="object-cover w-full h-auto"
-            radius="lg"
-            src={monster.imageUrl}
-            removeWrapper
-          />
+          <div className="relative bg-gray-300 rounded-xl aspect-square flex items-center overflow-hidden">
+            <Image
+              className="object-cover w-full h-auto"
+              radius="none"
+              src={monster.imageUrl}
+              removeWrapper
+            />
+          </div>
         </div>
       ))}
     </div>

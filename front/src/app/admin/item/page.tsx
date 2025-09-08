@@ -139,17 +139,19 @@ export default function Page() {
           key={item.id}
           className={clsx(
             assetBgColor(item.effectType),
-            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+            "relative p-1 rounded-2xl shadow-lg shadow-white hover:-translate-y-1"
           )}
         >
-          <Image
-            className="object-cover w-full h-auto"
-            radius="lg"
-            src={item.imageUrl}
-            removeWrapper
-          />
-          <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
-            <AssetTypeIcon type={item.effectType} size="35%" />
+          <div className="relative bg-gray-300 rounded-xl aspect-square flex items-center overflow-hidden">
+            <Image
+              className="object-cover w-full h-auto"
+              radius="none"
+              src={item.imageUrl}
+              removeWrapper
+            />
+            <div className="absolute w-full px-2 bottom-2 flex gap-2 z-10 justify-end">
+              <AssetTypeIcon type={item.effectType} size="35%" />
+            </div>
           </div>
           {isSelected && (
             <div

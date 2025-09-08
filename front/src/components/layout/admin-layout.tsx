@@ -191,7 +191,7 @@ export function AdminLayout({ children }: Props) {
       </div>
 
       <div className="lg:hidden">
-        <div className="fixed left-4 top-1/2 flex flex-col gap-2">
+        <div className="fixed left-2 top-1/2 flex flex-col gap-2 z-20">
           <Dropdown placement="right-start">
             <DropdownTrigger>
               <Button
@@ -239,7 +239,7 @@ export function AdminLayout({ children }: Props) {
           </Dropdown>
         </div>
 
-        <div className="fixed right-3 bottom-20">
+        <div className="fixed right-3 bottom-20 z-20">
           <Badge
             color="danger"
             content=""
@@ -260,7 +260,7 @@ export function AdminLayout({ children }: Props) {
           </Badge>
         </div>
 
-        <div className="fixed left-1/2 bottom-4 -translate-x-1/2">
+        <div className="fixed left-1/2 bottom-4 -translate-x-1/2 z-20">
           {paginationContent}
         </div>
       </div>
