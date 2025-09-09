@@ -44,21 +44,17 @@ export function MonsterStoreDrawer({
   const router = useRouter();
   const { setIsSelected, setMonsterWeapon, setMonsterItem } = useAdminContext();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-  } = useForm<MonsterStoreRequest>();
+  const { register, handleSubmit, watch, setValue } =
+    useForm<MonsterStoreRequest>();
 
-  const onSubmit = (data:MonsterStoreRequest) => {
+  const onSubmit = (data: MonsterStoreRequest) => {
     monsterStore(data).then(({ success, messages }) => {
       addToasts(success, messages);
       if (success) {
         window.location.href = "/admin/monster";
       }
-    })
-  }
+    });
+  };
 
   useEffect(() => setValue("weaponId", weapon?.id ?? null), [weapon]);
   useEffect(() => setValue("itemId", item?.id ?? null), [item]);
@@ -125,7 +121,10 @@ export function MonsterStoreDrawer({
       <DrawerContent className="pb-4">
         <DrawerHeader>モンスター追加</DrawerHeader>
         <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
-          <Form className="flex flex-col gap-12" onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
@@ -167,6 +166,9 @@ export function MonsterStoreDrawer({
                   <Input label="名前" {...register("name")} />
                   <NumberInput
                     label="攻撃力"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("attack")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("attack", v)
@@ -174,6 +176,9 @@ export function MonsterStoreDrawer({
                   />
                   <NumberInput
                     label="HP"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("hitPoint")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("hitPoint", v)
@@ -181,6 +186,9 @@ export function MonsterStoreDrawer({
                   />
                   <NumberInput
                     label="獲得経験値"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("experiencePoint")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("experiencePoint", v)

@@ -23,12 +23,8 @@ type Props = {
 };
 
 export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-  } = useForm<WeaponStoreRequest>();
+  const { register, handleSubmit, watch, setValue } =
+    useForm<WeaponStoreRequest>();
 
   const onSubmit = (data: WeaponStoreRequest) => {
     weaponStore(data).then(({ success, messages }) => {
@@ -36,8 +32,8 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
       if (success) {
         window.location.href = "/admin/weapon";
       }
-    })
-  }
+    });
+  };
 
   const imageFile = watch("imageFile");
   const elementType = watch("elementType");
@@ -47,8 +43,6 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
       setValue("elementAttack", 0);
     }
   }, [elementType]);
-
-
 
   return (
     <Drawer
@@ -61,7 +55,10 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
       <DrawerContent className="pb-4">
         <DrawerHeader>武器追加</DrawerHeader>
         <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
-          <Form className="flex flex-col gap-12" onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="grid lg:grid-cols-[300px_auto] gap-4 w-full">
               <div>
                 <input
@@ -102,6 +99,9 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                 <Input label="名前" {...register("name")} />
                 <NumberInput
                   label="物理攻撃力"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
                   {...register("physicsAttack")}
                   onChange={(v) =>
                     typeof v === "number" && setValue("physicsAttack", v)
@@ -109,6 +109,9 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                 />
                 <NumberInput
                   label="属性攻撃力"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
                   isDisabled={elementType === "neutral"}
                   {...register("elementAttack")}
                   onChange={(v) =>

@@ -57,12 +57,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
     { value: 1.0, label: "100%" },
   ];
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-  } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue } = useForm<FormValues>();
 
   const onSubmit = (data: FormValues) => {
     let item: ItemStoreRequest;
@@ -101,9 +96,8 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
       if (success) {
         window.location.href = "/admin/item";
       }
-    })
-
-  }
+    });
+  };
 
   const imageFile = watch("imageFile");
   const effectType = watch("effectType");
@@ -118,7 +112,10 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
       <DrawerContent className="pb-4">
         <DrawerHeader>アイテム追加</DrawerHeader>
         <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
-          <Form className="flex flex-col gap-12" onSubmit={handleSubmit(onSubmit)}>
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
@@ -166,6 +163,9 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                 {effectType === "heal" && (
                   <NumberInput
                     label="回復量"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("heal.amount")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("heal.amount", v)
