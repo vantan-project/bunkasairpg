@@ -62,10 +62,13 @@ export default function () {
                     <Input
                         classNames={{
                             base: "w-80",
-                            input: "group-data-[has-value=true]:text-white",
+                            input: [
+                                "group-data-[has-value=true]:text-white",
+                                "[&:-webkit-autofill]:![-webkit-text-fill-color:white]"
+                            ],
                             inputWrapper: [
                                 "after:bg-purple-800",
-                                "after:w-full"
+                                "after:w-full",
                             ],
                             label: "text-white",
                         }}
@@ -76,7 +79,9 @@ export default function () {
                         {...register("email", { required: "メールアドレスを入力してください" })}
                     />
                     {errors.email && (
-                        <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                        <p className="text-red-500 text-xs mt-1">
+                            {errors.email.message}
+                        </p>
                     )}
                     <Input
                         classNames={{
@@ -95,7 +100,9 @@ export default function () {
                         {...register("password", { required: "パスワードを入力してください" })}
                     />
                     {errors.password && (
-                        <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                        <p className="text-red-500 text-xs mt-1">
+                            {errors.password.message}
+                        </p>
                     )}
                     <Button
                         type="submit"
@@ -115,7 +122,9 @@ export default function () {
                         login
                     </Button>
                     {errMessages && (
-                        <div className="text-red-500 text-sm mt-4"> {errMessages}</div>
+                        <div className="text-red-500 text-xs mt-4">
+                            {errMessages}
+                        </div>
                     )}
                 </Form>
             </div >
