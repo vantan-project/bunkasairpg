@@ -11,38 +11,16 @@ import {
   NumberInput,
   Slider,
   SliderProps,
+  addToast,
 } from "@heroui/react";
 import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useAdminContext } from "@/hooks/use-admin-context";
-
-type FormValues = {
-  name: string;
-  imageFile: File | null;
-  attack: number;
-  hitPoint: number;
-  experiencePoint: number;
-
-  slash: number;
-  blow: number;
-  shoot: number;
-  neutral: number;
-  flame: number;
-  water: number;
-  wood: number;
-  shine: number;
-  dark: number;
-
-  weapon: {
-    id: number;
-    name: string;
-  } | null;
-  item: {
-    id: number;
-    name: string;
-  } | null;
-};
+import { useRouter } from "next/navigation";
+import { MonsterStoreRequest, monsterStore } from "@/api/monster-store";
+import { useEffect } from "react";
+import { addToasts } from "@/utils/add-toasts";
 
 type Props = {
   isOpen: boolean;
@@ -63,15 +41,23 @@ export function MonsterStoreDrawer({
   weapon,
   item,
 }: Props) {
-  const { monsterWeapon, monsterItem } = useAdminContext();
+  const router = useRouter();
+  const { setIsSelected, setMonsterWeapon, setMonsterItem } = useAdminContext();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue } =
+    useForm<MonsterStoreRequest>();
+
+  const onSubmit = (data: MonsterStoreRequest) => {
+    monsterStore(data).then(({ success, messages }) => {
+      addToasts(success, messages);
+      if (success) {
+        window.location.href = "/admin/monster";
+      }
+    });
+  };
+
+  useEffect(() => setValue("weaponId", weapon?.id ?? null), [weapon]);
+  useEffect(() => setValue("itemId", item?.id ?? null), [item]);
 
   const sliderMarks = [
     { value: -1.0, label: "弱点\n200%" },
@@ -130,13 +116,16 @@ export function MonsterStoreDrawer({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>モンスター追加</DrawerHeader>
-        <DrawerBody>
-          <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_1fr] gap-4 w-full">
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -172,11 +161,14 @@ export function MonsterStoreDrawer({
                 </label>
               </div>
 
-              <div className="px-1 flex flex-col gap-4 overflow-y-auto max-h-[400px] [scrollbar-color:var(--color-black)_transparent]">
-                <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-4 lg:overflow-y-auto lg:h-[380px] [scrollbar-color:var(--color-black)_transparent]">
+                <div className="grid grid-cols-2 gap-4 h-fit">
                   <Input label="名前" {...register("name")} />
                   <NumberInput
                     label="攻撃力"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("attack")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("attack", v)
@@ -184,6 +176,9 @@ export function MonsterStoreDrawer({
                   />
                   <NumberInput
                     label="HP"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("hitPoint")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("hitPoint", v)
@@ -191,6 +186,9 @@ export function MonsterStoreDrawer({
                   />
                   <NumberInput
                     label="獲得経験値"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("experiencePoint")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("experiencePoint", v)
@@ -199,27 +197,51 @@ export function MonsterStoreDrawer({
                   <div className="relative">
                     <Input
                       label="ドロップ武器"
-                      value={monsterWeapon?.name || ""}
-                      isReadOnly
+                      {...register("weaponId")}
+                      value={weapon?.name || ""}
+                      isClearable
+                      onClear={() => setMonsterWeapon(null)}
+                      classNames={{
+                        clearButton: "z-20",
+                      }}
                     />
                     <div
-                      className="absolute top-0 w-full h-full"
-                      onClick={() => onOpenChange(false)}
+                      className="absolute top-0 w-full h-full z-10"
+                      onClick={() => {
+                        setIsSelected(true);
+                        addToast({
+                          title: "武器を選択してください",
+                        });
+                        router.push("/admin/weapon");
+                        onOpenChange(false);
+                      }}
                     />
                   </div>
                   <div className="relative">
                     <Input
                       label="ドロップアイテム"
-                      value={monsterItem?.name || ""}
-                      isReadOnly
+                      {...register("itemId")}
+                      value={item?.name || ""}
+                      isClearable
+                      onClear={() => setMonsterItem(null)}
+                      classNames={{
+                        clearButton: "z-20",
+                      }}
                     />
                     <div
-                      className="absolute top-0 w-full h-full"
-                      onClick={() => onOpenChange(false)}
+                      className="absolute top-0 w-full h-full z-10"
+                      onClick={() => {
+                        setIsSelected(true);
+                        addToast({
+                          title: "アイテムを選択してください",
+                        });
+                        router.push("/admin/item");
+                        onOpenChange(false);
+                      }}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col gap-12 px-8">
+                <div className="flex flex-col gap-12 px-2">
                   {resistanceFields.map((field) => (
                     <div key={field.label}>
                       <Slider

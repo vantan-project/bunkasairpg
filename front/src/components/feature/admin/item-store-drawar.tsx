@@ -17,6 +17,8 @@ import { PhysicsType } from "@/types/physics-type";
 import { ElementType } from "@/types/element-type";
 import { EffectType } from "@/types/effect-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
+import { ItemStoreRequest, itemStore } from "@/api/item-store";
+import { addToasts } from "@/utils/add-toasts";
 
 type FormValues = {
   name: string;
@@ -55,13 +57,47 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
     { value: 1.0, label: "100%" },
   ];
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue } = useForm<FormValues>();
+
+  const onSubmit = (data: FormValues) => {
+    let item: ItemStoreRequest;
+    switch (data.effectType) {
+      case "heal":
+        item = {
+          name: data.name,
+          imageFile: data.imageFile,
+          effectType: "heal",
+          amount: data.heal.amount,
+        };
+        break;
+
+      case "buff":
+        item = {
+          name: data.name,
+          imageFile: data.imageFile,
+          effectType: "buff",
+          rate: data.buff.rate,
+          target: data.buff.target,
+        };
+        break;
+
+      case "debuff":
+        item = {
+          name: data.name,
+          imageFile: data.imageFile,
+          effectType: "debuff",
+          rate: data.debuff.rate,
+          target: data.debuff.target,
+        };
+        break;
+    }
+    itemStore(item).then(({ success, messages }) => {
+      addToasts(success, messages);
+      if (success) {
+        window.location.href = "/admin/item";
+      }
+    });
+  };
 
   const imageFile = watch("imageFile");
   const effectType = watch("effectType");
@@ -71,13 +107,16 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>アイテム追加</DrawerHeader>
-        <DrawerBody>
-          <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_1fr] gap-4 w-full">
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -124,6 +163,9 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                 {effectType === "heal" && (
                   <NumberInput
                     label="回復量"
+                    formatOptions={{
+                      useGrouping: false,
+                    }}
                     {...register("heal.amount")}
                     onChange={(v) =>
                       typeof v === "number" && setValue("heal.amount", v)
@@ -156,6 +198,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                       onChange={(v) =>
                         typeof v === "number" && setValue("buff.rate", v)
                       }
+                      color="foreground"
                     />
                   </>
                 )}
@@ -185,6 +228,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                       onChange={(v) =>
                         typeof v === "number" && setValue("debuff.rate", v)
                       }
+                      color="foreground"
                     />
                   </>
                 )}

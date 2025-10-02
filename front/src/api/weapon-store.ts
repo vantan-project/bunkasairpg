@@ -27,6 +27,7 @@ export function weaponStore(
     .post<WeaponStoreResponse>(apiUrl, req, {
       headers: {
         Authorization: `Bearer ${authToken}`,
+        "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => res.data)

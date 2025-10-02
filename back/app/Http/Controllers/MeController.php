@@ -164,14 +164,13 @@ class MeController extends Controller
 
         try {
             DB::transaction(function () use ($user, $itemId) {
-                // 既存のuser_itemを検索
-                $userItem = UserItem::where('user_id', $user->id)
-                    ->where('item_id', $itemId)
-                    ->first();
+                // 既存レコードの有無を複合キーで判定し、クエリビルダで更新
+                $query = UserItem::where('user_id', $user->id)
+                    ->where('item_id', $itemId);
 
-                if ($userItem) {
-                    // 既存アイテムの場合、countを1増加
-                    $userItem->increment('count');
+                if ($query->exists()) {
+                    // 既存アイテムの場合、countを1増加（主キーidを使わない）
+                    $query->increment('count');
                 } else {
                     // 新規アイテムの場合、count=1で作成
                     UserItem::create([
@@ -266,12 +265,17 @@ class MeController extends Controller
                     ], 400);
                 }
 
-                // countを1減算
-                $userItem->decrement('count');
+                // countを1減算（主キーidを使わない）
+                UserItem::where('user_id', $user->id)
+                    ->where('item_id', $itemId)
+                    ->where('count', '>', 0)
+                    ->decrement('count');
 
-                // countが0になった場合はレコードを削除
-                if ($userItem->count <= 0) {
-                    $userItem->delete();
+                // 減算後に0になった場合はレコードを削除
+                if ($userItem->count <= 1) {
+                    UserItem::where('user_id', $user->id)
+                        ->where('item_id', $itemId)
+                        ->delete();
                 }
 
                 return response()->json(null, 204);

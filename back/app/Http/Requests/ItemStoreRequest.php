@@ -55,6 +55,9 @@ class ItemStoreRequest extends FormRequest
             'rate.numeric' => '倍率は数値で入力してください。',
             'rate.between' => '倍率は0以上1以下で指定してください。',
 
+            'target.required_if' => '対象は必須です。',
+            'target.required_if.effectType.buff' => 'バフ効果の場合、対象を選択してください。',
+            'target.required_if.effectType.debuff' => 'デバフ効果の場合、対象を選択してください。',
             'target.string' => '対象属性は文字列で入力してください。',
             'target.in' => '対象属性は slash, blow, shoot, neutral, flame, water, wood, shine, dark のいずれかを指定してください。',
         ];

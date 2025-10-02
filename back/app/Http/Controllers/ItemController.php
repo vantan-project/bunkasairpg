@@ -46,9 +46,9 @@ class ItemController extends Controller
                     'effectType' => $item->effect_type,
                 ];
             });
-            return response()->json([
-                'items' => $formattedItems
-            ]);
+            return response()->json($formattedItems)
+                ->header('X-Total-Page', $items->lastPage())
+                ->header('Access-Control-Expose-Headers', 'X-Total-Page');
         } catch (Exception $e) {
             return response()->json([
                 'messages' => ['アイテム一覧の取得に失敗しました'],

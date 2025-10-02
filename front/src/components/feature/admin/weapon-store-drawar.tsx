@@ -12,19 +12,10 @@ import {
   Image,
   NumberInput,
 } from "@heroui/react";
-import { PhysicsType } from "@/types/physics-type";
-import { ElementType } from "@/types/element-type";
 import { ImageIcon } from "@/components/shared/icons/image-icon";
 import { useEffect } from "react";
-
-type FormValues = {
-  name: string;
-  imageFile: File | null;
-  physicsAttack: number;
-  elementAttack: number | null;
-  physicsType: PhysicsType;
-  elementType: ElementType;
-};
+import { WeaponStoreRequest, weaponStore } from "@/api/weapon-store";
+import { addToasts } from "@/utils/add-toasts";
 
 type Props = {
   isOpen: boolean;
@@ -32,20 +23,24 @@ type Props = {
 };
 
 export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    setValue,
-  } = useForm<FormValues>();
+  const { register, handleSubmit, watch, setValue } =
+    useForm<WeaponStoreRequest>();
+
+  const onSubmit = (data: WeaponStoreRequest) => {
+    weaponStore(data).then(({ success, messages }) => {
+      addToasts(success, messages);
+      if (success) {
+        window.location.href = "/admin/weapon";
+      }
+    });
+  };
 
   const imageFile = watch("imageFile");
   const elementType = watch("elementType");
 
   useEffect(() => {
     if (elementType === "neutral") {
-      setValue("elementAttack", null);
+      setValue("elementAttack", 0);
     }
   }, [elementType]);
 
@@ -55,13 +50,16 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       placement="bottom"
-      hideCloseButton
+      classNames={{ closeButton: "text-2xl" }}
     >
-      <DrawerContent className="h-[80vh]">
+      <DrawerContent className="pb-4">
         <DrawerHeader>武器追加</DrawerHeader>
-        <DrawerBody>
-          <Form className="flex flex-col gap-12">
-            <div className="grid grid-cols-[300px_auto] gap-4 w-full">
+        <DrawerBody className="[scrollbar-color:var(--color-black)_transparent]">
+          <Form
+            className="flex flex-col gap-12"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="grid lg:grid-cols-[300px_auto] gap-4 w-full">
               <div>
                 <input
                   className="hidden"
@@ -97,10 +95,13 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                 </label>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="grid grid-cols-2 gap-4 h-fit">
                 <Input label="名前" {...register("name")} />
                 <NumberInput
                   label="物理攻撃力"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
                   {...register("physicsAttack")}
                   onChange={(v) =>
                     typeof v === "number" && setValue("physicsAttack", v)
@@ -108,6 +109,9 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                 />
                 <NumberInput
                   label="属性攻撃力"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
                   isDisabled={elementType === "neutral"}
                   {...register("elementAttack")}
                   onChange={(v) =>

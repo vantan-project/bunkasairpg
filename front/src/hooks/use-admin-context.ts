@@ -1,22 +1,13 @@
 import { createContext, useContext } from "react";
 
 type AdminContextType = {
-  isMonsterDrawerOpen: boolean;
+  isSelected: boolean;
+  setIsSelected: (isSelected: boolean) => void;
   onMonsterDrawerOpenChange: () => void;
-  monsterWeapon: {
-    id: number;
-    name: string;
-  } | null;
   setMonsterWeapon: (
     monsterWeapon: { id: number; name: string } | null
   ) => void;
-  monsterItem: {
-    id: number;
-    name: string;
-  } | null;
   setMonsterItem: (monsterItem: { id: number; name: string } | null) => void;
-  isSelected: boolean;
-  setIsSelected: (isSelected: boolean) => void;
   setFilterChildren: (filterChildren: React.ReactNode) => void;
   setPaginationContent: (paginationContent: React.ReactNode) => void;
 };

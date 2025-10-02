@@ -10,6 +10,7 @@ import {
   Pagination,
   Select,
   SelectItem,
+  Skeleton,
 } from "@heroui/react";
 import { useAdminContext } from "@/hooks/use-admin-context";
 import {
@@ -24,6 +25,7 @@ import { assetBgColor } from "@/utils/asset-bg-color";
 export default function Page() {
   const [weapons, setWeapons] = useState<WeaponIndexResponse>([]);
   const [totalPage, setTotalPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const {
     onMonsterDrawerOpenChange,
     isSelected,
@@ -33,11 +35,11 @@ export default function Page() {
     setPaginationContent,
   } = useAdminContext();
 
-  const { register, setValue, watch } = useForm<WeaponIndexRequest>({
+  const { register, setValue, watch, control } = useForm<WeaponIndexRequest>({
     defaultValues: {
       name: "",
-      physicsType: undefined,
-      elementType: undefined,
+      physicsType: null,
+      elementType: null,
       sort: "updatedAt",
       desc: 1,
       currentPage: 1,
@@ -52,6 +54,7 @@ export default function Page() {
       <div className="flex flex-col gap-2">
         <Input label="名前" variant="bordered" {...register("name")} />
         <Select
+          isClearable
           label="攻撃タイプ"
           variant="bordered"
           {...register("physicsType")}
@@ -60,7 +63,12 @@ export default function Page() {
           <SelectItem key="blow">打撃</SelectItem>
           <SelectItem key="shoot">射撃</SelectItem>
         </Select>
-        <Select label="属性" variant="bordered" {...register("elementType")}>
+        <Select
+          isClearable
+          label="属性"
+          variant="bordered"
+          {...register("elementType")}
+        >
           <SelectItem key="neutral">無属性</SelectItem>
           <SelectItem key="flame">炎属性</SelectItem>
           <SelectItem key="water">水属性</SelectItem>
@@ -110,13 +118,15 @@ export default function Page() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      setIsLoading(true);
       weaponIndex(form).then(({ data, totalPage }) => {
         setWeapons(data);
         setTotalPage(totalPage);
+        setIsLoading(false);
       });
     }, 500);
     return () => clearTimeout(timer);
-  }, [form]);
+  }, [JSON.stringify(form)]);
 
   useEffect(() => {
     setFilterChildren(filterChildren);
@@ -126,25 +136,39 @@ export default function Page() {
     setPaginationContent(paginationContent);
   }, [paginationContent, setPaginationContent]);
 
+  const containerClassName =
+    "grid grid-cols-3 sm:grid-cols-6 gap-4 h-fit max-h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden";
+  if (isLoading) {
+    return (
+      <div className={containerClassName}>
+        {Array.from({ length: 30 }).map((_, i) => (
+          <Skeleton className="aspect-square rounded-2xl" key={i} />
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-6 gap-4 h-screen p-4 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden">
+    <div className={containerClassName}>
       {weapons.map((weapon) => (
         <div
           key={weapon.id}
           className={clsx(
             assetBgColor(weapon.elementType),
-            "relative p-1 rounded-2xl aspect-square shadow-lg shadow-white hover:-translate-y-1"
+            "relative p-1 rounded-2xl shadow-lg shadow-white hover:-translate-y-1"
           )}
         >
-          <Image
-            className="object-cover w-full h-auto"
-            radius="lg"
-            src={weapon.imageUrl}
-            removeWrapper
-          />
-          <div className="absolute w-full px-4 bottom-2 flex gap-2 z-10 justify-end">
-            <AssetTypeIcon type={weapon.physicsType} size="35%" />
-            <AssetTypeIcon type={weapon.elementType} size="35%" />
+          <div className="relative bg-gray-300 rounded-xl aspect-square flex items-center overflow-hidden">
+            <Image
+              className="object-cover w-full h-auto"
+              radius="none"
+              src={weapon.imageUrl}
+              removeWrapper
+            />
+            <div className="absolute w-full px-2 bottom-2 flex gap-2 z-10 justify-end">
+              <AssetTypeIcon type={weapon.physicsType} size="35%" />
+              <AssetTypeIcon type={weapon.elementType} size="35%" />
+            </div>
           </div>
           {isSelected && (
             <div

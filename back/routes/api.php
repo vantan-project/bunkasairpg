@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\WeaponController;
+use App\Http\Controllers\MonsterController;
 
 Route::post('/auth/user-login', [AuthController::class, 'userLogin']);
 Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
@@ -21,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/me/use-item', [MeController::class, 'useItem']);
     Route::get('/me/weapon', [MeController::class, 'weapon']);
     Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
+    Route::get('/monster/{monster}', [MonsterController::class, 'show']);
 });
 
 // 管理者系
@@ -30,4 +32,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('/item', [ItemController::class, 'store']);
     Route::get('/weapon', [WeaponController::class, 'index']);
     Route::post('/weapon', [WeaponController::class, 'store']);
+    Route::get('/monster', [MonsterController::class, 'index']);
+    Route::post('/monster', [MonsterController::class, 'store']);
 });
