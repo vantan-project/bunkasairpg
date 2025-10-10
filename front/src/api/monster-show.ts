@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 
 export type MonsterShowResponse = {
     name: string;
-    imageUrl: string | null;
+    imageUrl: string;
     attack: number;
     maxHitPoint: number;
     hitPoint: number;
@@ -27,8 +27,8 @@ export type MonsterShowResponse = {
     } | null;
 };
 
-export function monsterShow(id: number): Promise<MonsterShowResponse> {
-    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/monsters/${id}`;
+export function monsterShow(id: string): Promise<MonsterShowResponse> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/monster/${id}`;
     const authToken = Cookies.get("authToken");
 
     return axios

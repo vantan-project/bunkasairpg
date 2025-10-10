@@ -21,13 +21,14 @@ export function meUpdate(req: MeUpdateRequest): Promise<MeUpdateResponse> {
   const authToken = Cookie.get("authToken");
 
   return axios
-    .patch<MeUpdateResponse>(apiUrl, req, {
+    .post<MeUpdateResponse>(apiUrl, req, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => {
+      console.log(res);
       return res.data;
     })
     .catch((err) => {

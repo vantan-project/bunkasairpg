@@ -1,7 +1,19 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+// next.config.js
+module.exports = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 's3-bunkasairpg.s3.ap-northeast-1.amazonaws.com',
+        port: '',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'placehold.jp',
+        port: '',
+        pathname: '/**'
+      },
+    ],
+  },
 };
-
-export default nextConfig;

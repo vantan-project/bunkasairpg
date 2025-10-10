@@ -1,4 +1,4 @@
-import { Modal } from "@/components/layout/modal";
+import { Modal } from "@/components/feature/battle/modal";
 import { useState } from "react";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
@@ -49,7 +49,7 @@ export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
         setItem(item)
     }
     return (
-        <>
+        <div className="flex overflow-x-hidden">
             {items.map((item, index) => (
                 <div
                     key={index}
@@ -63,9 +63,9 @@ export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
                 <Modal
                     onClose={() => setConfirmModal(false)}
                     onConfirm={handleUseItem}
-                    title={`本当に「${item.name}」を使用しますか？`}
+                    title={`本当に「${item.name}」を\n使用しますか？`}
                 />
             )}
-        </>
+        </div>
     )
 }

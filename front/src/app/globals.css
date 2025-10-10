@@ -22,6 +22,12 @@
   --color-heal: var(--color-pink-400);
   --color-buff: var(--color-red-400);
   --color-debuff: var(--color-sky-400);
+  --color-hp-height: #BDFF16;
+  --color-hp-middle: #FFD916;
+  --color-hp-low: #FF1622;
+  --color-label: #BABABA;
+  --color-border: #666666;
+
 }
 
 body::-webkit-scrollbar {
