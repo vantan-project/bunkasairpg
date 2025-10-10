@@ -10,6 +10,8 @@ import { MailIcon } from "@/components/shared/icons/mail-icon";
 import { LockIcon } from "@/components/shared/icons/lock-icon";
 import "../admin.module.css";
 import { addToasts } from "@/utils/add-toasts";
+import { useEffect } from "react";
+import { adminToken } from "@/api/admin-token";
 
 export default function () {
   const router = useRouter();
@@ -29,6 +31,16 @@ export default function () {
 
     addToasts(res.success, res.messages);
   };
+
+  const tokenApi = async () => {
+    const res = await adminToken();
+    if (res.success) {
+      router.push("/admin/monster");
+    }
+  };
+  useEffect(() => {
+    tokenApi();
+  }, []);
 
   return (
     <div className="h-screen grid place-items-center w-full">

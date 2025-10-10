@@ -256,10 +256,14 @@ export function MonsterStoreDrawer({
                         classNames={{
                           mark: "!whitespace-pre-line",
                         }}
-                        {...register(field.value)}
-                        onChange={(v) =>
-                          typeof v === "number" && setValue(field.value, v)
-                        }
+                        value={watch(field.value)}
+                        onChange={(v) => {
+                          if (Array.isArray(v)) {
+                            setValue(field.value, v[0]);
+                          } else {
+                            setValue(field.value, v);
+                          }
+                        }}
                       />
                     </div>
                   ))}
