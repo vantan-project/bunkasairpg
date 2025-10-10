@@ -14,24 +14,30 @@ Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 
 // ユーザー系
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/me', [MeController::class, 'index']);
-    Route::get('/me/item', [MeController::class, 'items']);
-    Route::post('/me', [MeController::class, 'update']);
-    Route::post('/me/get-item', [MeController::class, 'getItem']);
-    Route::post('/me/get-weapon', [MeController::class, 'getWeapon']);
-    Route::patch('/me/use-item', [MeController::class, 'useItem']);
-    Route::get('/me/weapon', [MeController::class, 'weapon']);
-    Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
-    Route::get('/monster/{monster}', [MonsterController::class, 'show']);
+  Route::get('/me', [MeController::class, 'index']);
+  Route::get('/me/item', [MeController::class, 'items']);
+  Route::patch('/me', [MeController::class, 'update']);
+  Route::post('/me/get-item', [MeController::class, 'getItem']);
+  Route::post('/me/get-weapon', [MeController::class, 'getWeapon']);
+  Route::patch('/me/use-item', [MeController::class, 'useItem']);
+  Route::get('/me/weapon', [MeController::class, 'weapon']);
+  Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
+  Route::get('/monster/{monster}', [MonsterController::class, 'show']);
 });
 
 // 管理者系
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-    Route::post('/user', [UserController::class, 'store']);
-    Route::get('/item', [ItemController::class, 'index']);
-    Route::post('/item', [ItemController::class, 'store']);
-    Route::get('/weapon', [WeaponController::class, 'index']);
-    Route::post('/weapon', [WeaponController::class, 'store']);
-    Route::get('/monster', [MonsterController::class, 'index']);
-    Route::post('/monster', [MonsterController::class, 'store']);
+  Route::get('/admin-token', function (Request $request) {
+    return response()->json([
+      'success' => true,
+    ]);
+  });
+
+  Route::post('/user', [UserController::class, 'store']);
+  Route::get('/item', [ItemController::class, 'index']);
+  Route::post('/item', [ItemController::class, 'store']);
+  Route::get('/weapon', [WeaponController::class, 'index']);
+  Route::post('/weapon', [WeaponController::class, 'store']);
+  Route::get('/monster', [MonsterController::class, 'index']);
+  Route::post('/monster', [MonsterController::class, 'store']);
 });

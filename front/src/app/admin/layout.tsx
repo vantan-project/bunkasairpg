@@ -1,6 +1,6 @@
 "use client";
 
-import "./admin.css"
+import "../admin.module.css"
 import { AdminLayout } from "@/components/layout/admin-layout";
 
 type Props = {

@@ -8,7 +8,7 @@ export type AuthAdminLoginRequset = {
 export type AuthAdminLoginResponse = {
   success: boolean;
   messages: string[];
-  authToken: string;
+  token: string;
 };
 
 export function authAdminLogin(
