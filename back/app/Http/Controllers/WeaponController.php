@@ -75,6 +75,7 @@ class WeaponController extends Controller
                 $weapon = Weapon::create([
                     'name' => $validated['name'],
                     'image_url' => $url,
+                    'index_number' => $validated['indexNumber'],
                     'physics_attack' => $validated['physicsAttack'],
                     'element_attack' => $validated['elementAttack'] ?? null,
                     'physics_type' => $validated['physicsType'],
@@ -89,6 +90,24 @@ class WeaponController extends Controller
             return response()->json([
                 'success' => false,
                 'messages' => ['武器の作成に失敗しました。'],
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try{
+            $item = Weapon::find($id);
+            $item->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => '正常に削除されました！',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'messages' => ['削除に失敗しました！'],
             ], 500);
         }
     }

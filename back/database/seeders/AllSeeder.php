@@ -22,6 +22,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '炎の剣',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '001',
                 'physics_attack' => 50,
                 'element_attack' => 20,
                 'physics_type' => 'slash',
@@ -32,6 +33,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '氷の弓',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '002',
                 'physics_attack' => 35,
                 'element_attack' => 30,
                 'physics_type' => 'shoot',
@@ -42,6 +44,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '木のハンマー',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '003',
                 'physics_attack' => 60,
                 'element_attack' => null,
                 'physics_type' => 'blow',
@@ -95,6 +98,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '回復ポーション',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '001',
                 'effect_type' => 'heal',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -102,6 +106,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '力の薬',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '002',
                 'effect_type' => 'buff',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -109,6 +114,7 @@ class AllSeeder extends Seeder
             [
                 'name' => '毒矢',
                 'image_url' => 'https://placehold.jp/150x150.png',
+                'index_number' => '003',
                 'effect_type' => 'debuff',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -125,6 +131,7 @@ class AllSeeder extends Seeder
                 'id' => Str::uuid(),
                 'weapon_id' => 1,
                 'item_id' => 1,
+                'index_number' => '001',
                 'name' => 'スライム',
                 'image_url' => 'https://placehold.jp/150x150.png',
                 'attack' => 10,
@@ -146,6 +153,7 @@ class AllSeeder extends Seeder
                 'id' => Str::uuid(),
                 'weapon_id' => 2,
                 'item_id' => null,
+                'index_number' => '002',
                 'name' => 'ゴブリン',
                 'image_url' => 'https://example.com/images/goblin.png',
                 'attack' => 25,
@@ -167,6 +175,7 @@ class AllSeeder extends Seeder
                 'id' => Str::uuid(),
                 'weapon_id' => null,
                 'item_id' => null,
+                'index_number' => '003',
                 'name' => 'ドラゴン',
                 'image_url' => 'https://example.com/images/dragon.png',
                 'attack' => 100,
