@@ -88,6 +88,7 @@ class MonsterController extends Controller
                 Monster::create([
                     'weapon_id' => $validated['weaponId'] ?? null,
                     'item_id' => $validated['itemId'] ?? null,
+                    'index_number' => $validated['indexNumber'],
                     'name' => $validated['name'],
                     'image_url' => $url,
                     'attack' => $validated['attack'],
@@ -170,6 +171,24 @@ class MonsterController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'messages' => ['モンスター情報の取得に失敗しました'],
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try{
+            $item = Monster::find($id);
+            $item->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => '正常に削除されました！',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'messages' => ['削除に失敗しました！'],
             ], 500);
         }
     }

@@ -69,6 +69,7 @@ class ItemController extends Controller
                 $item = Item::create([
                     'name' => $validated['name'],
                     'image_url' => $url,
+                    'index_number' => $validated['indexNumber'],
                     'effect_type' => $validated['effectType'],
                 ]);
                 if ($item->effect_type === 'heal') {
@@ -95,6 +96,24 @@ class ItemController extends Controller
             return response()->json([
                 'success' => false,
                 'messages' => ['アイテムの作成に失敗しました。'],
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try{
+            $item = Item::find($id);
+            $item->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => '正常に削除されました！',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'messages' => ['削除に失敗しました！'],
             ], 500);
         }
     }

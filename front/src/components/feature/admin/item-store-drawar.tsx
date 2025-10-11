@@ -24,6 +24,7 @@ type FormValues = {
   name: string;
   imageFile: File | null;
   effectType: EffectType;
+  indexNumber: string;
   heal: {
     amount: number;
   };
@@ -68,6 +69,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
           imageFile: data.imageFile,
           effectType: "heal",
           amount: data.heal.amount,
+          indexNumber: data.indexNumber,
         };
         break;
 
@@ -78,6 +80,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
           effectType: "buff",
           rate: data.buff.rate,
           target: data.buff.target,
+          indexNumber: data.indexNumber,
         };
         break;
 
@@ -88,6 +91,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
           effectType: "debuff",
           rate: data.debuff.rate,
           target: data.debuff.target,
+          indexNumber: data.indexNumber,
         };
         break;
     }
@@ -117,7 +121,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
-              <div>
+              <div className="flex flex-col gap-4">
                 <input
                   className="hidden"
                   type="file"
@@ -150,6 +154,16 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                     </div>
                   )}
                 </label>
+                <NumberInput
+                  label="図鑑番号"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
+                  {...register("indexNumber")}
+                  onChange={(v) =>
+                    typeof v === "number" && setValue("indexNumber", String(v))
+                  }
+                />
               </div>
 
               <div className="flex flex-col gap-4">

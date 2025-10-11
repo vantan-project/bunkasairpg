@@ -60,7 +60,7 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid lg:grid-cols-[300px_auto] gap-4 w-full">
-              <div>
+              <div className="flex flex-col gap-4">
                 <input
                   className="hidden"
                   type="file"
@@ -93,6 +93,16 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                     </div>
                   )}
                 </label>
+                <NumberInput
+                  label="図鑑番号"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
+                  {...register("indexNumber")}
+                  onChange={(v) =>
+                    typeof v === "number" && setValue("indexNumber", String(v))
+                  }
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4 h-fit">
