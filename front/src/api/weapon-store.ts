@@ -10,6 +10,7 @@ export type WeaponStoreRequest = {
   elementAttack: number;
   physicsType: PhysicsType;
   elementType: ElementType;
+  indexNumber: string;
 };
 
 export type WeaponStoreResponse = {

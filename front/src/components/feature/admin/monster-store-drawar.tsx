@@ -126,7 +126,7 @@ export function MonsterStoreDrawer({
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="grid lg:grid-cols-[300px_1fr] gap-4 w-full">
-              <div>
+              <div className="flex flex-col gap-4">
                 <input
                   className="hidden"
                   type="file"
@@ -159,6 +159,16 @@ export function MonsterStoreDrawer({
                     </div>
                   )}
                 </label>
+                <NumberInput
+                  label="図鑑番号"
+                  formatOptions={{
+                    useGrouping: false,
+                  }}
+                  {...register("indexNumber")}
+                  onChange={(v) =>
+                    typeof v === "number" && setValue("indexNumber", String(v))
+                  }
+                />
               </div>
 
               <div className="flex flex-col gap-4 lg:overflow-y-auto lg:h-[380px] [scrollbar-color:var(--color-black)_transparent]">
