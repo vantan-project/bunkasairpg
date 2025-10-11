@@ -57,6 +57,7 @@ export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
                     onClick={() => handleConfirmItem(item)}
                 >
                     {item.name}
+                    {item.count}
                 </div>
             ))}
             {confirmModal && (

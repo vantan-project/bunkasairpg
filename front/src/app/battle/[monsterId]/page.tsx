@@ -14,6 +14,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { meUpdate } from "@/api/me-update";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
+import { meUseItem } from "@/api/me-use-item";
 
 export type Mode =
   | "first"
@@ -32,7 +33,7 @@ type MonsterId = {
 };
 
 export default function Page() {
-  const { user, setUser, weapons, items } = useGlobalContext();
+  const { user, setUser, weapons, items, setItems } = useGlobalContext();
 
   const { monsterId } = useParams<MonsterId>();
   const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
@@ -52,6 +53,7 @@ export default function Page() {
     monsterShow(monsterId).then((data) => {
       setMonster(structuredClone(data));
       setBattle(new Battle(structuredClone(user), structuredClone(data)));
+      console.log(weapon)
     });
   }, []);
 
@@ -102,18 +104,20 @@ export default function Page() {
         },
       },
     ];
-
-    if (take.isFinished)
+    if (take.isFinished){
       logs.push({
         message: `${monster.name}に倒された`,
         action: () => setMode("defeat"),
       });
+    } else{
+      // meUpdate({hitPoint: take.userHitPoint})
+    }
     return logs;
   };
 
   const handleNextLog = () => {
     const [current, ...rest] = battleQueue;
-    current.action();
+    current?.action();
     setBattleQueue(rest);
   };
 
@@ -131,28 +135,29 @@ export default function Page() {
     setBattleQueue([...logs, ...monsterAttackLogs()]);
   };
 
-  const handleStandbyWeaponChange = async () => {
+  const handleStandbyWeaponChange = () => {
     setStandByWeaponDrawer(false);
-    await meUpdate({ weaponId: weapon.id });
+    meUpdate({ weaponId: weapon.id });
     battle.changeWeapon(weapon);
     setUser({ ...user, weapon: weapon });
   };
   const handleUseItem = () => {
     setMode("standBy");
     setItemDrawer(false);
-    let logs: BattleLog[] = [];
+    meUseItem({ itemId: item.id });
+    console.log(items);
+    let logs: BattleLog[] = [
+      {
+        message: `${item.name}を使った！`,
+        action: () => {},
+      },
+    ];
     if (item.effectType === "heal") {
       const player = battle.useHealItem(item);
-      logs.push(
-        {
-          message: `${item.name}を使った！`,
-          action: () => {},
-        },
-        {
-          message: player.message,
-          action: () => setUser({ ...user, hitPoint: player.userHitPoint }),
-        }
-      );
+      logs.push({
+        message: player.message,
+        action: () => setUser({ ...user, hitPoint: player.userHitPoint }),
+      });
     }
     if (item.effectType === "buff") {
       const player = battle.useBuffItem(item);
@@ -168,8 +173,16 @@ export default function Page() {
         action: () => {},
       });
     }
-
     setBattleQueue([...logs, ...monsterAttackLogs()]);
+    if (item.count === 1) {
+      setItems(items.filter((prev) => prev.id !== item.id));
+    } else {
+      setItems(
+        items.map((prev) =>
+          prev.id === item.id ? { ...prev, count: prev.count - 1 } : prev
+        )
+      );
+    }
   };
 
   const dotBorderClassName =
@@ -252,7 +265,7 @@ export default function Page() {
           !standByWeaponDrawer &&
           mode === "first" && (
             <div className="h-full flex flex-col">
-              <WeaponCard weapon={weapon} />
+              <WeaponCard weapon={weapon} selectedWeaponId={weapon.id} />
               <div className="flex flex-col">
                 <button
                   className={clsx(buttonGradationClassName, "h-12")}
@@ -399,9 +412,10 @@ export default function Page() {
             </div>
           ) : (
             <div className="flex justify-center items-center h-full">
-              <div className="w-[90%] aspect-[380/605] bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${"/bg-reward.png"})` }}>
-              </div>
+              <div
+                className="w-[90%] aspect-[380/605] bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url(${"/bg-reward.png"})` }}
+              ></div>
             </div>
           )}
         </div>

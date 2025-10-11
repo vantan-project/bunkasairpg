@@ -78,13 +78,13 @@ export function WeaponDrawer({
           scroll-smooth
         "
       >
-        {weapons.map((weapon, index) => (
+        {weapons.map((we, index) => (
           <div
             key={index}
-            onClick={() => handleConfirmWeapon(weapon)}
+            onClick={() => handleConfirmWeapon(we)}
             className="snap-start"
           >
-            <WeaponCard weapon={weapon} />
+            <WeaponCard weapon={we} selectedWeaponId={weapon.id} />
           </div>
         ))}
       </div>

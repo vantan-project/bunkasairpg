@@ -4,9 +4,10 @@ import { MeWeapon } from "./weapon-drawer";
 
 type Props = {
   weapon: MeWeapon;
+  selectedWeaponId: number;
 };
 
-export function WeaponCard({ weapon }: Props) {
+export function WeaponCard({ weapon, selectedWeaponId }: Props) {
   const physicsTypeMap: Record<string, string> = {
     slash: "斬撃",
     blow: "打撃",
@@ -26,6 +27,7 @@ export function WeaponCard({ weapon }: Props) {
   return (
     <div className="flex">
       <div className="relative flex-[2] w-[35%] aspect-square">
+        <div className="absolute top-0 left-0">装備中</div>
         <Image src={weapon.imageUrl} alt="武器画像" fill priority />
       </div>
       <div className="ml-2 flex-[3] flex-col w-full">
