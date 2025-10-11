@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('image_url');
+            $table->string('index_number');
             $table->unsignedInteger('physics_attack');
             $table->unsignedInteger('element_attack')->nullable();
             $table->enum('physics_type', ['slash', 'blow', 'shoot']);

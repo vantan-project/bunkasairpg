@@ -26,6 +26,7 @@ class MonsterStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'imageFile' => ['required', 'file', 'image', 'max:2048'],
+            'indexNumber' => ['required', 'string'],
             'attack' => ['required', 'integer', 'min:0'],
             'hitPoint' => ['required', 'integer', 'min:0'],
             'experiencePoint' => ['required', 'integer', 'min:0'],
@@ -50,9 +51,13 @@ class MonsterStoreRequest extends FormRequest
             'name.string' => '名前は文字列で入力してください。',
             'name.max' => '名前は255文字以内で入力してください。',
 
+            'imageFile.required' => '画像ファイルは必須です。',
             'imageFile.file' => '画像ファイルをアップロードしてください。',
             'imageFile.image' => '画像ファイル形式である必要があります。',
             'imageFile.max' => '画像ファイルのサイズは2MB以内でなければなりません。',
+
+            'indexNumber.required' => 'インデックス番号は必須です。',
+            'indexNumber.string'   => 'インデックス番号は文字列でなければなりません。',
 
             'attack.required' => '攻撃力は必須です。',
             'attack.integer' => '攻撃力は整数で入力してください。',

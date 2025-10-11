@@ -26,6 +26,7 @@ class ItemStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'imageFile' => ['required', 'file', 'image', 'max:2048'],
+            'indexNumber' => ['required', 'string'],
             'effectType' => ['required', 'string', 'in:heal,buff,debuff'],
             'amount' => ['required_if:effectType,heal', 'integer', 'min:0'],
             'rate' => ['required_if:effectType,buff,debuff', 'numeric', 'between:0,1'],
@@ -44,6 +45,9 @@ class ItemStoreRequest extends FormRequest
             'imageFile.file' => '画像ファイルをアップロードしてください。',
             'imageFile.image' => '画像ファイル形式である必要があります。',
             'imageFile.max' => '画像ファイルのサイズは2MB以内でなければなりません。',
+
+            'indexNumber.required' => 'インデックス番号は必須です。',
+            'indexNumber.string'   => 'インデックス番号は文字列でなければなりません。',
 
             'effectType.required' => '効果タイプは必須です。',
             'effectType.string' => '効果タイプは文字列で入力してください。',

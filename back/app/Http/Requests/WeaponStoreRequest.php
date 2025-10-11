@@ -26,6 +26,7 @@ class WeaponStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'imageFile' => ['required', 'file', 'image', 'max:2048'],
+            'indexNumber' => ['required', 'string'],
             'physicsAttack' => ['required', 'integer', 'min:0'],
             'elementAttack' => ['nullable', 'integer', 'min:0'],
             'physicsType' => ['required', 'in:slash,blow,shoot'],
@@ -43,6 +44,9 @@ class WeaponStoreRequest extends FormRequest
             'imageFile.file' => '有効なファイルを指定してください。',
             'imageFile.image' => '画像ファイル形式で指定してください。',
             'imageFile.max' => '画像ファイルは2MB以下にしてください。',
+
+            'indexNumber.required' => 'インデックス番号は必須です。',
+            'indexNumber.string'   => 'インデックス番号は文字列でなければなりません。',
 
             'physicsAttack.required' => '物理攻撃力は必須です。',
             'physicsAttack.integer' => '物理攻撃力は整数で入力してください。',

@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('image_url');
-            $table->string('index_number');
-            $table->enum('effect_type', ['heal', 'buff', 'debuff']);
+        Schema::create('monster_entries', function (Blueprint $table) {
+            $table->foreignUuid('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignUuid('monster_id')->references('id')->on('monsters')->onDelete('cascade');
+            $table->primary(['user_id', 'monster_id']);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('monster_entries');
     }
 };

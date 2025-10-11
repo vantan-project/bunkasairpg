@@ -16,6 +16,7 @@ class Monster extends Model
     protected $fillable = [
         'weapon_id',
         'item_id',
+        'index_number',
         'name',
         'image_url',
         'attack',

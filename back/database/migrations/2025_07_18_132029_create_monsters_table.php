@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('weapon_id')->nullable();
             $table->unsignedBigInteger('item_id')->nullable();
+            $table->string('index_number');
             $table->string('name');
             $table->text('image_url');
             $table->unsignedInteger('attack');
