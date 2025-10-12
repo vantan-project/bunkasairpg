@@ -9,6 +9,7 @@ export type ItemStoreRequest =
       imageFile: File | null;
       effectType: "heal";
       amount: number;
+      indexNumber: string;
     }
   | {
       name: string;
@@ -16,6 +17,7 @@ export type ItemStoreRequest =
       effectType: "buff";
       rate: number;
       target: PhysicsType | ElementType;
+      indexNumber: string;
     }
   | {
       name: string;
@@ -23,6 +25,7 @@ export type ItemStoreRequest =
       effectType: "debuff";
       rate: number;
       target: PhysicsType | ElementType;
+      indexNumber: string;
     };
 
 export type ItemStoreResponse = {

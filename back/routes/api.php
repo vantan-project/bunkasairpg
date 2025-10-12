@@ -36,8 +36,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   Route::post('/user', [UserController::class, 'store']);
   Route::get('/item', [ItemController::class, 'index']);
   Route::post('/item', [ItemController::class, 'store']);
+  Route::delete('/item/{id}', [ItemController::class, 'destroy']);
   Route::get('/weapon', [WeaponController::class, 'index']);
   Route::post('/weapon', [WeaponController::class, 'store']);
+  Route::delete('/weapon/{id}', [WeaponController::class, 'destroy']);
   Route::get('/monster', [MonsterController::class, 'index']);
   Route::post('/monster', [MonsterController::class, 'store']);
+  Route::delete('/monster/{id}', [MonsterController::class, 'destroy']);
 });

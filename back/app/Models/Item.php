@@ -10,6 +10,7 @@ class Item extends Model
     protected $fillable = [
         'name',
         'image_url',
+        'index_number',
         'effect_type',
     ];
 

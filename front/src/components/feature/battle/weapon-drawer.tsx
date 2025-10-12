@@ -81,7 +81,7 @@ export function WeaponDrawer({
         {weapons.map((we, index) => (
           <div
             key={index}
-            onClick={() => handleConfirmWeapon(we)}
+            onClick={() => {weapon.id === we.id ? {} : handleConfirmWeapon(we)}}
             className="snap-start"
           >
             <WeaponCard weapon={we} selectedWeaponId={weapon.id} />

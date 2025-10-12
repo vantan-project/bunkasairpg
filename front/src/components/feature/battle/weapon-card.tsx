@@ -27,7 +27,9 @@ export function WeaponCard({ weapon, selectedWeaponId }: Props) {
   return (
     <div className="flex">
       <div className="relative flex-[2] w-[35%] aspect-square">
-        <div className="absolute top-0 left-0">装備中</div>
+        {weapon.id === selectedWeaponId &&
+            <div className="absolute top-0 left-0 bg-[#666666]/80">装備中</div>
+        }
         <Image src={weapon.imageUrl} alt="武器画像" fill priority />
       </div>
       <div className="ml-2 flex-[3] flex-col w-full">
