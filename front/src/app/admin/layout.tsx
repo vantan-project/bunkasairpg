@@ -1,6 +1,6 @@
 "use client";
 
-import "../admin.module.css"
+import { useEffect } from "react";
 import { AdminLayout } from "@/components/layout/admin-layout";
 
 type Props = {
@@ -8,5 +8,9 @@ type Props = {
 };
 
 export default function ({ children }: Props) {
+  useEffect(() => {
+    document.documentElement.classList.add("admin");
+  }, []);
+
   return <AdminLayout>{children}</AdminLayout>;
 }
