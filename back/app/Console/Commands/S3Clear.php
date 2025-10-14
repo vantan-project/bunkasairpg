@@ -32,7 +32,7 @@ class S3Clear extends Command
     $targets = [
       'monster_images' => Monster::pluck('image_url')->toArray(),
       'item_images'    => Item::pluck('image_url')->toArray(),
-      'weapon_items'   => Weapon::pluck('image_url')->toArray(),
+      'weapon_images'   => Weapon::pluck('image_url')->toArray(),
     ];
 
     foreach ($targets as $dir => $urls) {

@@ -1,27 +1,17 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-export type UserStoreRequest = {
-  name: string;
+export type UserHealResponse = {
+  success: false;
+  messages: string[];
 };
 
-export type UserStoreResponse =
-  | {
-      success: true;
-      messages: string[];
-      id: string;
-    }
-  | {
-      success: false;
-      messages: string[];
-    };
-
-export function userStore(req: UserStoreRequest): Promise<UserStoreResponse> {
-  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user`;
+export function userHeal(userId: string): Promise<UserHealResponse> {
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user/heal/${userId}`;
   const authToken = Cookies.get("authToken");
 
   return axios
-    .post(apiUrl, req, {
+    .patch(apiUrl, null, {
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
