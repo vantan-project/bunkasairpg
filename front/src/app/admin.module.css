@@ -1,8 +1,8 @@
-body {
+:global(body) {
   overflow-x: hidden;
 }
 
-html::before {
+:global(html)::before {
   content: "";
   position: fixed;
   inset: 0;
