@@ -68,7 +68,7 @@ export default function Page() {
             className="w-full h-full"
             width={100}
             height={100}
-            src="/home-btn.png"
+            src="/btn-home.png"
             alt="home"
           />
         </Link>
@@ -77,7 +77,7 @@ export default function Page() {
             className="w-full h-full"
             width={100}
             height={100}
-            src="/encyclopedia_btn.png"
+            src="/btn-encyclopedia.png"
             alt="home"
           />
         </Link>
@@ -86,7 +86,7 @@ export default function Page() {
             className="w-full h-full"
             width={100}
             height={100}
-            src="/profile_btn.png"
+            src="/btn-profile.png"
             alt="home"
           />
         </Link>

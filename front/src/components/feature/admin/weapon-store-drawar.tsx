@@ -37,7 +37,7 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
 
   const imageFile = watch("imageFile");
   const elementType = watch("elementType");
-
+  const indexNumber = watch("indexNumber");
   useEffect(() => {
     if (elementType === "neutral") {
       setValue("elementAttack", 0);
@@ -93,14 +93,15 @@ export function WeaponStoreDrawer({ isOpen, onOpenChange }: Props) {
                     </div>
                   )}
                 </label>
-                <NumberInput
+                <Input
                   label="図鑑番号"
-                  formatOptions={{
-                    useGrouping: false,
-                  }}
                   {...register("indexNumber")}
-                  onChange={(v) =>
-                    typeof v === "number" && setValue("indexNumber", String(v))
+                  value={indexNumber}
+                  onChange={(e) =>
+                    setValue(
+                      "indexNumber",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
                   }
                 />
               </div>
