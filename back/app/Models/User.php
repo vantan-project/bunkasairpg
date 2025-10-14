@@ -6,11 +6,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
+
+    /**
+     * UUIDを主キーとして使用
+     */
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * The attributes that are mass assignable.
@@ -18,9 +26,13 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'weapon_id',
         'name',
-        'email',
-        'password',
+        'image_url',
+        'level',
+        'max_hit_point',
+        'hit_point',
+        'experience_point',
     ];
 
     /**
@@ -29,7 +41,6 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -45,4 +56,34 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * モデル作成時に自動でUUIDを生成
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->getKey()) {
+                $model->{$model->getKeyName()} = (string) Str::uuid();
+            }
+        });
+    }
+
+    public function weapon()
+    {
+        return $this->belongsTo(Weapon::class, 'weapon_id');
+    }
+
+    public function userItems()
+    {
+        return $this->hasMany(UserItem::class, 'user_id');
+    }
+
+    public function ownedWeapons()
+    {
+        return $this->belongsToMany(Weapon::class, 'user_weapons', 'user_id', 'weapon_id');
+    }
+
 }
