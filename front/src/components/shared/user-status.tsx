@@ -58,7 +58,7 @@ export function UserStatus({
             </div>
             <div className="relative w-full h-6 bg-gray-300 flex justify-end items-center">
               <div
-                className="absolute top-0 right-0 h-full"
+                className="absolute top-0 left-0 h-full"
                 style={{
                   width: `calc(${hitPoint} / ${maxHitPoint} * 100%)`,
                   backgroundColor: getHpColor(),

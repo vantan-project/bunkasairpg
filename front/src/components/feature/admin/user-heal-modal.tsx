@@ -28,24 +28,28 @@ export function UserHealModal({ isOpen, onOpenChange }: Props) {
     <Modal
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      classNames={{ closeButton: "text-2xl" }}
-      size="xl"
+      classNames={{
+        closeButton: "text-2xl",
+      }}
+      size="lg"
     >
       <ModalContent>
         <ModalHeader>ユーザー回復</ModalHeader>
-        <ModalBody className="py-6 relative">
-          <video
-            ref={ref}
-            className="w-full aspect-square object-cover"
-            autoPlay
-            muted
-            playsInline
-          />
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <p className="text-white text-center pb-4">
-              QRコードをスキャンしてください。
-            </p>
-            <div className="w-80 h-80 border-2 border-white" />
+        <ModalBody>
+          <div className="py-6 relative">
+            <video
+              ref={ref}
+              className="w-full aspect-square object-cover"
+              autoPlay
+              muted
+              playsInline
+            />
+            <div className="absolute top-0 w-full h-full flex flex-col items-center justify-center">
+              <p className="text-white text-center pb-4">
+                QRコードをスキャンしてください。
+              </p>
+              <div className="w-64 lg:w-80 aspect-square border-2 border-white" />
+            </div>
           </div>
         </ModalBody>
       </ModalContent>
