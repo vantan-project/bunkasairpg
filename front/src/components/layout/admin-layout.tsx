@@ -25,6 +25,10 @@ import {
   Badge,
 } from "@heroui/react";
 import { SearchIcon } from "../shared/icons/search-icon";
+import { HealIcon } from "../shared/icons/heal-icon";
+import { UserIcon } from "../shared/icons/user-icon";
+import { UserStoreModal } from "../feature/admin/user-store-modal";
+import { UserHealModal } from "../feature/admin/user-heal-modal";
 
 type Props = {
   children: React.ReactNode;
@@ -41,6 +45,14 @@ export function AdminLayout({ children }: Props) {
     useDisclosure();
   const { isOpen: isItemDrawerOpen, onOpenChange: onItemDrawerOpenChange } =
     useDisclosure();
+  const {
+    isOpen: isUserStoreModalOpen,
+    onOpenChange: onUserStoreModalOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isUserHealModalOpen,
+    onOpenChange: onUserHealModalOpenChange,
+  } = useDisclosure();
 
   const [monsterWeapon, setMonsterWeapon] = useState<{
     id: number;
@@ -98,6 +110,27 @@ export function AdminLayout({ children }: Props) {
       </DropdownItem>
     </DropdownMenu>
   );
+  const UserDropdownMenu = () => (
+    <DropdownMenu aria-label="Link Actions">
+      <DropdownItem endContent={<ListIcon />} key="index" href="/admin/user">
+        ユーザー一覧
+      </DropdownItem>
+      <DropdownItem
+        endContent={<AddIcon />}
+        key="store"
+        onPress={onUserStoreModalOpenChange}
+      >
+        ユーザー登録
+      </DropdownItem>
+      <DropdownItem
+        endContent={<HealIcon />}
+        key="heal"
+        onPress={onUserHealModalOpenChange}
+      >
+        ユーザー回復
+      </DropdownItem>
+    </DropdownMenu>
+  );
 
   return (
     <AdminContext.Provider
@@ -132,47 +165,44 @@ export function AdminLayout({ children }: Props) {
             <div className="h-2 bg-[linear-gradient(90deg,hsl(194,74%,56%),hsl(266,74%,56%),hsl(338,74%,56%),hsl(50,74%,56%),hsl(122,74%,56%))]" />
             <div className="p-2 pl-4">
               <h1 className="text-lg font-bold pl-2 pb-2">メニュー</h1>
-              <Dropdown placement="right-start">
-                <DropdownTrigger>
-                  <Button
-                    fullWidth
-                    startContent={<MonsterIcon />}
-                    variant="light"
-                    className="justify-start text-left gap-4"
-                  >
-                    モンスター管理
-                  </Button>
-                </DropdownTrigger>
-                <MonsterDropdownMenu />
-              </Dropdown>
-
-              <Dropdown placement="right-start">
-                <DropdownTrigger>
-                  <Button
-                    fullWidth
-                    startContent={<WeaponIcon />}
-                    variant="light"
-                    className="justify-start text-left gap-4"
-                  >
-                    武器管理
-                  </Button>
-                </DropdownTrigger>
-                <WeaponDropdownMenu />
-              </Dropdown>
-
-              <Dropdown placement="right-start">
-                <DropdownTrigger>
-                  <Button
-                    fullWidth
-                    startContent={<ItemIcon />}
-                    variant="light"
-                    className="justify-start text-left gap-4"
-                  >
-                    アイテム管理
-                  </Button>
-                </DropdownTrigger>
-                <ItemDropdownMenu />
-              </Dropdown>
+              {[
+                {
+                  Menu: MonsterDropdownMenu,
+                  Icon: MonsterIcon,
+                  label: "モンスター管理",
+                },
+                {
+                  Menu: WeaponDropdownMenu,
+                  Icon: WeaponIcon,
+                  label: "武器管理",
+                },
+                {
+                  Menu: ItemDropdownMenu,
+                  Icon: ItemIcon,
+                  label: "アイテム管理",
+                },
+                {
+                  Menu: UserDropdownMenu,
+                  Icon: UserIcon,
+                  label: "ユーザー管理",
+                },
+              ].map(({ Menu, Icon, label }, index) => (
+                <div key={index}>
+                  <Dropdown placement="right-start">
+                    <DropdownTrigger>
+                      <Button
+                        fullWidth
+                        startContent={<Icon />}
+                        variant="light"
+                        className="justify-start text-left gap-4"
+                      >
+                        {label}
+                      </Button>
+                    </DropdownTrigger>
+                    <Menu />
+                  </Dropdown>
+                </div>
+              ))}
             </div>
           </header>
 
@@ -192,51 +222,42 @@ export function AdminLayout({ children }: Props) {
 
       <div className="lg:hidden">
         <div className="fixed left-2 top-1/2 flex flex-col gap-2 z-20">
-          <Dropdown placement="right-start">
-            <DropdownTrigger>
-              <Button
-                isIconOnly
-                fullWidth
-                variant="light"
-                className="bg-white shadow-lg shadow-white"
-                radius="full"
-                size="lg"
-              >
-                <MonsterIcon />
-              </Button>
-            </DropdownTrigger>
-            <MonsterDropdownMenu />
-          </Dropdown>
-          <Dropdown placement="right-start">
-            <DropdownTrigger>
-              <Button
-                isIconOnly
-                fullWidth
-                variant="light"
-                className="bg-white shadow-lg shadow-white"
-                radius="full"
-                size="lg"
-              >
-                <WeaponIcon />
-              </Button>
-            </DropdownTrigger>
-            <WeaponDropdownMenu />
-          </Dropdown>
-          <Dropdown placement="right-start">
-            <DropdownTrigger>
-              <Button
-                isIconOnly
-                fullWidth
-                variant="light"
-                className="bg-white shadow-lg shadow-white"
-                radius="full"
-                size="lg"
-              >
-                <ItemIcon />
-              </Button>
-            </DropdownTrigger>
-            <ItemDropdownMenu />
-          </Dropdown>
+          {[
+            {
+              Menu: MonsterDropdownMenu,
+              Icon: MonsterIcon,
+            },
+            {
+              Menu: WeaponDropdownMenu,
+              Icon: WeaponIcon,
+            },
+            {
+              Menu: ItemDropdownMenu,
+              Icon: ItemIcon,
+            },
+            {
+              Menu: UserDropdownMenu,
+              Icon: UserIcon,
+            },
+          ].map(({ Menu, Icon }, index) => (
+            <div key={index}>
+              <Dropdown placement="right-start" key={index}>
+                <DropdownTrigger>
+                  <Button
+                    isIconOnly
+                    fullWidth
+                    variant="light"
+                    className="bg-white shadow-lg shadow-white"
+                    radius="full"
+                    size="lg"
+                  >
+                    <Icon />
+                  </Button>
+                </DropdownTrigger>
+                <Menu />
+              </Dropdown>
+            </div>
+          ))}
         </div>
 
         <div className="fixed right-3 bottom-20 z-20">
@@ -278,6 +299,14 @@ export function AdminLayout({ children }: Props) {
       <ItemStoreDrawer
         isOpen={isItemDrawerOpen}
         onOpenChange={onItemDrawerOpenChange}
+      />
+      <UserStoreModal
+        isOpen={isUserStoreModalOpen}
+        onOpenChange={onUserStoreModalOpenChange}
+      />
+      <UserHealModal
+        isOpen={isUserHealModalOpen}
+        onOpenChange={onUserHealModalOpenChange}
       />
 
       <Modal

@@ -5,14 +5,18 @@ export type UserStoreRequest = {
   name: string;
 };
 
-export type UserStoreResponse = {
-  success: boolean;
-  messages: string[];
-};
+export type UserStoreResponse =
+  | {
+      success: true;
+      messages: string[];
+      id: string;
+    }
+  | {
+      success: false;
+      messages: string[];
+    };
 
-export default function uesrStore(
-  req: UserStoreRequest
-): Promise<UserStoreResponse> {
+export function userStore(req: UserStoreRequest): Promise<UserStoreResponse> {
   const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/user`;
   const authToken = Cookies.get("authToken");
 

@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 
 import { MailIcon } from "@/components/shared/icons/mail-icon";
 import { LockIcon } from "@/components/shared/icons/lock-icon";
-import "../admin.module.css";
 import { addToasts } from "@/utils/add-toasts";
 import { useEffect } from "react";
 import { adminToken } from "@/api/admin-token";
@@ -40,6 +39,10 @@ export default function () {
   };
   useEffect(() => {
     tokenApi();
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.classList.add("admin");
   }, []);
 
   return (

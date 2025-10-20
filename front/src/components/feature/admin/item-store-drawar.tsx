@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import {
   Drawer,
   DrawerContent,
@@ -105,6 +105,7 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
 
   const imageFile = watch("imageFile");
   const effectType = watch("effectType");
+  const indexNumber = watch("indexNumber");
   return (
     <Drawer
       size="xl"
@@ -154,14 +155,15 @@ export function ItemStoreDrawer({ isOpen, onOpenChange }: Props) {
                     </div>
                   )}
                 </label>
-                <NumberInput
+                <Input
                   label="図鑑番号"
-                  formatOptions={{
-                    useGrouping: false,
-                  }}
                   {...register("indexNumber")}
-                  onChange={(v) =>
-                    typeof v === "number" && setValue("indexNumber", String(v))
+                  value={indexNumber}
+                  onChange={(e) =>
+                    setValue(
+                      "indexNumber",
+                      e.target.value.replace(/[^0-9]/g, "")
+                    )
                   }
                 />
               </div>
