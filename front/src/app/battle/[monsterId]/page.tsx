@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Battle } from "@/utils/battle";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/hooks/use-global-context";
@@ -15,6 +15,12 @@ import clsx from "clsx";
 import { meUpdate } from "@/api/me-update";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
 import { meUseItem } from "@/api/me-use-item";
+import { RewardModal } from "@/components/feature/battle/reward-modal";
+import { meGetItem } from "@/api/me-get-item";
+import { meGetWeapon } from "@/api/me-get-weapon";
+import { UserStatus } from "@/components/shared/user-status";
+import { LevelUpModal } from "@/components/feature/battle/level-up-modal";
+import { motion, useMotionValue, animate } from "framer-motion";
 
 export type Mode =
   | "first"
@@ -28,6 +34,9 @@ export type BattleLog = {
   message: string;
   action: () => void;
 };
+export type ReawrdLog = {
+  action: () => void;
+};
 type MonsterId = {
   monsterId: string;
 };
@@ -37,6 +46,7 @@ export default function Page() {
 
   const { monsterId } = useParams<MonsterId>();
   const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
+  const [rewardLogs, setRewardLogs] = useState<ReawrdLog[]>([]);
   const router = useRouter();
   const [battle, setBattle] = useState<Battle | null>(null);
   const [monster, setMonster] = useState<MonsterShowResponse | null>(null);
@@ -47,13 +57,24 @@ export default function Page() {
   const [itemDrawer, setItemDrawer] = useState(false);
   const [awayModal, setAwayModal] = useState(false);
   const [standByWeaponDrawer, setStandByWeaponDrawer] = useState(false);
-  const [rewardModal, setRewardModal] = useState(false);
+  const [rewardImage, setRewardImage] = useState("");
+  const [maxExp, setMaxExp] = useState(0);
+  const [minExp, setMinExp] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [previousWidth, setPreviousWidth] = useState(0);
+  const [isIncreasing, setIsIncreasing] = useState(true);
+  const [levelUpModal, setLevelUpModal] = useState(false);
+  const [cameraAccessModal, setCameraAccessModal] = useState(false);
+  const stopExpRef = useRef(false);
+  const [riseLevel, setRiseLevel] = useState(0);
+  let maxCount = useMotionValue(maxExp);
+  const [rustLevel, setRustLevel] = useState(0);
+  
 
   useEffect(() => {
     monsterShow(monsterId).then((data) => {
       setMonster(structuredClone(data));
       setBattle(new Battle(structuredClone(user), structuredClone(data)));
-      console.log(weapon)
     });
   }, []);
 
@@ -66,7 +87,7 @@ export default function Page() {
     const player = battle.attack();
     const logs: BattleLog[] = [
       {
-        message: `${monster.name}を攻撃した`,
+        message: `${monster.name}を\n攻撃した！`,
         action: () => {},
       },
       {
@@ -79,8 +100,15 @@ export default function Page() {
     if (player.isFinished) {
       setBattleQueue([
         ...logs,
-        { message: `${monster.name}を倒した`, action: () => setMode("reward") },
+        {
+          message: `${monster.name}を\n倒した！`,
+          action: () => {
+            setMode("reward");
+            handleReward();
+          },
+        },
       ]);
+
       return;
     }
 
@@ -91,7 +119,7 @@ export default function Page() {
     const take = battle.takeDamage();
     const logs: BattleLog[] = [
       {
-        message: `${monster.name}の攻撃！`,
+        message: `${monster.name}の\n攻撃！`,
         action: () => {},
       },
       {
@@ -104,12 +132,12 @@ export default function Page() {
         },
       },
     ];
-    if (take.isFinished){
+    if (take.isFinished) {
       logs.push({
-        message: `${monster.name}に倒された`,
+        message: `${monster.name}に\n倒された！`,
         action: () => setMode("defeat"),
       });
-    } else{
+    } else {
       // meUpdate({hitPoint: take.userHitPoint})
     }
     return logs;
@@ -145,10 +173,9 @@ export default function Page() {
     setMode("standBy");
     setItemDrawer(false);
     meUseItem({ itemId: item.id });
-    console.log(items);
     let logs: BattleLog[] = [
       {
-        message: `${item.name}を使った！`,
+        message: `${item.name}を\n使った！`,
         action: () => {},
       },
     ];
@@ -182,6 +209,99 @@ export default function Page() {
           prev.id === item.id ? { ...prev, count: prev.count - 1 } : prev
         )
       );
+    }
+  };
+
+  const handleReward = () => {
+    const weaponIds = weapons.map((weapon) => weapon.id);
+    const drop = battle.drop(weaponIds);
+
+    if (drop.drop?.type === "weapon" && monster.weapon) {
+      setRewardImage(monster.weapon.imageUrl);
+      meGetWeapon({ weaponId: monster.weapon.id });
+    } else if (drop.drop?.type === "item" && monster.item) {
+      setRewardImage(monster.item.imageUrl);
+      meGetItem({ itemId: monster.item.id });
+    }
+    const r = battle.changeExprience({ level: user.level });
+    setPreviousWidth(r.currentExp / r.expToNextLevel);
+    setWidth(r.currentExp / r.expToNextLevel);
+    setMaxExp(r.remainingExp);
+    const experiencePoint = battle.grantExperience();
+    const levelUp = battle.levelUp();
+    // meUpdate({
+    //   experiencePoint: experiencePoint.experiencePoint,
+    //   ...(levelUp
+    //     ? { maxHitPoint: user.level+levelUp.increasedHitPoint, level: levelUp.level }
+    //     : {}),
+    // });
+    let rustLevel = null;
+    let riseLevel = 0;
+    if (levelUp) {
+      rustLevel = levelUp.level;
+      setRustLevel(rustLevel);
+      riseLevel = levelUp.level - user.level;
+      setRiseLevel(riseLevel);
+    }
+
+    const logs: ReawrdLog[] = [
+      {
+        action: () => {
+          // ここにあるとタップしてから始まる。 アクセスした瞬間に始まるにはuseEffectに入れた方が良い。
+          handleExp({ rustLevel, riseLevel });
+        },
+      },
+      {
+        action: () => {
+          setLevelUpModal(true);
+          stopExpRef.current = true;
+        },
+      },
+    ];
+    setRewardLogs(logs);
+  };
+
+  const handleExp = async ({
+    rustLevel,
+    riseLevel,
+  }: {
+    rustLevel: number | null;
+    riseLevel: number;
+  }) => {
+    if (rustLevel) {
+      stopExpRef.current = false;
+      let level = user.level;
+      for (let i = 0; i < riseLevel; i++) {
+        setMaxExp(i*100)
+        if (stopExpRef.current) break;
+        setIsIncreasing(true);
+        setWidth(1);
+        if (stopExpRef.current) break;
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        if (stopExpRef.current) break;
+        setIsIncreasing(false);
+        setWidth(0);
+        if (stopExpRef.current) break;
+        level++;
+        setUser({ ...user, level: level });
+        if (stopExpRef.current) break;
+        await new Promise((resolve) => setTimeout(resolve, 300));
+      }
+      setIsIncreasing(true);
+      setUser({ ...user, level: rustLevel });
+      const result = battle.changeExprience({ level: rustLevel });
+      setMaxExp(result.remainingExp);
+      setWidth(result.currentExp / result.expToNextLevel);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setLevelUpModal(true);
+    } else {
+      const result = battle.changeExprience({ level: user.level });
+      setMaxExp(result.remainingExp);
+      setMinExp(result.currentExp)
+      console.log(result.currentExp)
+      setWidth(result.currentExp / result.expToNextLevel);    
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setCameraAccessModal(true);
     }
   };
 
@@ -224,11 +344,13 @@ export default function Page() {
       <div className="fixed bottom-0 w-full min-h-[340px] bg-black/70 px-3 text-white pt-4">
         {!weaponDrawer && !itemDrawer && mode !== "first" && (
           <div>
+            <div className={clsx(dotBorderClassName, "h-[2px]")} />
             <div className="flex justify-between">
               <p>Lv.{user.level}</p>
               <p>{user.name}</p>
             </div>
-            <div className="relative w-full bg-white border border-white h-6 flex items-center">
+            <div className={clsx(dotBorderClassName, "h-[2px]")} />
+            <div className="relative my-2 w-full bg-white border border-white h-6 flex items-center">
               <div
                 className={`h-full transition-all duration-300 ${
                   user.hitPoint / user.maxHitPoint <= 0.1
@@ -245,17 +367,43 @@ export default function Page() {
                 {user.hitPoint}/{user.maxHitPoint}
               </div>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute top-0 left-0 bg-[#666666]/80 z-10">
+                装備中
+              </div>
               <div className="relative flex-[2] w-[35%] aspect-square">
                 <Image src={weapon.imageUrl} alt="武器画像" fill priority />
               </div>
               <div className="flex-[3] flex-col flex">
-                <button onClick={handleAttack}>攻撃</button>
-                <button onClick={() => setItemDrawer(true)}>アイテム</button>
-                <button onClick={() => setWeaponDrawer(true)}>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                <button
+                  className={clsx(buttonGradationClassName, "h-12")}
+                  onClick={handleAttack}
+                >
+                  攻撃
+                </button>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                <button
+                  className={clsx(buttonGradationClassName, "h-12")}
+                  onClick={() => setItemDrawer(true)}
+                >
+                  アイテム
+                </button>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                <button
+                  className={clsx(buttonGradationClassName, "h-12")}
+                  onClick={() => setWeaponDrawer(true)}
+                >
                   装備の変更
                 </button>
-                <button onClick={() => setAwayModal(true)}>逃げる</button>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                <button
+                  className={clsx(buttonGradationClassName, "h-12")}
+                  onClick={() => setAwayModal(true)}
+                >
+                  逃げる
+                </button>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
               </div>
             </div>
           </div>
@@ -297,7 +445,7 @@ export default function Page() {
                     setMode("standBy");
                     setBattleQueue([
                       {
-                        message: `${monster.name}が現れた`,
+                        message: `${monster.name}が\n現れた！`,
                         action: () => setMode("command"),
                       },
                     ]);
@@ -322,16 +470,14 @@ export default function Page() {
               setWeapon={setWeapon}
               handleChangeWeapon={handleStandbyWeaponChange}
             />
-            <button
-              className="flex justify-center w-full my-4"
-              onClick={() => setStandByWeaponDrawer(false)}
-            >
+            <button className="flex justify-center w-full my-4">
               <Image
                 className="w-[130px] h-auto"
                 src={"/back-button.png"}
                 alt="戻る"
                 width={1000}
                 height={1000}
+                onClick={() => setStandByWeaponDrawer(false)}
               />
             </button>
           </div>
@@ -344,35 +490,70 @@ export default function Page() {
               setWeapon={setWeapon}
               handleChangeWeapon={handleChangeWeapon}
             />
-            <button
-              className="flex justify-center w-full my-4"
-              onClick={() => setWeaponDrawer(false)}
-            >
+            <div>
+              <button className="flex justify-center w-full my-4">
+                <Image
+                  className="w-[130px] h-auto"
+                  src={"/back-button.png"}
+                  alt="戻る"
+                  width={1000}
+                  height={1000}
+                  onClick={() => setWeaponDrawer(false)}
+                />
+              </button>
+            </div>
+          </div>
+        )}
+        {itemDrawer && (
+          <div>
+            <ItemDrawer
+              items={items}
+              item={item}
+              setItem={setItem}
+              handleUseItem={handleUseItem}
+            />
+            <button className="flex justify-center w-full my-4">
               <Image
                 className="w-[130px] h-auto"
                 src={"/back-button.png"}
                 alt="戻る"
                 width={1000}
                 height={1000}
+                onClick={() => setItemDrawer(false)}
               />
             </button>
           </div>
         )}
-        {itemDrawer && (
-          <ItemDrawer
-            items={items}
-            item={item}
-            setItem={setItem}
-            handleUseItem={handleUseItem}
-          />
-        )}
       </div>
       {mode === "standBy" && (
         <div
-          className="fixed w-screen h-screen z-10 bg-gray-200/[0.8]"
+          className="fixed h-1/2 w-full z-10 bg-black/80 text-white text-4xl "
           onClick={handleNextLog}
         >
-          <div className="w-full text-center">{battleQueue[0]?.message}</div>
+          <div className="relative flex justify-center items-center w-full h-full">
+            <div className="w-full text-center whitespace-pre-wrap">
+              {battleQueue[0]?.message}
+            </div>
+            <motion.div
+              animate={{
+                opacity: [1, 0, 1],
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Image
+                className="absolute bottom-[15%] right-[8%]"
+                src={"/triangle.svg"}
+                alt="タップ画像"
+                width={40}
+                height={40}
+                priority
+              />
+            </motion.div>
+          </div>
         </div>
       )}
       {awayModal && (
@@ -385,54 +566,84 @@ export default function Page() {
 
       {mode === "reward" && (
         <div className="fixed top-0 w-screen h-screen z-10 bg-black/60">
-          {!rewardModal ? (
-            <div
-              className="flex flex-col w-full h-full items-center mt-[30%]"
-              onClick={() => setRewardModal(true)}
-            >
-              <div className="w-[80%]">
-                <Image
-                  src={"/clear.png"}
-                  alt="勝利画面"
-                  width={1000}
-                  height={1000}
-                  priority
-                />
-              </div>
-              <div className="text-xl text-white flex items-center gap-2 mt-[20%]">
-                <div>タップして進む</div>
-                <Image
-                  src={"/triangle.svg"}
-                  alt="タップ画像"
-                  width={24}
-                  height={24}
-                  priority
-                />
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center h-full">
-              <div
-                className="w-[90%] aspect-[380/605] bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: `url(${"/bg-reward.png"})` }}
-              ></div>
-            </div>
-          )}
+          <RewardModal
+            level={user.level}
+            imageUrl={rewardImage}
+            setRewardLogs={setRewardLogs}
+            rewardLogs={rewardLogs}
+            maxExp={maxExp}
+            minExp={minExp}
+            width={width}
+            previousWidth={previousWidth}
+            isIncreasing={isIncreasing}
+            riseLevel={riseLevel}
+            battle={battle}
+            rustLevel={rustLevel}
+            stopExpRef={stopExpRef}
+          />
+        </div>
+      )}
+      {(mode === "first" || weaponDrawer || itemDrawer) && (
+        <div className="fixed top-0 w-full p-2">
+          <UserStatus
+            name={user.name}
+            imageUrl={user.imageUrl}
+            level={user.level}
+            hitPoint={user.hitPoint}
+            maxHitPoint={user.maxHitPoint}
+          />
         </div>
       )}
 
       {mode === "defeat" && (
         <div className="fixed top-0 w-screen h-screen z-10 bg-black/60">
-          <div className="flex w-full justify-center">
-            <div className="relative w-[50%] h-40">
+          <div
+            className="flex flex-col w-full h-full items-center mt-[30%]"
+            onClick={() => router.push("/camera")}
+          >
+            <div className="w-[80%]">
               <Image
                 src={"/clear.png"}
-                alt="勝利画面"
+                alt="敗北画面"
                 width={1000}
                 height={1000}
                 priority
               />
             </div>
+            <div className="text-xl text-white flex items-center gap-2 mt-[20%]">
+              <div>タップして進む</div>
+              <Image
+                src={"/triangle.svg"}
+                alt="タップ画像"
+                width={24}
+                height={24}
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      {levelUpModal && (
+        <LevelUpModal
+          level={user.level}
+          setLevelUpModal={setLevelUpModal}
+          setCameraAccessModal={setCameraAccessModal}
+        />
+      )}
+      {cameraAccessModal && (
+        <div 
+          className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black/60 bg-cover bg-opacity-50 z-50 bg-center"
+          onClick={() => router.push("/camera")}
+        >
+          <div className="text-xl text-white flex items-center gap-2">
+            <div>タップしてホームに戻る</div>
+            <Image
+              src={"/triangle.svg"}
+              alt="タップ画像"
+              width={24}
+              height={24}
+              priority
+            />
           </div>
         </div>
       )}

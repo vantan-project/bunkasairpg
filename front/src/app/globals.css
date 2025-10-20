@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&display=swap');
 @import "tailwindcss";
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
 
 @theme {
   --color-black: black;
@@ -27,6 +29,14 @@
   --color-hp-low: #FF1622;
   --color-label: #BABABA;
   --color-border: #666666;
+  --color-reward: #DAC49D;
+
+  --font-abhaya: "Abhaya Libre", serif;
+  --text-shadow-outline: 
+    -1px -1px 0 #410606,  
+    1px -1px 0 #410606,
+    -1px  1px 0 #410606,
+    1px  1px 0 #410606;
 
 }
 

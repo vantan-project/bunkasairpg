@@ -1,5 +1,6 @@
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
+import next from "next";
 
 export type Monster = {
   attack: number;
@@ -133,27 +134,27 @@ export class Battle {
       return {
         monsterHitPoint: this.monster.hitPoint,
         isFinished: true,
-        message: `${damage}のダメージを与えた！`,
+        message: `${damage}のダメージを\n与えた！`,
       };
 
     if (damage === 0)
       return {
         monsterHitPoint: this.monster.hitPoint,
         isFinished: false,
-        message: "モンスターの防御に阻まれた！",
+        message: "モンスターの防御に\n阻まれた！",
       };
 
     if (damage < 0)
       return {
         monsterHitPoint: this.monster.hitPoint,
         isFinished: false,
-        message: `${-damage}ダメージが吸収された！`,
+        message: `${-damage}ダメージが\n吸収された！`,
       };
 
     return {
       monsterHitPoint: this.monster.hitPoint,
       isFinished: false,
-      message: `${damage}のダメージを与えた！`,
+      message: `${damage}のダメージを\n与えた！`,
     };
   }
 
@@ -162,7 +163,7 @@ export class Battle {
   } {
     this.user.weapon = weapon;
     return {
-      message: `武器を${weapon.name}に変更した！`,
+      message: `武器を${weapon.name}に\n変更した！`,
     };
   }
 
@@ -186,7 +187,7 @@ export class Battle {
   } {
     this.buffs[item.target] += Math.floor(item.rate * 10) / 10;
     return {
-      message: `${item.name}を使った！`,
+      message: `${item.name}を\n使った！`,
     };
   }
 
@@ -195,7 +196,7 @@ export class Battle {
   } {
     this.debuffs[item.target] += Math.floor(item.rate * 10) / 10;
     return {
-      message: `${item.name}を使った！`,
+      message: `${item.name}を\n使った！`,
     };
   }
 
@@ -206,7 +207,9 @@ export class Battle {
   } {
     // モンスター攻撃力 * (100/レベル) * 乱数
     const random = 0.95 + Math.random() * 0.1;
-    const damage = Math.floor(this.monster.attack * (100 / this.user.level) * random);
+    const damage = Math.floor(
+      this.monster.attack * (100 / this.user.level) * random
+    );
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
 
@@ -214,13 +217,13 @@ export class Battle {
       return {
         userHitPoint: this.user.hitPoint,
         isFinished: true,
-        message: `${damage}のダメージを受けた！`,
+        message: `${damage}のダメージを\n受けた！`,
       };
 
     return {
       userHitPoint: this.user.hitPoint,
       isFinished: false,
-      message: `${damage}のダメージを受けた！`,
+      message: `${damage}のダメージを\n受けた！`,
     };
   }
 
@@ -237,7 +240,7 @@ export class Battle {
           id: this.monster.weapon.id,
           type: "weapon",
         },
-        message: `${this.monster.weapon.name}を落とした！`,
+        message: `${this.monster.weapon.name}を\n落とした！`,
       };
     }
 
@@ -247,7 +250,7 @@ export class Battle {
           id: this.monster.item.id,
           type: "item",
         },
-        message: `${this.monster.item.name}を落とした！`,
+        message: `${this.monster.item.name}を\n落とした！`,
       };
 
     return {
@@ -258,13 +261,33 @@ export class Battle {
 
   public grantExperience(): {
     experiencePoint: number;
-    message: string;
   } {
     this.user.experiencePoint += this.monster.experiencePoint;
 
     return {
-      experiencePoint: this.monster.experiencePoint,
-      message: `${this.monster.experiencePoint}の経験値を獲得した！`,
+      experiencePoint: this.user.experiencePoint,
+    };
+  }
+
+
+  public changeExprience({level}:{level:number}): {
+    nextLevelTotalExp: number;
+    expToNextLevel: number;
+    remainingExp: number;
+    currentExp: number
+  } {
+    const nextLevelTotalExp = (17 * (level + 1)) ** 2 - 1;
+    const levelTotalExp = (17 * (level)) ** 2 - 1;
+    const remainingExp = nextLevelTotalExp - this.user.experiencePoint;
+    const expToNextLevel = nextLevelTotalExp -levelTotalExp;
+    const currentExp = expToNextLevel - remainingExp
+
+
+    return {
+      nextLevelTotalExp,
+      expToNextLevel,
+      remainingExp,
+      currentExp,
     };
   }
 

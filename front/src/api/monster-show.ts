@@ -20,10 +20,12 @@ export type MonsterShowResponse = {
     weapon: {
         id: number;
         name: string;
+        imageUrl: string;
     } | null;
     item: {
         id: number;
         name: string;
+        imageUrl: string;
     } | null;
 };
 

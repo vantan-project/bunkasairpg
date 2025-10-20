@@ -7,7 +7,7 @@ type Props = {
 export function Modal({ onClose, onConfirm, title }: Props) {
   return (
     <div
-      className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 z-50"
+      className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black/80 bg-opacity-50 z-50"
       onClick={onClose}
     >
       <div
