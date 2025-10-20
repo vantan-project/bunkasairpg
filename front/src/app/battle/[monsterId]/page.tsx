@@ -20,7 +20,7 @@ import { meGetItem } from "@/api/me-get-item";
 import { meGetWeapon } from "@/api/me-get-weapon";
 import { UserStatus } from "@/components/shared/user-status";
 import { LevelUpModal } from "@/components/feature/battle/level-up-modal";
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion } from "framer-motion";
 
 export type Mode =
   | "first"
@@ -43,33 +43,29 @@ type MonsterId = {
 
 export default function Page() {
   const { user, setUser, weapons, items, setItems } = useGlobalContext();
-
+  const router = useRouter();
   const { monsterId } = useParams<MonsterId>();
   const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
   const [rewardLogs, setRewardLogs] = useState<ReawrdLog[]>([]);
-  const router = useRouter();
   const [battle, setBattle] = useState<Battle | null>(null);
   const [monster, setMonster] = useState<MonsterShowResponse | null>(null);
   const [item, setItem] = useState(items[0]);
   const [weapon, setWeapon] = useState(user.weapon);
   const [mode, setMode] = useState<Mode>("first");
+  const [awayModal, setAwayModal] = useState(false);
+  const [levelUpModal, setLevelUpModal] = useState(false);
+  const [cameraAccessModal, setCameraAccessModal] = useState(false);
   const [weaponDrawer, setWeaponDrawer] = useState(false);
   const [itemDrawer, setItemDrawer] = useState(false);
-  const [awayModal, setAwayModal] = useState(false);
   const [standByWeaponDrawer, setStandByWeaponDrawer] = useState(false);
   const [rewardImage, setRewardImage] = useState("");
   const [maxExp, setMaxExp] = useState(0);
-  const [minExp, setMinExp] = useState(0);
   const [width, setWidth] = useState(0);
   const [previousWidth, setPreviousWidth] = useState(0);
   const [isIncreasing, setIsIncreasing] = useState(true);
-  const [levelUpModal, setLevelUpModal] = useState(false);
-  const [cameraAccessModal, setCameraAccessModal] = useState(false);
   const stopExpRef = useRef(false);
   const [riseLevel, setRiseLevel] = useState(0);
-  let maxCount = useMotionValue(maxExp);
   const [rustLevel, setRustLevel] = useState(0);
-  
 
   useEffect(() => {
     monsterShow(monsterId).then((data) => {
@@ -138,7 +134,7 @@ export default function Page() {
         action: () => setMode("defeat"),
       });
     } else {
-      // meUpdate({hitPoint: take.userHitPoint})
+      meUpdate({hitPoint: take.userHitPoint})
     }
     return logs;
   };
@@ -229,12 +225,12 @@ export default function Page() {
     setMaxExp(r.remainingExp);
     const experiencePoint = battle.grantExperience();
     const levelUp = battle.levelUp();
-    // meUpdate({
-    //   experiencePoint: experiencePoint.experiencePoint,
-    //   ...(levelUp
-    //     ? { maxHitPoint: user.level+levelUp.increasedHitPoint, level: levelUp.level }
-    //     : {}),
-    // });
+    meUpdate({
+      experiencePoint: experiencePoint.experiencePoint,
+      ...(levelUp
+        ? { maxHitPoint: user.level+levelUp.increasedHitPoint, level: levelUp.level }
+        : {}),
+    });
     let rustLevel = null;
     let riseLevel = 0;
     if (levelUp) {
@@ -272,7 +268,7 @@ export default function Page() {
       stopExpRef.current = false;
       let level = user.level;
       for (let i = 0; i < riseLevel; i++) {
-        setMaxExp(i*100)
+        setMaxExp(i * 100);
         if (stopExpRef.current) break;
         setIsIncreasing(true);
         setWidth(1);
@@ -297,9 +293,8 @@ export default function Page() {
     } else {
       const result = battle.changeExprience({ level: user.level });
       setMaxExp(result.remainingExp);
-      setMinExp(result.currentExp)
-      console.log(result.currentExp)
-      setWidth(result.currentExp / result.expToNextLevel);    
+      console.log(result.currentExp);
+      setWidth(result.currentExp / result.expToNextLevel);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setCameraAccessModal(true);
     }
@@ -572,7 +567,6 @@ export default function Page() {
             setRewardLogs={setRewardLogs}
             rewardLogs={rewardLogs}
             maxExp={maxExp}
-            minExp={minExp}
             width={width}
             previousWidth={previousWidth}
             isIncreasing={isIncreasing}
@@ -631,7 +625,7 @@ export default function Page() {
         />
       )}
       {cameraAccessModal && (
-        <div 
+        <div
           className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black/60 bg-cover bg-opacity-50 z-50 bg-center"
           onClick={() => router.push("/camera")}
         >

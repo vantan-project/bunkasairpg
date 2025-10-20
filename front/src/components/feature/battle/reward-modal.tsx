@@ -10,7 +10,6 @@ type Props = {
   setRewardLogs: React.Dispatch<React.SetStateAction<ReawrdLog[]>>;
   rewardLogs: ReawrdLog[];
   maxExp: number;
-  minExp: number;
   width: number;
   previousWidth: number;
   isIncreasing: boolean;
@@ -26,7 +25,6 @@ export function RewardModal({
   setRewardLogs,
   rewardLogs,
   maxExp,
-  minExp,
   width,
   previousWidth,
   isIncreasing,
