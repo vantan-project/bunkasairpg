@@ -5,30 +5,33 @@ import { useState, useEffect, useRef } from "react";
 import { Battle } from "@/utils/battle";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "@/hooks/use-global-context";
-import { WeaponDrawer } from "@/components/feature/battle/weapon-drawer";
+import {
+  MeWeapon,
+  WeaponDrawer,
+} from "@/components/feature/battle/weapon-drawer";
 import { MonsterShowResponse } from "@/api/monster-show";
-import { ItemDrawer } from "@/components/feature/battle/item-drawer";
+import { ItemDrawer, MeItem } from "@/components/feature/battle/item-drawer";
 import { Modal } from "@/components/feature/battle/modal";
 import { monsterShow } from "@/api/monster-show";
 import Image from "next/image";
 import clsx from "clsx";
 import { meUpdate } from "@/api/me-update";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
-import { meUseItem } from "@/api/me-use-item";
 import { RewardModal } from "@/components/feature/battle/reward-modal";
 import { meGetItem } from "@/api/me-get-item";
 import { meGetWeapon } from "@/api/me-get-weapon";
 import { UserStatus } from "@/components/shared/user-status";
 import { LevelUpModal } from "@/components/feature/battle/level-up-modal";
 import { motion } from "framer-motion";
+import { BattleConsole } from "@/components/feature/battle/battle-console";
+import { ITEM_TARGET_LABEL_MAP } from "@/const/item-target-label-map";
 
-export type Mode =
-  | "first"
-  | "command"
-  | "standBy"
-  | "reward"
-  | "defeat"
-  | "levelUp";
+export type BattlePhase =
+  | { status: "first"; action: null | "weapon" | "item" }
+  | { status: "command"; action: null | "weapon" | "item" }
+  | { status: "reward"; action: null }
+  | { status: "defeat"; action: null }
+  | { status: "levelUp"; action: null };
 
 export type BattleLog = {
   message: string;
@@ -49,15 +52,12 @@ export default function Page() {
   const [rewardLogs, setRewardLogs] = useState<ReawrdLog[]>([]);
   const [battle, setBattle] = useState<Battle | null>(null);
   const [monster, setMonster] = useState<MonsterShowResponse | null>(null);
-  const [item, setItem] = useState(items[0]);
-  const [weapon, setWeapon] = useState(user.weapon);
-  const [mode, setMode] = useState<Mode>("first");
-  const [awayModal, setAwayModal] = useState(false);
+  const [battlePhase, setBattlePhase] = useState<BattlePhase>({
+    status: "first",
+    action: null,
+  });
   const [levelUpModal, setLevelUpModal] = useState(false);
   const [cameraAccessModal, setCameraAccessModal] = useState(false);
-  const [weaponDrawer, setWeaponDrawer] = useState(false);
-  const [itemDrawer, setItemDrawer] = useState(false);
-  const [standByWeaponDrawer, setStandByWeaponDrawer] = useState(false);
   const [rewardImage, setRewardImage] = useState("");
   const [maxExp, setMaxExp] = useState(0);
   const [width, setWidth] = useState(0);
@@ -66,6 +66,9 @@ export default function Page() {
   const stopExpRef = useRef(false);
   const [riseLevel, setRiseLevel] = useState(0);
   const [rustLevel, setRustLevel] = useState(0);
+  const [isStandBy, setIsStandBy] = useState(false);
+  const [isItemUsed, setIsItemUsed] = useState(false);
+  const [showAwayModal, setShowAwayModal] = useState(false);
 
   useEffect(() => {
     monsterShow(monsterId).then((data) => {
@@ -74,12 +77,18 @@ export default function Page() {
     });
   }, []);
 
+  useEffect(() => {
+    if (battleQueue.length) {
+      setIsStandBy(true);
+    }
+  }, [battleQueue]);
+
   if (!monster || !battle) {
     return <div>Loading...</div>;
   }
 
+  // 攻撃メソッド
   const handleAttack = () => {
-    setMode("standBy");
     const player = battle.attack();
     const logs: BattleLog[] = [
       {
@@ -99,7 +108,10 @@ export default function Page() {
         {
           message: `${monster.name}を\n倒した！`,
           action: () => {
-            setMode("reward");
+            setBattlePhase({
+              status: "reward",
+              action: null,
+            });
             handleReward();
           },
         },
@@ -110,8 +122,9 @@ export default function Page() {
 
     setBattleQueue([...logs, ...monsterAttackLogs()]);
   };
-
+  // モンスター攻撃ログ
   const monsterAttackLogs = (): BattleLog[] => {
+    setIsItemUsed(false);
     const take = battle.takeDamage();
     const logs: BattleLog[] = [
       {
@@ -122,7 +135,10 @@ export default function Page() {
         message: take.message,
         action: () => {
           if (!take.isFinished) {
-            setMode("command");
+            setBattlePhase({
+              status: "command",
+              action: null,
+            });
           }
           setUser({ ...user, hitPoint: take.userHitPoint });
         },
@@ -130,73 +146,27 @@ export default function Page() {
     ];
     if (take.isFinished) {
       logs.push({
-        message: `${monster.name}に\n倒された！`,
-        action: () => setMode("defeat"),
+        message: `${user.name}は死んでしまった！`,
+        action: () => router.push("/camera"),
       });
-    } else {
-      meUpdate({hitPoint: take.userHitPoint})
     }
     return logs;
   };
-
-  const handleNextLog = () => {
-    const [current, ...rest] = battleQueue;
-    current?.action();
-    setBattleQueue(rest);
-  };
-
-  const handleChangeWeapon = async () => {
-    setMode("standBy");
-    setWeaponDrawer(false);
-    await meUpdate({ weaponId: weapon.id });
-    const player = battle.changeWeapon(weapon);
+  // 武器変更ログ
+  const changeWeaponLogs = (weapon: MeWeapon) => {
+    battle.changeWeapon(weapon);
     const logs: BattleLog[] = [
       {
-        message: player.message,
-        action: () => setUser({ ...user, weapon: weapon }),
+        message: `${weapon.name}を\n装備した！`,
+        action: () => {
+          setUser({ ...user, weapon: weapon });
+        },
       },
     ];
-    setBattleQueue([...logs, ...monsterAttackLogs()]);
+    return logs;
   };
-
-  const handleStandbyWeaponChange = () => {
-    setStandByWeaponDrawer(false);
-    meUpdate({ weaponId: weapon.id });
-    battle.changeWeapon(weapon);
-    setUser({ ...user, weapon: weapon });
-  };
-  const handleUseItem = () => {
-    setMode("standBy");
-    setItemDrawer(false);
-    meUseItem({ itemId: item.id });
-    let logs: BattleLog[] = [
-      {
-        message: `${item.name}を\n使った！`,
-        action: () => {},
-      },
-    ];
-    if (item.effectType === "heal") {
-      const player = battle.useHealItem(item);
-      logs.push({
-        message: player.message,
-        action: () => setUser({ ...user, hitPoint: player.userHitPoint }),
-      });
-    }
-    if (item.effectType === "buff") {
-      const player = battle.useBuffItem(item);
-      logs.push({
-        message: player.message,
-        action: () => {},
-      });
-    }
-    if (item.effectType === "debuff") {
-      const player = battle.useDebuffItem(item);
-      logs.push({
-        message: player.message,
-        action: () => {},
-      });
-    }
-    setBattleQueue([...logs, ...monsterAttackLogs()]);
+  // アイテム使用ログ
+  const useItemLogs = (item: MeItem) => {
     if (item.count === 1) {
       setItems(items.filter((prev) => prev.id !== item.id));
     } else {
@@ -206,6 +176,47 @@ export default function Page() {
         )
       );
     }
+    let logs: BattleLog[] = [
+      {
+        message: `${item.name}を\n使った！`,
+        action: () => {},
+      },
+    ];
+    if (item.effectType === "heal") {
+      battle.useHealItem(item);
+      const healedAmount = Math.min(
+        item.amount,
+        user.maxHitPoint - user.hitPoint
+      );
+      logs.push({
+        message:
+          healedAmount === 0
+            ? "何も起こらなかった！"
+            : `HPが${healedAmount}回復した！`,
+        action: () => {
+          setUser({ ...user, hitPoint: user.hitPoint + healedAmount });
+        },
+      });
+    }
+    if (item.effectType === "buff") {
+      battle.useBuffItem(item);
+      logs.push({
+        message: `${user.name}の${
+          ITEM_TARGET_LABEL_MAP[item.target]
+        }火力が${Math.floor(item.rate * 100)}%上昇した!`,
+        action: () => {},
+      });
+    }
+    if (item.effectType === "debuff") {
+      battle.useDebuffItem(item);
+      logs.push({
+        message: `${monster.name}の${
+          ITEM_TARGET_LABEL_MAP[item.target]
+        }耐性が$${Math.floor(item.rate * 100)}低下した！`,
+        action: () => {},
+      });
+    }
+    return logs;
   };
 
   const handleReward = () => {
@@ -228,7 +239,10 @@ export default function Page() {
     meUpdate({
       experiencePoint: experiencePoint.experiencePoint,
       ...(levelUp
-        ? { maxHitPoint: user.level+levelUp.increasedHitPoint, level: levelUp.level }
+        ? {
+            maxHitPoint: user.level + levelUp.increasedHitPoint,
+            level: levelUp.level,
+          }
         : {}),
     });
     let rustLevel = null;
@@ -310,9 +324,9 @@ export default function Page() {
       style={{ backgroundImage: `url(${"/bg-battle.png"})` }}
     >
       {/* モンスター画面 */}
-      <div className="h-[calc(100vh-340px)] flex flex-col items-center justify-center">
+      <div className="h-[calc(100vh-320px)] pt-18 flex flex-col items-center justify-center">
         <p className="">{monster.name}</p>
-        <div className="relative w-[50%] h-auto aspect-square">
+        <div className="relative w-[24vh] h-auto aspect-square">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
         </div>
         <div className="w-[70%] bg-white/60 p-3">
@@ -335,97 +349,43 @@ export default function Page() {
           </div>
         </div>
       </div>
-      {/* ユーザー画面 */}
-      <div className="fixed bottom-0 w-full min-h-[340px] bg-black/70 px-3 text-white pt-4">
-        {!weaponDrawer && !itemDrawer && mode !== "first" && (
-          <div>
-            <div className={clsx(dotBorderClassName, "h-[2px]")} />
-            <div className="flex justify-between">
-              <p>Lv.{user.level}</p>
-              <p>{user.name}</p>
-            </div>
-            <div className={clsx(dotBorderClassName, "h-[2px]")} />
-            <div className="relative my-2 w-full bg-white border border-white h-6 flex items-center">
-              <div
-                className={`h-full transition-all duration-300 ${
-                  user.hitPoint / user.maxHitPoint <= 0.1
-                    ? "bg-hp-low"
-                    : user.hitPoint / user.maxHitPoint <= 0.5
-                    ? "bg-hp-middle"
-                    : "bg-hp-height"
-                }`}
-                style={{
-                  width: `${(user.hitPoint / user.maxHitPoint) * 100}%`,
-                }}
-              />
-              <div className="absolute inset-0 flex items-center justify-end text-base text-black">
-                {user.hitPoint}/{user.maxHitPoint}
-              </div>
-            </div>
-            <div className="relative flex items-center justify-center">
-              <div className="absolute top-0 left-0 bg-[#666666]/80 z-10">
-                装備中
-              </div>
-              <div className="relative flex-[2] w-[35%] aspect-square">
-                <Image src={weapon.imageUrl} alt="武器画像" fill priority />
-              </div>
-              <div className="flex-[3] flex-col flex">
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={handleAttack}
-                >
-                  攻撃
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={() => setItemDrawer(true)}
-                >
-                  アイテム
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={() => setWeaponDrawer(true)}
-                >
-                  装備の変更
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={() => setAwayModal(true)}
-                >
-                  逃げる
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-              </div>
-            </div>
-          </div>
-        )}
-        {!weaponDrawer &&
-          !itemDrawer &&
-          !standByWeaponDrawer &&
-          mode === "first" && (
-            <div className="h-full flex flex-col">
-              <WeaponCard weapon={weapon} selectedWeaponId={weapon.id} />
+
+      {battlePhase.status === "first" && (
+        <>
+          <BattleConsole>
+            <div className="flex flex-col gap-2">
+              <WeaponCard weapon={user.weapon} />
               <div className="flex flex-col">
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={() => setItemDrawer(true)}
-                >
-                  アイテム一覧
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
-                <button
-                  className={clsx(buttonGradationClassName, "h-12")}
-                  onClick={() => setStandByWeaponDrawer(true)}
-                >
-                  装備変更
-                </button>
-                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                <div className={clsx("h-1", dotBorderClassName)} />
+                {[
+                  {
+                    label: "アイテム使用",
+                    onClick: () =>
+                      setBattlePhase({ status: "first", action: "item" }),
+                  },
+                  {
+                    label: "装備変更",
+                    onClick: () =>
+                      setBattlePhase({ status: "first", action: "weapon" }),
+                  },
+                ].map(({ label, onClick }) => (
+                  <div key={label}>
+                    <button
+                      key={label}
+                      className={clsx(
+                        buttonGradationClassName,
+                        "text-base font-bold w-full h-10"
+                      )}
+                      onClick={onClick}
+                    >
+                      {label}
+                    </button>
+                    <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                  </div>
+                ))}
               </div>
-              <div className="flex grow justify-between p-4">
+
+              <div className="flex grow justify-between px-4">
                 <button>
                   <Image
                     className="w-[130px] h-auto"
@@ -437,11 +397,24 @@ export default function Page() {
                 </button>
                 <button
                   onClick={() => {
-                    setMode("standBy");
+                    if (user.hitPoint <= 0) {
+                      setBattleQueue([
+                        {
+                          message:
+                            "アイテムもしくは4階の教会でHPを回復してください！",
+                          action: () => {},
+                        },
+                      ]);
+                      return;
+                    }
                     setBattleQueue([
                       {
                         message: `${monster.name}が\n現れた！`,
-                        action: () => setMode("command"),
+                        action: () =>
+                          setBattlePhase({
+                            status: "command",
+                            action: null,
+                          }),
                       },
                     ]);
                   }}
@@ -456,80 +429,146 @@ export default function Page() {
                 </button>
               </div>
             </div>
+          </BattleConsole>
+          {battlePhase.action === "weapon" && (
+            <BattleConsole>
+              <WeaponDrawer
+                onClose={() =>
+                  setBattlePhase({ status: "first", action: null })
+                }
+                changeWeapon={(w) => {
+                  setBattlePhase({ status: "first", action: null });
+                  const logs = changeWeaponLogs(w);
+                  setBattleQueue(logs);
+                }}
+              />
+            </BattleConsole>
           )}
-        {standByWeaponDrawer && (
-          <div>
-            <WeaponDrawer
-              weapons={weapons}
-              weapon={weapon}
-              setWeapon={setWeapon}
-              handleChangeWeapon={handleStandbyWeaponChange}
-            />
-            <button className="flex justify-center w-full my-4">
-              <Image
-                className="w-[130px] h-auto"
-                src={"/back-button.png"}
-                alt="戻る"
-                width={1000}
-                height={1000}
-                onClick={() => setStandByWeaponDrawer(false)}
+          {battlePhase.action === "item" && (
+            <BattleConsole>
+              <ItemDrawer
+                onClose={() =>
+                  setBattlePhase({ status: "first", action: null })
+                }
+                useItem={(i) => {
+                  if (i.effectType !== "heal") {
+                    setBattlePhase({ status: "first", action: null });
+                    setBattleQueue([
+                      {
+                        message: "戦闘前は回復アイテム以外使えない！",
+                        action: () => {},
+                      },
+                    ]);
+                    return;
+                  }
+                  setBattlePhase({ status: "first", action: null });
+                  const logs = useItemLogs(i);
+                  setBattleQueue(logs);
+                }}
               />
-            </button>
-          </div>
-        )}
-        {weaponDrawer && (
-          <div>
-            <WeaponDrawer
-              weapons={weapons}
-              weapon={weapon}
-              setWeapon={setWeapon}
-              handleChangeWeapon={handleChangeWeapon}
-            />
-            <div>
-              <button className="flex justify-center w-full my-4">
-                <Image
-                  className="w-[130px] h-auto"
-                  src={"/back-button.png"}
-                  alt="戻る"
-                  width={1000}
-                  height={1000}
-                  onClick={() => setWeaponDrawer(false)}
-                />
-              </button>
+            </BattleConsole>
+          )}
+        </>
+      )}
+
+      {battlePhase.status === "command" && (
+        <>
+          <BattleConsole>
+            <div className="flex flex-col gap-2">
+              <WeaponCard weapon={user.weapon} />
+              <div>
+                <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                {[
+                  { label: "攻撃", onClick: handleAttack },
+                  {
+                    label: "アイテム",
+                    onClick: () =>
+                      setBattlePhase({ status: "command", action: "item" }),
+                  },
+                  {
+                    label: "装備の変更",
+                    onClick: () =>
+                      setBattlePhase({ status: "command", action: "weapon" }),
+                  },
+                  { label: "逃げる", onClick: () => setShowAwayModal(true) },
+                ].map(({ label, onClick }) => (
+                  <div key={label}>
+                    <button
+                      key={label}
+                      className={clsx(
+                        buttonGradationClassName,
+                        "text-base font-bold w-full h-10"
+                      )}
+                      onClick={onClick}
+                    >
+                      {label}
+                    </button>
+                    <div className={clsx(dotBorderClassName, "h-[2px]")} />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {itemDrawer && (
-          <div>
-            <ItemDrawer
-              items={items}
-              item={item}
-              setItem={setItem}
-              handleUseItem={handleUseItem}
-            />
-            <button className="flex justify-center w-full my-4">
-              <Image
-                className="w-[130px] h-auto"
-                src={"/back-button.png"}
-                alt="戻る"
-                width={1000}
-                height={1000}
-                onClick={() => setItemDrawer(false)}
+          </BattleConsole>
+
+          {battlePhase.action === "weapon" && (
+            <BattleConsole>
+              <WeaponDrawer
+                onClose={() =>
+                  setBattlePhase({ status: "command", action: null })
+                }
+                changeWeapon={(w) => {
+                  setBattlePhase({ status: "command", action: null });
+                  const logs = changeWeaponLogs(w);
+                  setBattleQueue(logs);
+                }}
               />
-            </button>
-          </div>
-        )}
-      </div>
-      {mode === "standBy" && (
-        <div
-          className="fixed h-1/2 w-full z-10 bg-black/80 text-white text-4xl "
-          onClick={handleNextLog}
-        >
-          <div className="relative flex justify-center items-center w-full h-full">
-            <div className="w-full text-center whitespace-pre-wrap">
-              {battleQueue[0]?.message}
-            </div>
+            </BattleConsole>
+          )}
+          {battlePhase.action === "item" && (
+            <BattleConsole>
+              <ItemDrawer
+                onClose={() =>
+                  setBattlePhase({ status: "command", action: null })
+                }
+                useItem={(i) => {
+                  if (isItemUsed) {
+                    setBattlePhase({ status: "command", action: null });
+                    setBattleQueue([
+                      {
+                        message: "アイテムは1ターンに1回しか使えない！",
+                        action: () => {},
+                      },
+                    ]);
+                    return;
+                  }
+                  setIsItemUsed(true);
+                  setBattlePhase({ status: "command", action: null });
+                  const logs = useItemLogs(i);
+                  setBattleQueue(logs);
+                }}
+              />
+            </BattleConsole>
+          )}
+        </>
+      )}
+
+      {isStandBy && (
+        <BattleConsole>
+          <div
+            className="relative h-[340px] flex items-center justify-center px-10"
+            onClick={() => {
+              if (battleQueue.length === 0) return;
+              const [current, ...rest] = battleQueue;
+              current.action();
+              if (rest.length === 0) {
+                setIsStandBy(false);
+              }
+              setBattleQueue(rest);
+            }}
+          >
+            <p className="text-center">{battleQueue[0]?.message}</p>
             <motion.div
+              className="absolute right-5 bottom-5"
               animate={{
                 opacity: [1, 0, 1],
               }}
@@ -540,26 +579,34 @@ export default function Page() {
               }}
             >
               <Image
-                className="absolute bottom-[15%] right-[8%]"
                 src={"/triangle.svg"}
                 alt="タップ画像"
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 priority
               />
             </motion.div>
           </div>
-        </div>
+        </BattleConsole>
       )}
-      {awayModal && (
+
+      {showAwayModal && (
         <Modal
-          onClose={() => setAwayModal(false)}
-          onConfirm={() => router.push("/")}
+          onClose={() => setShowAwayModal(false)}
+          onConfirm={() => {
+            setShowAwayModal(false);
+            setBattleQueue([
+              {
+                message: `${user.name}は逃げ出した！`,
+                action: () => router.push("/camera"),
+              },
+            ]);
+          }}
           title={`本当に逃げますか？`}
         />
       )}
 
-      {mode === "reward" && (
+      {battlePhase.status === "reward" && (
         <div className="fixed top-0 w-screen h-screen z-10 bg-black/60">
           <RewardModal
             level={user.level}
@@ -577,46 +624,17 @@ export default function Page() {
           />
         </div>
       )}
-      {(mode === "first" || weaponDrawer || itemDrawer) && (
-        <div className="fixed top-0 w-full p-2">
-          <UserStatus
-            name={user.name}
-            imageUrl={user.imageUrl}
-            level={user.level}
-            hitPoint={user.hitPoint}
-            maxHitPoint={user.maxHitPoint}
-          />
-        </div>
-      )}
 
-      {mode === "defeat" && (
-        <div className="fixed top-0 w-screen h-screen z-10 bg-black/60">
-          <div
-            className="flex flex-col w-full h-full items-center mt-[30%]"
-            onClick={() => router.push("/camera")}
-          >
-            <div className="w-[80%]">
-              <Image
-                src={"/clear.png"}
-                alt="敗北画面"
-                width={1000}
-                height={1000}
-                priority
-              />
-            </div>
-            <div className="text-xl text-white flex items-center gap-2 mt-[20%]">
-              <div>タップして進む</div>
-              <Image
-                src={"/triangle.svg"}
-                alt="タップ画像"
-                width={24}
-                height={24}
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="fixed top-0 w-full p-2">
+        <UserStatus
+          name={user.name}
+          imageUrl={user.imageUrl}
+          level={user.level}
+          hitPoint={user.hitPoint}
+          maxHitPoint={user.maxHitPoint}
+        />
+      </div>
+
       {levelUpModal && (
         <LevelUpModal
           level={user.level}

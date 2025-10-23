@@ -1,6 +1,7 @@
+import { meUpdate } from "@/api/me-update";
+import { meUseItem } from "@/api/me-use-item";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
-import next from "next";
 
 export type Monster = {
   attack: number;
@@ -42,7 +43,7 @@ type User = {
 };
 
 type Weapon = {
-  name: string;
+  id: number;
   physicsAttack: number;
   elementAttack: number | null;
   physicsType: PhysicsType;
@@ -50,21 +51,18 @@ type Weapon = {
 };
 
 type HeelItem = {
-  name: string;
-  effectType: "heal";
+  id: number;
   amount: number;
 };
 
 type BuffItem = {
-  name: string;
-  effectType: "buff";
+  id: number;
   rate: number; // 何%増加するか
   target: PhysicsType | ElementType;
 };
 
 type DebuffItem = {
-  name: string;
-  effectType: "debuff";
+  id: number;
   rate: number; // 何%減少するか
   target: PhysicsType | ElementType;
 };
@@ -158,46 +156,28 @@ export class Battle {
     };
   }
 
-  public changeWeapon(weapon: Weapon): {
-    message: string;
-  } {
+  public changeWeapon(weapon: Weapon): void {
     this.user.weapon = weapon;
-    return {
-      message: `武器を${weapon.name}に\n変更した！`,
-    };
+    meUpdate({ weaponId: weapon.id });
   }
 
-  public useHealItem(item: HeelItem): {
-    userHitPoint: number;
-    message: string;
-  } {
-    const healedAmount = Math.min(
-      item.amount,
-      this.user.maxHitPoint - this.user.hitPoint
+  public useHealItem(item: HeelItem): void {
+    meUseItem({ itemId: item.id });
+    this.user.hitPoint = Math.min(
+      this.user.hitPoint + item.amount,
+      this.user.maxHitPoint
     );
-    this.user.hitPoint += healedAmount;
-    return {
-      userHitPoint: this.user.hitPoint,
-      message: `${healedAmount}回復した！`,
-    };
+    meUpdate({ hitPoint: this.user.hitPoint });
   }
 
-  public useBuffItem(item: BuffItem): {
-    message: string;
-  } {
+  public useBuffItem(item: BuffItem): void {
+    meUseItem({ itemId: item.id });
     this.buffs[item.target] += Math.floor(item.rate * 10) / 10;
-    return {
-      message: `${item.name}を\n使った！`,
-    };
   }
 
-  public useDebuffItem(item: DebuffItem): {
-    message: string;
-  } {
+  public useDebuffItem(item: DebuffItem): void {
+    meUseItem({ itemId: item.id });
     this.debuffs[item.target] += Math.floor(item.rate * 10) / 10;
-    return {
-      message: `${item.name}を\n使った！`,
-    };
   }
 
   public takeDamage(): {
@@ -212,7 +192,7 @@ export class Battle {
     );
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
-
+    meUpdate({ hitPoint: this.user.hitPoint });
     if (this.user.hitPoint === 0)
       return {
         userHitPoint: this.user.hitPoint,
@@ -269,19 +249,17 @@ export class Battle {
     };
   }
 
-
-  public changeExprience({level}:{level:number}): {
+  public changeExprience({ level }: { level: number }): {
     nextLevelTotalExp: number;
     expToNextLevel: number;
     remainingExp: number;
-    currentExp: number
+    currentExp: number;
   } {
     const nextLevelTotalExp = (17 * (level + 1)) ** 2 - 1;
-    const levelTotalExp = (17 * (level)) ** 2 - 1;
+    const levelTotalExp = (17 * level) ** 2 - 1;
     const remainingExp = nextLevelTotalExp - this.user.experiencePoint;
-    const expToNextLevel = nextLevelTotalExp -levelTotalExp;
-    const currentExp = expToNextLevel - remainingExp
-
+    const expToNextLevel = nextLevelTotalExp - levelTotalExp;
+    const currentExp = expToNextLevel - remainingExp;
 
     return {
       nextLevelTotalExp,

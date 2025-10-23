@@ -1,9 +1,10 @@
 import { Modal } from "@/components/feature/battle/modal";
 import { useRef, useState, useEffect } from "react";
-import { MeWeaponResponse } from "@/api/me-weapon";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import { WeaponCard } from "./weapon-card";
+import { useGlobalContext } from "@/hooks/use-global-context";
+import Image from "next/image";
 
 export type MeWeapon = {
   id: number;
@@ -15,29 +16,19 @@ export type MeWeapon = {
   elementType: ElementType;
 };
 
-type Props = {
-  weapons: MeWeaponResponse;
-  weapon: MeWeapon;
-  setWeapon: React.Dispatch<React.SetStateAction<MeWeapon>>;
-  handleChangeWeapon: () => void;
+export type WeaponDrawerProps = {
+  onClose: () => void;
+  changeWeapon: (weapon: MeWeapon) => void;
 };
 
-export function WeaponDrawer({
-  weapons,
-  weapon,
-  setWeapon,
-  handleChangeWeapon,
-}: Props) {
-  const [confirmModal, setConfirmModal] = useState(false);
+export function WeaponDrawer({ onClose, changeWeapon }: WeaponDrawerProps) {
+  const { user, weapons } = useGlobalContext();
+
+  const [selectedWeapon, setSelectedWeapon] = useState<MeWeapon | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 2;
   const pageCount = Math.ceil(weapons.length / itemsPerPage);
-
-  const handleConfirmWeapon = (weapon: MeWeapon) => {
-    setConfirmModal(true);
-    setWeapon(weapon);
-  };
 
   const handleDotClick = (index: number) => {
     const container = scrollContainerRef.current;
@@ -81,10 +72,12 @@ export function WeaponDrawer({
         {weapons.map((we, index) => (
           <div
             key={index}
-            onClick={() => {weapon.id === we.id ? {} : handleConfirmWeapon(we)}}
+            onClick={() => {
+              user.weapon.id !== we.id && setSelectedWeapon(we);
+            }}
             className="snap-start"
           >
-            <WeaponCard weapon={we} selectedWeaponId={weapon.id} />
+            <WeaponCard weapon={we} />
           </div>
         ))}
       </div>
@@ -104,12 +97,30 @@ export function WeaponDrawer({
         ))}
       </div>
 
+      <div>
+        <button className="flex justify-center w-full my-4">
+          <Image
+            className="w-[130px] h-auto"
+            src={"/back-button.png"}
+            alt="戻る"
+            width={1000}
+            height={1000}
+            onClick={onClose}
+          />
+        </button>
+      </div>
+
       {/* 確認モーダル */}
-      {confirmModal && (
+      {selectedWeapon && (
         <Modal
-          onClose={() => setConfirmModal(false)}
-          onConfirm={handleChangeWeapon}
-          title={`本当に「${weapon.name}」に\n変更しますか？`}
+          onClose={() => {
+            setSelectedWeapon(null);
+          }}
+          onConfirm={() => {
+            changeWeapon(selectedWeapon);
+            setSelectedWeapon(null);
+          }}
+          title={`「${selectedWeapon.name}」に\n変更しますか？`}
         />
       )}
     </div>

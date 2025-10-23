@@ -2,8 +2,9 @@ import { Modal } from "@/components/feature/battle/modal";
 import { useState, useRef, useEffect } from "react";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
-import { MeItemResponse } from "@/api/me-item";
 import { ItemCard } from "./item-card";
+import Image from "next/image";
+import { useGlobalContext } from "@/hooks/use-global-context";
 
 export type MeItem =
   | {
@@ -34,22 +35,18 @@ export type MeItem =
     };
 
 type Props = {
-  items: MeItemResponse;
-  item: MeItem;
-  setItem: React.Dispatch<React.SetStateAction<MeItem>>;
-  handleUseItem: () => void;
+  onClose: () => void;
+  useItem: (item: MeItem) => void;
 };
 
-export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
-  const [confirmModal, setConfirmModal] = useState(false);
+export function ItemDrawer({ onClose, useItem }: Props) {
+  const { items } = useGlobalContext();
+
+  const [selectedItem, setSelectedItem] = useState<MeItem | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 2;
   const pageCount = Math.ceil(items.length / itemsPerPage);
-  const handleConfirmItem = (item: MeItem) => {
-    setConfirmModal(true);
-    setItem(item);
-  };
   const handleDotClick = (index: number) => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -92,7 +89,7 @@ export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
           <div
             key={index}
             onClick={() => {
-              handleConfirmItem(item);
+              setSelectedItem(item);
             }}
             className="snap-start"
           >
@@ -116,12 +113,28 @@ export function ItemDrawer({ items, item, setItem, handleUseItem }: Props) {
         ))}
       </div>
 
+      <button className="flex justify-center w-full my-4">
+        <Image
+          className="w-[130px] h-auto"
+          src={"/back-button.png"}
+          alt="戻る"
+          width={1000}
+          height={1000}
+          onClick={onClose}
+        />
+      </button>
+
       {/* 確認モーダル */}
-      {confirmModal && (
+      {selectedItem && (
         <Modal
-          onClose={() => setConfirmModal(false)}
-          onConfirm={handleUseItem}
-          title={`本当に「${item.name}」に\n変更しますか？`}
+          onClose={() => {
+            setSelectedItem(null);
+          }}
+          onConfirm={() => {
+            useItem(selectedItem);
+            setSelectedItem(null);
+          }}
+          title={`本当に「${selectedItem.name}」に\n変更しますか？`}
         />
       )}
     </div>
