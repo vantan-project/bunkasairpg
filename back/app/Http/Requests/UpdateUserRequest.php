@@ -23,9 +23,9 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         $user = Auth::user();
-        
+
         return [
-            'name' => 'nullable|string|max:255|unique:users,name,' . ($user ? $user->id : ''),
+            'name' => 'nullable|string|max:255' . ($user ? $user->id : ''),
             'imageFile' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'level' => 'nullable|integer|min:1|max:100',
             'maxHitPoint' => 'nullable|integer|min:1',
