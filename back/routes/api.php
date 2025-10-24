@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::patch('/me/use-item', [MeController::class, 'useItem']);
   Route::get('/me/weapon', [MeController::class, 'weapon']);
   Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
+  Route::post('/me/clear-boss', [MeController::class, 'clearBoss']);
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
 });
 
