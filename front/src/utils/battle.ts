@@ -1,7 +1,9 @@
+import { meUpdate } from "@/api/me-update";
+import { meUseItem } from "@/api/me-use-item";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 
-type Monster = {
+export type Monster = {
   attack: number;
   maxHitPoint: number;
   hitPoint: number;
@@ -41,7 +43,7 @@ type User = {
 };
 
 type Weapon = {
-  name: string;
+  id: number;
   physicsAttack: number;
   elementAttack: number | null;
   physicsType: PhysicsType;
@@ -49,21 +51,18 @@ type Weapon = {
 };
 
 type HeelItem = {
-  name: string;
-  logicType: "heal";
+  id: number;
   amount: number;
 };
 
 type BuffItem = {
-  name: string;
-  logicType: "buff";
+  id: number;
   rate: number; // 何%増加するか
   target: PhysicsType | ElementType;
 };
 
 type DebuffItem = {
-  name: string;
-  logicType: "debuff";
+  id: number;
   rate: number; // 何%減少するか
   target: PhysicsType | ElementType;
 };
@@ -101,8 +100,7 @@ export class Battle {
 
   public attack(): {
     monsterHitPoint: number;
-    isFinished: boolean;
-    message: string;
+    damage: number;
   } {
     const physicsType = this.user.weapon.physicsType;
     const elementType = this.user.weapon.elementType;
@@ -128,102 +126,55 @@ export class Battle {
       damage < 0
         ? Math.min(this.monster.hitPoint - damage, this.monster.maxHitPoint)
         : Math.max(this.monster.hitPoint - damage, 0);
-
-    if (this.monster.hitPoint === 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: true,
-        message: "モンスターを倒した！",
-      };
-
-    if (damage === 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: false,
-        message: "モンスターの防御に阻まれた！",
-      };
-
-    if (damage < 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: false,
-        message: `${-damage}ダメージが吸収された！`,
-      };
-
     return {
       monsterHitPoint: this.monster.hitPoint,
-      isFinished: false,
-      message: `${damage}のダメージを与えた！`,
+      damage: damage,
     };
   }
 
-  public changeWeapon(weapon: Weapon): {
-    message: string;
-  } {
+  public changeWeapon(weapon: Weapon): void {
     this.user.weapon = weapon;
-    return {
-      message: `武器を${weapon.name}に変更した！`,
-    };
+    meUpdate({ weaponId: weapon.id });
   }
 
-  public useHealItem(item: HeelItem): {
-    userHitPoint: number;
-    message: string;
-  } {
-    const healedAmount = Math.min(
-      item.amount,
-      this.user.maxHitPoint - this.user.hitPoint
+  public useHealItem(item: HeelItem): void {
+    meUseItem({ itemId: item.id });
+    this.user.hitPoint = Math.min(
+      this.user.hitPoint + item.amount,
+      this.user.maxHitPoint
     );
-    this.user.hitPoint += healedAmount;
-    return {
-      userHitPoint: this.user.hitPoint,
-      message: `${healedAmount}回復した！`,
-    };
+    meUpdate({ hitPoint: this.user.hitPoint });
   }
 
-  public useBuffItem(item: BuffItem): {
-    message: string;
-  } {
+  public useBuffItem(item: BuffItem): void {
+    meUseItem({ itemId: item.id });
     this.buffs[item.target] += Math.floor(item.rate * 10) / 10;
-    return {
-      message: `${item.name}を使った！`,
-    };
   }
 
-  public useDebuffItem(item: DebuffItem): {
-    message: string;
-  } {
+  public useDebuffItem(item: DebuffItem): void {
+    meUseItem({ itemId: item.id });
     this.debuffs[item.target] += Math.floor(item.rate * 10) / 10;
-    return {
-      message: `${item.name}を使った！`,
-    };
   }
 
   public takeDamage(): {
     userHitPoint: number;
-    isFinished: boolean;
-    message: string;
+    damage: number;
   } {
     // モンスター攻撃力 * (100/レベル) * 乱数
     const random = 0.95 + Math.random() * 0.1;
-    const damage = this.monster.attack * (100 / this.user.level) * random;
+    const damage = Math.floor(
+      this.monster.attack * (100 / this.user.level) * random
+    );
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
-
-    if (this.user.hitPoint === 0)
-      return {
-        userHitPoint: this.user.hitPoint,
-        isFinished: true,
-        message: "モンスターに倒された！",
-      };
-
+    meUpdate({ hitPoint: this.user.hitPoint });
     return {
       userHitPoint: this.user.hitPoint,
-      isFinished: false,
-      message: `${damage}のダメージを受けた！`,
+      damage: damage,
     };
   }
 
+  // TODO: リファクタ前
   public drop(weaponIds: number[]): {
     drop: {
       id: number;
@@ -237,7 +188,7 @@ export class Battle {
           id: this.monster.weapon.id,
           type: "weapon",
         },
-        message: `${this.monster.weapon.name}を落とした！`,
+        message: `${this.monster.weapon.name}を\n落とした！`,
       };
     }
 
@@ -247,7 +198,7 @@ export class Battle {
           id: this.monster.item.id,
           type: "item",
         },
-        message: `${this.monster.item.name}を落とした！`,
+        message: `${this.monster.item.name}を\n落とした！`,
       };
 
     return {
@@ -258,13 +209,31 @@ export class Battle {
 
   public grantExperience(): {
     experiencePoint: number;
-    message: string;
   } {
     this.user.experiencePoint += this.monster.experiencePoint;
 
     return {
-      experiencePoint: this.monster.experiencePoint,
-      message: `${this.monster.experiencePoint}の経験値を獲得した！`,
+      experiencePoint: this.user.experiencePoint,
+    };
+  }
+
+  public changeExprience({ level }: { level: number }): {
+    nextLevelTotalExp: number;
+    expToNextLevel: number;
+    remainingExp: number;
+    currentExp: number;
+  } {
+    const nextLevelTotalExp = (17 * (level + 1)) ** 2 - 1;
+    const levelTotalExp = (17 * level) ** 2 - 1;
+    const remainingExp = nextLevelTotalExp - this.user.experiencePoint;
+    const expToNextLevel = nextLevelTotalExp - levelTotalExp;
+    const currentExp = expToNextLevel - remainingExp;
+
+    return {
+      nextLevelTotalExp,
+      expToNextLevel,
+      remainingExp,
+      currentExp,
     };
   }
 

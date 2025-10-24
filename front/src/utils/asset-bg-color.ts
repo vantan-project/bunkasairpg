@@ -1,3 +1,6 @@
+import { ElementType } from "@/types/element-type";
+import { PhysicsType } from "@/types/physics-type";
+
 const assetBgColorMap = {
   slash: "bg-slash",
   blow: "bg-blow",
@@ -13,8 +16,6 @@ const assetBgColorMap = {
   debuff: "bg-debuff",
 };
 
-type AssetType = keyof typeof assetBgColorMap;
-
-export function assetBgColor(type: AssetType): string {
+export function assetBgColor(type: PhysicsType | ElementType): string {
   return assetBgColorMap[type];
 }

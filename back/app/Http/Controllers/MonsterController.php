@@ -129,22 +129,24 @@ class MonsterController extends Controller
         try {
             $weapon = null;
             if (isset($monster->weapon_id)) {
-                $weaponModel = Weapon::query()->select(['id', 'name'])->find($monster->weapon_id);
+                $weaponModel = Weapon::query()->select(['id', 'name', 'image_url'])->find($monster->weapon_id);
                 if ($weaponModel) {
                     $weapon = [
                         'id' => (int) $weaponModel->id,
                         'name' => $weaponModel->name,
+                        'imageUrl' => $weaponModel->image_url,
                     ];
                 }
             }
 
             $item = null;
             if (isset($monster->item_id)) {
-                $itemModel = Item::query()->select(['id', 'name'])->find($monster->item_id);
+                $itemModel = Item::query()->select(['id', 'name', 'image_url'])->find($monster->item_id);
                 if ($itemModel) {
                     $item = [
                         'id' => (int) $itemModel->id,
                         'name' => $itemModel->name,
+                        'imageUrl' => $itemModel->image_url,
                     ];
                 }
             }
