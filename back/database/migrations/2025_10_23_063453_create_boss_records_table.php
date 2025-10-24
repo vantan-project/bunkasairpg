@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('boss_records', function (Blueprint $table) {
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade')->primary();
+            $table->uuid('user_id')->primary();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('clear_time', 8);
             $table->timestamps();
         });

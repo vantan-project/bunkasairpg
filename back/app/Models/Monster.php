@@ -46,4 +46,8 @@ class Monster extends Model
             }
         });
     }
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'weapon_entries', 'weapon_id', 'user_id');
+    }
 }

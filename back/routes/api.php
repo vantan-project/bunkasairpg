@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
   Route::post('/me/clear-boss', [MeController::class, 'clearBoss']);
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
+  Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
+  Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
 });
 
 // 管理者系
