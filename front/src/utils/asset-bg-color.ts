@@ -1,3 +1,4 @@
+import { EffectType } from "@/types/effect-type";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 
@@ -16,6 +17,6 @@ const assetBgColorMap = {
   debuff: "bg-debuff",
 };
 
-export function assetBgColor(type: PhysicsType | ElementType): string {
+export function assetBgColor(type: PhysicsType | ElementType | EffectType): string {
   return assetBgColorMap[type];
 }
