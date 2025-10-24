@@ -100,8 +100,7 @@ export class Battle {
 
   public attack(): {
     monsterHitPoint: number;
-    isFinished: boolean;
-    message: string;
+    damage: number;
   } {
     const physicsType = this.user.weapon.physicsType;
     const elementType = this.user.weapon.elementType;
@@ -127,32 +126,9 @@ export class Battle {
       damage < 0
         ? Math.min(this.monster.hitPoint - damage, this.monster.maxHitPoint)
         : Math.max(this.monster.hitPoint - damage, 0);
-
-    if (this.monster.hitPoint === 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: true,
-        message: `${damage}のダメージを\n与えた！`,
-      };
-
-    if (damage === 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: false,
-        message: "モンスターの防御に\n阻まれた！",
-      };
-
-    if (damage < 0)
-      return {
-        monsterHitPoint: this.monster.hitPoint,
-        isFinished: false,
-        message: `${-damage}ダメージが\n吸収された！`,
-      };
-
     return {
       monsterHitPoint: this.monster.hitPoint,
-      isFinished: false,
-      message: `${damage}のダメージを\n与えた！`,
+      damage: damage,
     };
   }
 
@@ -182,8 +158,7 @@ export class Battle {
 
   public takeDamage(): {
     userHitPoint: number;
-    isFinished: boolean;
-    message: string;
+    damage: number;
   } {
     // モンスター攻撃力 * (100/レベル) * 乱数
     const random = 0.95 + Math.random() * 0.1;
@@ -193,20 +168,13 @@ export class Battle {
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
     meUpdate({ hitPoint: this.user.hitPoint });
-    if (this.user.hitPoint === 0)
-      return {
-        userHitPoint: this.user.hitPoint,
-        isFinished: true,
-        message: `${damage}のダメージを\n受けた！`,
-      };
-
     return {
       userHitPoint: this.user.hitPoint,
-      isFinished: false,
-      message: `${damage}のダメージを\n受けた！`,
+      damage: damage,
     };
   }
 
+  // TODO: リファクタ前
   public drop(weaponIds: number[]): {
     drop: {
       id: number;

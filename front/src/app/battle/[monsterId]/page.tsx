@@ -48,14 +48,18 @@ export default function Page() {
   const { user, setUser, weapons, items, setItems } = useGlobalContext();
   const router = useRouter();
   const { monsterId } = useParams<MonsterId>();
-  const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
-  const [rewardLogs, setRewardLogs] = useState<ReawrdLog[]>([]);
-  const [battle, setBattle] = useState<Battle | null>(null);
   const [monster, setMonster] = useState<MonsterShowResponse | null>(null);
+  const [battle, setBattle] = useState<Battle | null>(null);
   const [battlePhase, setBattlePhase] = useState<BattlePhase>({
     status: "first",
     action: null,
   });
+  const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
+  const [rewardLogs, setRewardLogs] = useState<ReawrdLog[]>([]);
+  const [isStandBy, setIsStandBy] = useState(false);
+  const [isItemUsed, setIsItemUsed] = useState(false);
+  const [showAwayModal, setShowAwayModal] = useState(false);
+  // TODO: リファクタ前
   const [levelUpModal, setLevelUpModal] = useState(false);
   const [cameraAccessModal, setCameraAccessModal] = useState(false);
   const [rewardImage, setRewardImage] = useState("");
@@ -66,9 +70,6 @@ export default function Page() {
   const stopExpRef = useRef(false);
   const [riseLevel, setRiseLevel] = useState(0);
   const [rustLevel, setRustLevel] = useState(0);
-  const [isStandBy, setIsStandBy] = useState(false);
-  const [isItemUsed, setIsItemUsed] = useState(false);
-  const [showAwayModal, setShowAwayModal] = useState(false);
 
   useEffect(() => {
     monsterShow(monsterId).then((data) => {
@@ -76,33 +77,37 @@ export default function Page() {
       setBattle(new Battle(structuredClone(user), structuredClone(data)));
     });
   }, []);
-
   useEffect(() => {
-    if (battleQueue.length) {
-      setIsStandBy(true);
-    }
+    setIsStandBy(!!battleQueue.length);
   }, [battleQueue]);
-
-  if (!monster || !battle) {
-    return <div>Loading...</div>;
-  }
+  if (!monster || !battle) return;
 
   // 攻撃メソッド
   const handleAttack = () => {
-    const player = battle.attack();
     const logs: BattleLog[] = [
       {
         message: `${monster.name}を\n攻撃した！`,
         action: () => {},
       },
-      {
-        message: player.message,
-        action: () =>
-          setMonster({ ...monster, hitPoint: player.monsterHitPoint }),
-      },
     ];
-
-    if (player.isFinished) {
+    const attackData = battle.attack();
+    if (attackData.damage === 0) {
+      logs.push({
+        message: "モンスターの防御に\n阻まれた！",
+        action: () => {},
+      });
+    } else if (attackData.damage < 0) {
+      logs.push({
+        message: `${-attackData.damage}ダメージが\n吸収された！`,
+        action: () => setMonster({ ...monster, hitPoint: attackData.damage }),
+      });
+    } else {
+      logs.push({
+        message: `${attackData.damage}のダメージを\n与えた！`,
+        action: () => setMonster({ ...monster, hitPoint: attackData.damage }),
+      });
+    }
+    if (attackData.monsterHitPoint === 0) {
       setBattleQueue([
         ...logs,
         {
@@ -116,35 +121,33 @@ export default function Page() {
           },
         },
       ]);
-
       return;
     }
-
     setBattleQueue([...logs, ...monsterAttackLogs()]);
   };
   // モンスター攻撃ログ
   const monsterAttackLogs = (): BattleLog[] => {
     setIsItemUsed(false);
-    const take = battle.takeDamage();
+    const takeDamageData = battle.takeDamage();
     const logs: BattleLog[] = [
       {
         message: `${monster.name}の\n攻撃！`,
         action: () => {},
       },
       {
-        message: take.message,
+        message: `${takeDamageData.damage}のダメージを\n受けた！`,
         action: () => {
-          if (!take.isFinished) {
+          if (takeDamageData.userHitPoint === 0) {
             setBattlePhase({
               status: "command",
               action: null,
             });
           }
-          setUser({ ...user, hitPoint: take.userHitPoint });
+          setUser({ ...user, hitPoint: takeDamageData.userHitPoint });
         },
       },
     ];
-    if (take.isFinished) {
+    if (takeDamageData.userHitPoint === 0) {
       logs.push({
         message: `${user.name}は死んでしまった！`,
         action: () => router.push("/camera"),
@@ -219,6 +222,8 @@ export default function Page() {
     return logs;
   };
 
+
+  // TODO: リファクタ前
   const handleReward = () => {
     const weaponIds = weapons.map((weapon) => weapon.id);
     const drop = battle.drop(weaponIds);
@@ -350,6 +355,16 @@ export default function Page() {
         </div>
       </div>
 
+      <div className="fixed top-0 w-full p-2">
+        <UserStatus
+          name={user.name}
+          imageUrl={user.imageUrl}
+          level={user.level}
+          hitPoint={user.hitPoint}
+          maxHitPoint={user.maxHitPoint}
+        />
+      </div>
+
       {battlePhase.status === "first" && (
         <>
           <BattleConsole>
@@ -386,7 +401,7 @@ export default function Page() {
               </div>
 
               <div className="flex grow justify-between px-4">
-                <button>
+                <button onClick={() => router.push("/camera")}>
                   <Image
                     className="w-[130px] h-auto"
                     src={"/back-button.png"}
@@ -560,9 +575,6 @@ export default function Page() {
               if (battleQueue.length === 0) return;
               const [current, ...rest] = battleQueue;
               current.action();
-              if (rest.length === 0) {
-                setIsStandBy(false);
-              }
               setBattleQueue(rest);
             }}
           >
@@ -606,6 +618,7 @@ export default function Page() {
         />
       )}
 
+      {/* TODO: リファクタ前 */}
       {battlePhase.status === "reward" && (
         <div className="fixed top-0 w-screen h-screen z-10 bg-black/60">
           <RewardModal
@@ -624,17 +637,6 @@ export default function Page() {
           />
         </div>
       )}
-
-      <div className="fixed top-0 w-full p-2">
-        <UserStatus
-          name={user.name}
-          imageUrl={user.imageUrl}
-          level={user.level}
-          hitPoint={user.hitPoint}
-          maxHitPoint={user.maxHitPoint}
-        />
-      </div>
-
       {levelUpModal && (
         <LevelUpModal
           level={user.level}
