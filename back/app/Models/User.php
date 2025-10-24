@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -84,6 +85,10 @@ class User extends Authenticatable
     public function ownedWeapons()
     {
         return $this->belongsToMany(Weapon::class, 'user_weapons', 'user_id', 'weapon_id');
+    }
+    public function bossRecord()
+    {
+        return $this->hasOne(BossRecord::class, 'user_id');
     }
 
 }
