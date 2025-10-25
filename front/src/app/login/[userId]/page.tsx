@@ -17,7 +17,7 @@ export default function Page() {
         window.location.href = "/";
       })
       .catch(() => {
-        window.location.href = "/guide";
+        window.location.href = "/?notLoggedIn=1";
       });
   }, [userId]);
 

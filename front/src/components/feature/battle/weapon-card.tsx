@@ -59,7 +59,7 @@ export function WeaponCard({ weapon }: Props) {
           },
           {
             label: "属性値",
-            value: weapon.elementAttack,
+            value: weapon.elementAttack || 0,
           },
           {
             label: "属性",

@@ -222,7 +222,6 @@ export default function Page() {
     return logs;
   };
 
-
   // TODO: リファクタ前
   const handleReward = () => {
     const weaponIds = weapons.map((weapon) => weapon.id);
@@ -380,8 +379,19 @@ export default function Page() {
                   },
                   {
                     label: "装備変更",
-                    onClick: () =>
-                      setBattlePhase({ status: "first", action: "weapon" }),
+                    onClick: () => {
+                      if (weapons.length === 0) {
+                        setBattleQueue([
+                          {
+                            message: "武器がありません。",
+                            action: () => {},
+                          },
+                        ]);
+                        setIsStandBy(true);
+                        return;
+                      }
+                      setBattlePhase({ status: "first", action: "weapon" });
+                    },
                   },
                 ].map(({ label, onClick }) => (
                   <div key={label}>
@@ -502,8 +512,19 @@ export default function Page() {
                   },
                   {
                     label: "装備の変更",
-                    onClick: () =>
-                      setBattlePhase({ status: "command", action: "weapon" }),
+                    onClick: () => {
+                      if (weapons.length === 0) {
+                        setBattleQueue([
+                          {
+                            message: "武器がありません。",
+                            action: () => {},
+                          },
+                        ]);
+                        setIsStandBy(true);
+                        return;
+                      }
+                      setBattlePhase({ status: "command", action: "weapon" });
+                    },
                   },
                   { label: "逃げる", onClick: () => setShowAwayModal(true) },
                 ].map(({ label, onClick }) => (

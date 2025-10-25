@@ -14,8 +14,13 @@ type Props = {
 
 export function MainLayout({ children }: Props) {
   const pathname = usePathname();
-  const allowedPaths = ["/admin", "/login", "/guide"];
-  if (allowedPaths.some((path) => pathname.startsWith(path))) {
+  const allowedPaths = ["/admin", "/login"];
+  if (
+    pathname === "/" ||
+    allowedPaths.some(
+      (path) => pathname === path || pathname.startsWith(path + "/")
+    )
+  ) {
     return (
       <HeroUIProvider>
         <ToastProvider placement="top-center" />
@@ -54,7 +59,7 @@ export function MainLayout({ children }: Props) {
         ]);
       } catch (err) {
         console.warn(err);
-        router.push("/guide");
+        router.push("/?notLoggedIn=1");
       }
     };
 
