@@ -64,7 +64,9 @@ class UserController extends Controller
   {
     $user = $this->getAuthenticatedUser();
     $userRanking = $user->bossRecord;
-    $rankings = BossRecord::with('user')->get();
+    $rankings = BossRecord::with('user')
+        ->orderBy('clear_time', 'asc')
+        ->get();
     $userRankingData = [];
 
     if ($userRanking) {
@@ -88,32 +90,35 @@ class UserController extends Controller
   }
   public function collectedRanking(){
     $user = $this->getAuthenticatedUser();
-    $users = User::withCount(['items', 'monsters', 'weapons'])->get();
-    $counts = [
-        Monster::count(),
-        Item::count(),
-        Weapon::count(),
-    ];
-    $userCounts = [
-        $user->items()->count(),
-        $user->monsters()->count(),
-        $user->weapons()->count(),
-    ];
+    $users = User::withCount(['items', 'monsters', 'weapons'])
+        ->get()
+        ->map(function  ($u){
+            $u->total_count = $u->items_count + $u->monsters_count + $u->weapons_count;
+            return $u;
+        })
+        ->sortByDesc('created_at')
+        ->sortByDesc('total_count')
+        ->take(20);
 
+    $totalCount = Monster::count() + Item::count() + Weapon::count();
+    $totalUserCount = $user->items()->count() + $user->monsters()->count() + $user->weapons()->count();
 
-    $totalCount = array_sum($counts);
-    $totalUserCount = array_sum($userCounts);
+    //パーセント計算(例60.33)
+    $calcPercentage = function ($partial) use ($totalCount) {
+        return round(($partial / $totalCount) * 100, 2);
+    };
+
     $userData = [
         'name' => $user->name,
         'image_url' => $user->image_url,
-        'user_percentage' => round(($totalUserCount / $totalCount) * 100, 2),
+        'user_percentage' => $calcPercentage($totalUserCount),
     ];
-    $userDatas = $users->map(function ($user) use ($totalCount) {
-        $total = $user->items_count + $user->monsters_count + $user->weapons_count;
+
+    $userDatas = $users->map(function ($user) use ($calcPercentage) {
         return [
             'name' => $user->name,
             'image_url' => $user->image_url,
-            'total' => round(($total / $totalCount) * 100, 2),
+            'total' => $calcPercentage($user->total_count),
         ];
     });
 
