@@ -63,34 +63,34 @@ class UserController extends Controller
   public function clearRanking()
   {
     $user = $this->getAuthenticatedUser();
-    $userRanking = $user->bossRecord;
-    $rankings = BossRecord::with('user')
+    $userRecord= $user->bossRecord;
+    $bossRecords = BossRecord::with('user')
         ->orderBy('clear_time', 'asc')
         ->get();
-    $userRankingData = [];
+    $userRecordData = [];
 
-    if ($userRanking) {
-        $userRankingData = [
+    if ($userRecord) {
+        $userRecordData = [
             'name' => $user->name,
             'image_url' => $user->image_url,
-            'clear_time' => $userRanking->clear_time,
+            'clear_time' => $userRecord->clear_time,
         ];
     }
-    $rankingData = $rankings->map(function ($ranking) {
+    $rankingList = $bossRecords->map(function ($record) {
         return[
-            'name' => $ranking->user->name,
-            'image_url' => $ranking->user->image_url,
-            'clear_time' => $ranking->clear_time,
+            'name' => $record->user->name,
+            'image_url' => $record->user->image_url,
+            'clear_time' => $record->clear_time,
         ];
     });
     return response()->json([
-        'userRanking' => $userRankingData,
-        'rankings' => $rankingData,
+        'userRanking' => $userRecordData,
+        'rankings' => $rankingList,
     ]);
   }
   public function collectedRanking(){
     $user = $this->getAuthenticatedUser();
-    $users = User::withCount(['items', 'monsters', 'weapons'])
+    $rankingUsers = User::withCount(['items', 'monsters', 'weapons'])
         ->get()
         ->map(function  ($u){
             $u->total_count = $u->items_count + $u->monsters_count + $u->weapons_count;
@@ -100,31 +100,31 @@ class UserController extends Controller
         ->sortByDesc('total_count')
         ->take(20);
 
-    $totalCount = Monster::count() + Item::count() + Weapon::count();
-    $totalUserCount = $user->items()->count() + $user->monsters()->count() + $user->weapons()->count();
+    $totalAvailableCount = Monster::count() + Item::count() + Weapon::count();
+    $userTotalCount = $user->items()->count() + $user->monsters()->count() + $user->weapons()->count();
 
     //パーセント計算(例60.33)
-    $calcPercentage = function ($partial) use ($totalCount) {
-        return round(($partial / $totalCount) * 100, 2);
+    $calcPercentage = function ($partial) use ($totalAvailableCount) {
+        return round(($partial / $totalAvailableCount) * 100, 2);
     };
 
-    $userData = [
+    $userRanking = [
         'name' => $user->name,
         'image_url' => $user->image_url,
-        'user_percentage' => $calcPercentage($totalUserCount),
+        'user_percentage' => $calcPercentage($userTotalCount),
     ];
 
-    $userDatas = $users->map(function ($user) use ($calcPercentage) {
+    $rankings = $rankingUsers->map(function ($u) use ($calcPercentage) {
         return [
-            'name' => $user->name,
-            'image_url' => $user->image_url,
-            'total' => $calcPercentage($user->total_count),
+            'name' => $u->name,
+            'image_url' => $u->image_url,
+            'total' => $calcPercentage($u->total_count),
         ];
-    });
+    })->values();
 
     return response()->json([
-        'userRanking'=> $userData,
-        'userRankings' => $userDatas
+        'userRanking' => $userRanking,
+        'rankings' => $rankings
     ]);
   }
 }
