@@ -2,10 +2,9 @@
 
 import { UserStatus } from "@/components/shared/user-status";
 import { useGlobalContext } from "@/hooks/use-global-context";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useZxing } from "react-zxing";
+import { Footer } from "@/components/shared/footer";
 
 export default function Page() {
   const router = useRouter();
@@ -53,44 +52,7 @@ export default function Page() {
         <div className="w-80 h-80 border-2 border-white" />
       </div>
 
-      <div className="fixed bottom-0 w-full h-24 flex justify-center overflow-hidden">
-        <Image
-          className="w-[110%] h-full"
-          width={100}
-          height={100}
-          src="/tab-bar-backgrand.png"
-          alt="tab-bar"
-        />
-      </div>
-      <div className="w-full flex justify-center gap-3 fixed bottom-5">
-        <Link className="w-24 h-auto" href="/camera">
-          <Image
-            className="w-full h-full"
-            width={100}
-            height={100}
-            src="/btn-home.png"
-            alt="home"
-          />
-        </Link>
-        <Link className="w-24 h-auto" href="/encyclopedia">
-          <Image
-            className="w-full h-full"
-            width={100}
-            height={100}
-            src="/btn-encyclopedia.png"
-            alt="home"
-          />
-        </Link>
-        <Link className="w-24 h-auto" href="/profile">
-          <Image
-            className="w-full h-full"
-            width={100}
-            height={100}
-            src="/btn-profile.png"
-            alt="home"
-          />
-        </Link>
-      </div>
+      <Footer/>
     </div>
   );
 }

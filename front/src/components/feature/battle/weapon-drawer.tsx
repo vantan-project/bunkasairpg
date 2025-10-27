@@ -23,7 +23,6 @@ export type WeaponDrawerProps = {
 
 export function WeaponDrawer({ onClose, changeWeapon }: WeaponDrawerProps) {
   const { user, weapons } = useGlobalContext();
-
   const [selectedWeapon, setSelectedWeapon] = useState<MeWeapon | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
