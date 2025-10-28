@@ -14,8 +14,9 @@ import {
 import { ItemDrawer } from "@/components/feature/battle/item-drawer";
 import { MeItem } from "@/components/feature/battle/item-drawer";
 import { meUseItem } from "@/api/me-use-item";
-import { addToasts } from "@/utils/add-toasts";
 import { ProfileConsole } from "@/components/feature/profile/profile-console";
+import { UserStatus } from "@/components/shared/user-status";
+import { WeaponCard } from "@/components/feature/battle/weapon-card";
 
 export default function Page() {
   const { user, setUser, items, setItems } = useGlobalContext();
@@ -29,7 +30,6 @@ export default function Page() {
     if (name === user.name || !name) return;
     setName(name);
     meUpdate({ name }).then(() => {
-      addToasts(true, [`ユーザー名を「${name}」に変更しました！`]);
       setUser({ ...user, name });
     });
   };
@@ -38,7 +38,6 @@ export default function Page() {
     if (!imageFile) return;
     const reader = new FileReader();
     meUpdate({ imageFile }).then(() => {
-      addToasts(true, ["ユーザーアイコンを変更しました！"]);
       reader.onload = () => {
         const imageUrl = reader.result as string;
         setUser({ ...user, imageUrl });
@@ -49,7 +48,6 @@ export default function Page() {
 
   const handleChangeWeapon = (weapon: MeWeapon) => {
     meUpdate({ weaponId: weapon.id }).then(() => {
-      addToasts(true, [`${user.name}は「${weapon.name}」を装備しました！`]);
       setUser({ ...user, weapon });
     });
     setWeaponDrawerOpen(false);
@@ -58,11 +56,9 @@ export default function Page() {
   const handleUseItem = (item: MeItem) => {
     setItemDrawerOpen(false);
     if (item.effectType !== "heal") {
-      addToasts(false, ["戦闘外は回復アイテム以外使用できません！"]);
       return;
     }
     meUseItem({ itemId: item.id }).then(() => {
-      addToasts(true, [`${user.name}は「${item.name}」を使用しました！`]);
       if (item.count === 1) {
         setItems(items.filter((prev) => prev.id !== item.id));
       } else {
@@ -72,6 +68,9 @@ export default function Page() {
           )
         );
       }
+      const hitPoint = Math.min(user.hitPoint + item.amount, user.maxHitPoint);
+      meUpdate({ hitPoint: hitPoint });
+      setUser({ ...user, hitPoint });
     });
   };
 
@@ -80,11 +79,20 @@ export default function Page() {
       className="flex justify-center items-center h-screen w-screen bg-cover bg-center bg-no-repeat text-xl"
       style={{ backgroundImage: `url(${"/bg-battle.png"})` }}
     >
+      <div className="fixed top-0 w-full p-2">
+        <UserStatus
+          name={user.name}
+          imageUrl={user.imageUrl}
+          level={user.level}
+          hitPoint={user.hitPoint}
+          maxHitPoint={user.maxHitPoint}
+        />
+      </div>
       <div
         className="w-[90%] aspect-[380/605] bg-cover bg-center bg-no-repeat flex justify-center"
         style={{ backgroundImage: `url(${"/bg-profile.png"})` }}
       >
-        <div className="relative w-[90%] flex flex-col items-center">
+        <div className="relative w-[90%] flex flex-col items-center px-2">
           <div className="mt-[20%] text-xl">マイページ</div>
           <Image
             className="w-[70%] h-[2px]"
@@ -93,22 +101,11 @@ export default function Page() {
             src="/profile-border.png"
             alt="マイページの下線"
           />
-          <div
-            className="relative w-[60%] aspect-square mt-[8%] mr-[30%] bg-center bg-cover bg-no-repeat flex justify-center items-center"
-            style={{ backgroundImage: `url(${"/bg-weapon.png"})` }}
-          >
-            <Image
-              className="ascept-square w-full h-full"
-              width={100}
-              height={100}
-              src={user.weapon.imageUrl}
-              alt="武器画像"
-            />
-            <div className="absolute bottom-[8%] min-w-[70%] [clip-path:polygon(10%_0%,90%_0%,100%_50%,90%_100%,10%_100%,0%_50%)] bg-[#6F7060]/90 text-xs text-white flex justify-center items-center py-1 px-5">
-              {user.weapon.name}
-            </div>
+          <div className="p-2 mt-[2%] bg-black/60 w-full rounded-md text-white">
+            <WeaponCard weapon={user.weapon} />
           </div>
-          <div className="absolute top-[50%] flex w-full px-[5%] justify-between items-end">
+
+          <div className="mt-[5%] flex w-full px-[5%] justify-between items-end">
             <div
               className="relative flex w-[63%] h-6 rounded-full"
               onClick={() => setNameOpen(!nameOpen)}
@@ -161,7 +158,7 @@ export default function Page() {
               />
             </label>
           </div>
-          <div className="w-full px-[5%] flex justify-between mt-[20%]">
+          <div className="w-full px-[5%] flex justify-between mt-[10%]">
             <div
               className="relative w-[45%] aspect-[111/45]"
               onClick={() => setWeaponDrawerOpen(true)}
