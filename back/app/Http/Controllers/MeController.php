@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -11,13 +14,19 @@ use App\Http\Requests\GetItemRequest;
 use App\Http\Requests\GetWeaponRequest;
 use App\Http\Requests\UseItemRequest;
 use App\Http\Requests\ChangeWeaponRequest;
+use App\Http\Requests\CatalogPageRequest;
+use App\Http\Requests\MonsterEntryRequest;
+use App\Models\Item;
+use App\Models\Monster;
 use App\Models\User;
 use App\Models\UserItem;
+use App\Models\Weapon;
 
 class MeController extends Controller
 {
     const HTTP_UNAUTHORIZED = 401;
     const HTTP_SERVER_ERROR = 500;
+    private const CATALOG_PER_PAGE = 20;
 
     private function getAuthenticatedUser(): User
     {
@@ -179,6 +188,10 @@ class MeController extends Controller
                         'count' => 1,
                     ]);
                 }
+
+                if (!$user->itemEntries()->wherePivot('item_id', $itemId)->exists()) {
+                    $user->itemEntries()->attach($itemId);
+                }
             });
 
             return response()->json(null, 204);
@@ -205,30 +218,168 @@ class MeController extends Controller
 
         try {
             DB::transaction(function () use ($user, $weaponId) {
-                // 既存の武器所持チェック
-                $existingWeapon = DB::table('user_weapons')
-                    ->where('user_id', $user->id)
-                    ->where('weapon_id', $weaponId)
-                    ->exists();
-
-                if (!$existingWeapon) {
-                    // 新規武器の場合のみ追加
-                    DB::table('user_weapons')->insert([
-                        'user_id' => $user->id,
-                        'weapon_id' => $weaponId,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
+                $this->registerCatalogEntry($user->ownedWeapons(), $weaponId);
+                $this->registerCatalogEntry($user->weaponEntries(), $weaponId);
             });
 
             return response()->json(null, 204);
-        } catch (\Exception) {
+        } catch (\Throwable) {
             return response()->json([
                 'success' => false,
                 'messages' => ['武器の獲得に失敗しました。']
             ], self::HTTP_SERVER_ERROR);
         }
+    }
+
+    /**
+     * モンスター図鑑登録処理
+     *
+     * @param MonsterEntryRequest $request 登録するモンスターID
+     * @return JsonResponse
+     */
+    public function monsterEntry(MonsterEntryRequest $request): JsonResponse
+    {
+        $user = $this->getAuthenticatedUser();
+
+        $monsterId = $request->validated()['monsterId'];
+
+        try {
+            $this->registerCatalogEntry($user->monsterEntries(), $monsterId);
+
+            return response()->json(null, 204);
+        } catch (\Throwable) {
+            return response()->json([
+                'success' => false,
+                'messages' => ['モンスター図鑑の登録に失敗しました。']
+            ], self::HTTP_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * モンスター図鑑取得
+     */
+    public function monsterIndex(CatalogPageRequest $request): JsonResponse
+    {
+        $user = $this->getAuthenticatedUser();
+
+        return $this->catalogIndex(
+            $request,
+            Monster::query(),
+            $user->monsterEntries(),
+            fn (Monster $monster) => $monster->id,
+            fn (Monster $monster) => [
+                'id' => (string) $monster->id,
+                'name' => $monster->name,
+                'imageUrl' => $monster->image_url,
+            ],
+        );
+    }
+
+    /**
+     * 武器図鑑取得
+     */
+    public function weaponIndex(CatalogPageRequest $request): JsonResponse
+    {
+        $user = $this->getAuthenticatedUser();
+
+        return $this->catalogIndex(
+            $request,
+            Weapon::query(),
+            $user->weaponEntries(),
+            fn (Weapon $weapon) => $weapon->id,
+            fn (Weapon $weapon) => [
+                'id' => (int) $weapon->id,
+                'name' => $weapon->name,
+                'imageUrl' => $weapon->image_url,
+            ],
+        );
+    }
+
+    /**
+     * アイテム図鑑取得
+     */
+    public function itemIndex(CatalogPageRequest $request): JsonResponse
+    {
+        $user = $this->getAuthenticatedUser();
+
+        return $this->catalogIndex(
+            $request,
+            Item::query(),
+            $user->itemEntries(),
+            fn (Item $item) => $item->id,
+            fn (Item $item) => [
+                'id' => (int) $item->id,
+                'name' => $item->name,
+                'imageUrl' => $item->image_url,
+            ],
+        );
+    }
+
+    /**
+     * 図鑑のページング結果から、ユーザーが発見済みのエントリのみを抽出して返す。
+     *
+     * @param CatalogPageRequest $request ページ番号のバリデーション済みリクエスト
+     * @param Builder $query 図鑑マスター用クエリビルダ（index_number順でソート可能なもの）
+     * @param BelongsToMany $relation ユーザーと図鑑マスターを結ぶ多対多リレーション
+     * @param callable $modelKeyResolver モデルからレスポンス用IDを取り出すクロージャ
+     * @param callable $presenter 発見済みデータをレスポンス配列に整形するクロージャ
+     * @return JsonResponse 発見済みデータ（未発見はnull）とページングヘッダを含むレスポンス
+     */
+    private function catalogIndex(
+        CatalogPageRequest $request,
+        Builder $query,
+        BelongsToMany $relation,
+        callable $modelKeyResolver,
+        callable $presenter
+    ): JsonResponse {
+        $currentPage = $request->validated()['currentPage'];
+
+        $paginator = $query->orderBy('index_number')
+            ->paginate(self::CATALOG_PER_PAGE, ['id', 'name', 'image_url'], 'page', $currentPage);
+
+        $collection = $paginator->getCollection();
+        $pageIds = $collection->pluck('id')->all();
+
+        $discoveredIds = empty($pageIds)
+            ? []
+            : $relation->wherePivotIn($relation->getRelatedPivotKeyName(), $pageIds)
+                ->pluck($relation->getQualifiedRelatedPivotKeyName())
+                ->map(fn ($id) => (string) $id)
+                ->all();
+
+        $lookup = array_fill_keys($discoveredIds, true);
+
+        $payload = $collection->map(function ($model) use ($lookup, $modelKeyResolver, $presenter) {
+            $key = (string) $modelKeyResolver($model);
+
+            if (!isset($lookup[$key])) {
+                return null;
+            }
+
+            return $presenter($model);
+        })->values()->all();
+
+        return $this->catalogResponse($payload, $paginator);
+    }
+
+    /**
+     * 多対多リレーションを介して図鑑エントリを登録（重複は無視）する。
+     *
+     * @param BelongsToMany $relation 登録対象の多対多リレーション
+     * @param int|string $id 登録したい図鑑エントリID
+     * @return void
+     */
+    private function registerCatalogEntry(BelongsToMany $relation, int|string $id): void
+    {
+        $relation->syncWithoutDetaching([$id]);
+    }
+
+    private function catalogResponse(array $payload, LengthAwarePaginator $paginator): JsonResponse
+    {
+        return response()
+            ->json($payload)
+            ->header('X-Total-Page', (string) $paginator->lastPage())
+            ->header('Access-Control-Expose-Headers', 'X-Total-Page');
     }
 
     /**

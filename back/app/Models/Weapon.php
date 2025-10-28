@@ -15,4 +15,9 @@ class Weapon extends Model
         'physics_type',
         'element_type',
     ];
+
+    public function weaponEntries()
+    {
+        return $this->belongsToMany(User::class, 'weapon_entries', 'weapon_id', 'user_id')->withTimestamps();
+    }
 }
