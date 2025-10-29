@@ -81,8 +81,10 @@ class UserController extends Controller
                 ];
             });
         // 自分のランキング
-        $bossRecord = DB::table('boss_records')
-            ->select('user_id', 'clear_time', DB::raw('ROW_NUMBER() OVER (ORDER BY clear_time ASC) AS `rank`'))
+        $subQuery = DB::table('boss_records')
+            ->select('user_id', 'clear_time', DB::raw('ROW_NUMBER() OVER (ORDER BY clear_time ASC) AS `rank`'));
+        $bossRecord = DB::table(DB::raw("({$subQuery->toSql()}) as ranked"))
+            ->mergeBindings($subQuery)
             ->where('user_id', $user->id)
             ->first();
 
@@ -90,8 +92,8 @@ class UserController extends Controller
             'userRanking' => [
                 'name' => $user->name,
                 'imageUrl' => $user->image_url,
-                'rank' => $bossRecord ? $bossRecord->rank + 1 : null,
-                'clearTime' => $bossRecord?->clear_time
+                'rank' => $bossRecord?->rank ?? null,
+                'clearTime' => $bossRecord?->clear_time ?? null,
             ],
             'rankings' => $bossRecords,
         ]);
@@ -109,26 +111,16 @@ class UserController extends Controller
 
         //全体のランキング
         $rankingUsers = User::query()
+            ->leftJoin('item_entries', 'item_entries.user_id', '=', 'users.id')
+            ->leftJoin('monster_entries', 'monster_entries.user_id', '=', 'users.id')
+            ->leftJoin('weapon_entries', 'weapon_entries.user_id', '=', 'users.id')
             ->select('users.*')
-            ->selectRaw(
-                '
-                    (
-                        SELECT COUNT(DISTINCT item_id)
-                        FROM item_entries
-                        WHERE item_entries.user_id = users.id
-                    ) +
-                    (
-                        SELECT COUNT(DISTINCT monster_id)
-                        FROM monster_entries
-                        WHERE monster_entries.user_id = users.id
-                    ) +
-                    (
-                        SELECT COUNT(DISTINCT weapon_id)
-                        FROM weapon_entries
-                        WHERE weapon_entries.user_id = users.id
-                    ) AS total_count
-                ',
-            )
+            ->selectRaw('
+                  COUNT(DISTINCT item_entries.item_id)
+                  + COUNT(DISTINCT monster_entries.monster_id)
+                  + COUNT(DISTINCT weapon_entries.weapon_id) AS total_count
+              ')
+            ->groupBy('users.id')
             ->orderByDesc('total_count')
             ->orderByDesc('users.created_at')
             ->limit(20)
