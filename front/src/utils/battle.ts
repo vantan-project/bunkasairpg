@@ -7,7 +7,7 @@ import { PhysicsType } from "@/types/physics-type";
 import { calculateLevel } from "./calculate-level";
 import { MonsterShowResponse } from "@/api/monster-show";
 
-type User = {
+export type User = {
   level: number;
   maxHitPoint: number;
   hitPoint: number;
@@ -42,9 +42,9 @@ type DebuffItem = {
 };
 
 export class Battle {
-  private user: User;
-  private monster: MonsterShowResponse;
-  private buffs = {
+  protected user: User;
+  protected monster: MonsterShowResponse;
+  protected buffs = {
     slash: 0.0,
     blow: 0.0,
     shoot: 0.0,
@@ -55,7 +55,7 @@ export class Battle {
     shine: 0.0,
     dark: 0.0,
   };
-  private debuffs = {
+  protected debuffs = {
     slash: 0.0,
     blow: 0.0,
     shoot: 0.0,
@@ -66,6 +66,7 @@ export class Battle {
     shine: 0.0,
     dark: 0.0,
   };
+  protected isBoss = false;
 
   constructor(user: User, monster: MonsterShowResponse) {
     this.user = user;
@@ -116,21 +117,21 @@ export class Battle {
   }
 
   public useHealItem(item: HeelItem): void {
-    meUseItem({ itemId: item.id });
+    this.isBoss || meUseItem({ itemId: item.id });
     this.user.hitPoint = Math.min(
       this.user.hitPoint + item.amount,
       this.user.maxHitPoint
     );
-    meUpdate({ hitPoint: this.user.hitPoint });
+    this.isBoss || meUpdate({ hitPoint: this.user.hitPoint });
   }
 
   public useBuffItem(item: BuffItem): void {
-    meUseItem({ itemId: item.id });
+    this.isBoss || meUseItem({ itemId: item.id });
     this.buffs[item.target] += Math.floor(item.rate * 10) / 10;
   }
 
   public useDebuffItem(item: DebuffItem): void {
-    meUseItem({ itemId: item.id });
+    this.isBoss || meUseItem({ itemId: item.id });
     this.debuffs[item.target] += Math.floor(item.rate * 10) / 10;
   }
 
@@ -145,7 +146,7 @@ export class Battle {
     );
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
-    meUpdate({ hitPoint: this.user.hitPoint });
+    this.isBoss || meUpdate({ hitPoint: this.user.hitPoint });
     return {
       userHitPoint: this.user.hitPoint,
       damage: damage,

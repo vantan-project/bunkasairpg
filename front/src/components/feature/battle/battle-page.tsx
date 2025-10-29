@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Battle } from "@/utils/battle";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useGlobalContext } from "@/hooks/use-global-context";
 import {
   MeWeapon,
@@ -35,12 +35,16 @@ export type BattleLog = {
 
 type Props = {
   battle: Battle;
-  monsterAttackLogs: (setBattlePhase: (bp: BattlePhase) => void) => BattleLog[];
+  monsterAttackLogs: (
+    setBattlePhase: (bp: BattlePhase) => void,
+    setMonster: (m: MonsterShowResponse) => void
+  ) => BattleLog[];
 };
 
 export function BattlePage({ battle, monsterAttackLogs }: Props) {
   const { user, setUser, weapons, items, setItems } = useGlobalContext();
   const router = useRouter();
+  const pathname = usePathname();
   const [monster, setMonster] = useState<MonsterShowResponse>(
     structuredClone(battle.getMonster())
   );
@@ -101,7 +105,10 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     }
     if (attackData.monsterHitPoint !== 0) {
       setIsItemUsed(false);
-      setBattleQueue([...logs, ...monsterAttackLogs(setBattlePhase)]);
+      setBattleQueue([
+        ...logs,
+        ...monsterAttackLogs(setBattlePhase, setMonster),
+      ]);
       return;
     }
 
@@ -234,7 +241,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         className={`h-[calc(100vh-320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
         style={{ opacity: monster.hitPoint > 0 ? 1 : 0 }}
       >
-        <div className="relative w-[24vh] h-auto aspect-square">
+        <div className="relative w-[24vh] h-auto aspect-square mb-2">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
         </div>
         <div className="w-[70%] bg-white/60 p-3">
@@ -502,7 +509,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
               setBattleQueue(rest);
             }}
           >
-            <p className="text-center">{battleQueue[0]?.message}</p>
+            <p className="text-center text-lg">{battleQueue[0]?.message}</p>
             <motion.div
               className="absolute right-5 bottom-5"
               animate={{
@@ -534,7 +541,11 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
             setBattleQueue([
               {
                 message: `${user.name}は逃げ出した！`,
-                action: () => router.push("/camera"),
+                action: () => {
+                  pathname === "/battle/boss"
+                    ? (location.href = "/camera")
+                    : router.push("/camera");
+                },
               },
             ]);
           }}

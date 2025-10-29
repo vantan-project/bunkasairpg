@@ -2,7 +2,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { calculateExperience } from "@/utils/calculate-experience";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   restLevel: number;
@@ -22,6 +22,7 @@ export function RewardModal({
   startDate,
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const expBarAnimation = createExpBarAnimation(
     restLevel,
     level,
@@ -78,7 +79,11 @@ export function RewardModal({
         </div>
         <button
           className="absolute -bottom-[8vh] left-1/2 -translate-x-1/2"
-          onClick={() => router.push("/camera")}
+          onClick={() =>
+            pathname === "/battle/boss"
+              ? (location.href = "/camera")
+              : router.push("/camera")
+          }
         >
           <Image
             className="w-[130px] h-auto"
