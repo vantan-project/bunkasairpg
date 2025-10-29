@@ -68,42 +68,43 @@ export function TreasureBoxButton({ drop }: Props) {
         />
       )}
 
-      {showDrop && (
-        <div className="pt-4">
-          {drop.type === "weapon" && (
-            <div
-              className={clsx(
-                "p-1 rounded-md w-28",
-                assetGradation(drop.elementType)
-              )}
-            >
-              <div className="relative aspect-square bg-gray-300">
-                <div className="absolute w-full px-1 bottom-2 flex gap-2 z-10 justify-end">
-                  <AssetTypeIcon type={drop.physicsType} size="30%" />
-                  <AssetTypeIcon type={drop.elementType} size="30%" />
-                </div>
-                <Image src={drop.imageUrl} alt="武器画像" fill priority />
+      <div
+        className="pt-4 transition-opacity duration-700 opacity-100"
+        style={{ opacity: showDrop ? 1 : 0 }}
+      >
+        {drop.type === "weapon" && (
+          <div
+            className={clsx(
+              "p-1 rounded-md w-28 transition-opacity duration-700",
+              assetGradation(drop.elementType)
+            )}
+          >
+            <div className="relative aspect-square bg-gray-300">
+              <div className="absolute w-full px-1 bottom-2 flex gap-2 z-10 justify-end">
+                <AssetTypeIcon type={drop.physicsType} size="30%" />
+                <AssetTypeIcon type={drop.elementType} size="30%" />
               </div>
+              <Image src={drop.imageUrl} alt="武器画像" fill priority />
             </div>
-          )}
+          </div>
+        )}
 
-          {drop.type === "item" && (
-            <div
-              className={clsx(
-                "p-1 rounded-md w-28",
-                assetGradation(drop.effectType)
-              )}
-            >
-              <div className="relative aspect-square bg-gray-300">
-                <div className="absolute w-full px-1 bottom-2 flex gap-2 z-10 justify-end">
-                  <AssetTypeIcon type={drop.effectType} size="30%" />
-                </div>
-                <Image src={drop.imageUrl} alt="アイテム画像" fill priority />
+        {drop.type === "item" && (
+          <div
+            className={clsx(
+              "p-1 rounded-md w-28 transition-opacity duration-700",
+              assetGradation(drop.effectType)
+            )}
+          >
+            <div className="relative aspect-square bg-gray-300">
+              <div className="absolute w-full px-1 bottom-2 flex gap-2 z-10 justify-end">
+                <AssetTypeIcon type={drop.effectType} size="30%" />
               </div>
+              <Image src={drop.imageUrl} alt="アイテム画像" fill priority />
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -230,7 +230,10 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         />
       </div>
       {/* モンスター画面 */}
-      <div className="h-[calc(100vh-320px)] pt-18 flex flex-col items-center justify-center">
+      <div
+        className={`h-[calc(100vh-320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
+        style={{ opacity: monster.hitPoint > 0 ? 1 : 0 }}
+      >
         <div className="relative w-[24vh] h-auto aspect-square">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
         </div>
