@@ -15,4 +15,9 @@ class Weapon extends Model
         'physics_type',
         'element_type',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class,'monster_entries', 'weapon_id', 'user_id');
+    }
 }

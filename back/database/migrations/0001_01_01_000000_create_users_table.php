@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedBigInteger('weapon_id')->nullable();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->text('image_url')->nullable();
             $table->unsignedInteger('level')->default(1);
             $table->unsignedInteger('max_hit_point');

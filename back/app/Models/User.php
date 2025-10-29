@@ -85,5 +85,21 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Weapon::class, 'user_weapons', 'user_id', 'weapon_id');
     }
+    public function bossRecord()
+    {
+        return $this->hasOne(BossRecord::class, 'user_id');
+    }
 
+    public function monsters()
+    {
+        return $this->belongsToMany(Monster::class, 'monster_entries', 'user_id', 'monster_id');
+    }
+    public function weapons()
+    {
+        return $this->belongsToMany(Weapon::class, 'weapon_entries', 'user_id', 'weapon_id');
+    }
+    public function items()
+    {
+        return $this->belongsToMany(Item::class, 'item_entries', 'user_id', 'item_id');
+    }
 }

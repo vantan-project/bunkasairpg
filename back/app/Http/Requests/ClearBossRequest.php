@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserStoreRequest extends FormRequest
+class ClearBossRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +24,17 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'clearTime' => [
+                'required',
+                'regex:/^\d{2}:\d{2}:\d{2}$/',
+            ],
         ];
     }
     public function messages(): array
     {
         return [
-            'name.required' => '名前は必須です。',
-            'name.string' => '名前は文字列で入力してください。',
-            'name.max' => '名前は255文字以内で入力してください。',
+            'clearTime.required' => 'クリアタイムは必須です。',
+            'clearTime.regex'    => 'クリアタイムは「MM:SS:MS」の形式で入力してください。（例: 02:15:37）',
         ];
     }
     public function failedValidation(Validator $validator)
@@ -47,3 +49,4 @@ class UserStoreRequest extends FormRequest
         );
     }
 }
+
