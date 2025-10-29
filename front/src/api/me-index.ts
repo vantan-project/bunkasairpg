@@ -33,6 +33,20 @@ export function meIndex(): Promise<MeIndexResponse> {
       },
     })
     .then((res) => {
+      if (res.data.weapon === null) {
+        return {
+          ...res.data,
+          weapon: {
+            id: 0,
+            name: "素手",
+            imageUrl: "/hand_weapon.png",
+            physicsAttack: 10,
+            elementAttack: null,
+            physicsType: "blow",
+            elementType: "neutral",
+          },
+        };
+      }
       return res.data;
     });
 }

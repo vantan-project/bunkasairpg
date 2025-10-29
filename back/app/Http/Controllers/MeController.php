@@ -18,6 +18,8 @@ use App\Http\Requests\CatalogPageRequest;
 use App\Http\Requests\MonsterEntryRequest;
 use App\Models\Item;
 use App\Models\Monster;
+use App\Http\Requests\ClearBossRequest;
+use App\Models\BossRecord;
 use App\Models\User;
 use App\Models\UserItem;
 use App\Models\Weapon;
@@ -505,6 +507,27 @@ class MeController extends Controller
                 'success' => false,
                 'messages' => ['武器の変更に失敗しました。']
             ], self::HTTP_SERVER_ERROR);
+        }
+    }
+
+    public function clearBoss(ClearBossRequest $request)
+    {
+        $user = $this->getAuthenticatedUser();
+        $validated = $request->validated();
+        try {
+            BossRecord::create([
+                'user_id' => $user->id,
+                'clear_time' => $validated['clearTime'],
+            ]);
+            return response()->json([
+                'success' => true,
+                'messages' => ['クリア時間の追加が成功しました'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'messages' => ['クリア時間の追加が失敗しました']
+            ], 500);
         }
     }
 }

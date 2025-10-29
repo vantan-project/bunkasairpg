@@ -16,7 +16,7 @@ Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/me', [MeController::class, 'index']);
   Route::get('/me/item', [MeController::class, 'items']);
-  Route::patch('/me', [MeController::class, 'update']);
+  Route::post('/me', [MeController::class, 'update']);
   Route::post('/me/get-item', [MeController::class, 'getItem']);
   Route::post('/me/get-weapon', [MeController::class, 'getWeapon']);
   Route::patch('/me/use-item', [MeController::class, 'useItem']);
@@ -26,7 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/me/monster-index', [MeController::class, 'monsterIndex']);
   Route::get('/me/weapon-index', [MeController::class, 'weaponIndex']);
   Route::get('/me/item-index', [MeController::class, 'itemIndex']);
+  Route::post('/me/clear-boss', [MeController::class, 'clearBoss']);
+
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
+  Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
+  Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
 });
 
 // 管理者系
@@ -38,6 +42,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   });
 
   Route::post('/user', [UserController::class, 'store']);
+  Route::patch('/user/heal/{id}', [UserController::class, 'heal']);
   Route::get('/item', [ItemController::class, 'index']);
   Route::post('/item', [ItemController::class, 'store']);
   Route::delete('/item/{id}', [ItemController::class, 'destroy']);

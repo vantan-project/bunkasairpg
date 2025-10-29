@@ -24,7 +24,7 @@ class UserStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:users,name'],
+            'name' => ['required', 'string', 'max:255'],
         ];
     }
     public function messages(): array
@@ -33,7 +33,6 @@ class UserStoreRequest extends FormRequest
             'name.required' => '名前は必須です。',
             'name.string' => '名前は文字列で入力してください。',
             'name.max' => '名前は255文字以内で入力してください。',
-            'name.unique' => 'この名前はすでに使用されています。',
         ];
     }
     public function failedValidation(Validator $validator)
