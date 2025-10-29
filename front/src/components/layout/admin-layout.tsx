@@ -25,10 +25,8 @@ import {
   Badge,
 } from "@heroui/react";
 import { SearchIcon } from "../shared/icons/search-icon";
-import { HealIcon } from "../shared/icons/heal-icon";
 import { UserIcon } from "../shared/icons/user-icon";
 import { UserStoreModal } from "../feature/admin/user-store-modal";
-import { UserHealModal } from "../feature/admin/user-heal-modal";
 
 type Props = {
   children: React.ReactNode;
@@ -48,10 +46,6 @@ export function AdminLayout({ children }: Props) {
   const {
     isOpen: isUserStoreModalOpen,
     onOpenChange: onUserStoreModalOpenChange,
-  } = useDisclosure();
-  const {
-    isOpen: isUserHealModalOpen,
-    onOpenChange: onUserHealModalOpenChange,
   } = useDisclosure();
 
   const [monsterWeapon, setMonsterWeapon] = useState<{
@@ -121,13 +115,6 @@ export function AdminLayout({ children }: Props) {
         onPress={onUserStoreModalOpenChange}
       >
         ユーザー登録
-      </DropdownItem>
-      <DropdownItem
-        endContent={<HealIcon />}
-        key="heal"
-        onPress={onUserHealModalOpenChange}
-      >
-        ユーザー回復
       </DropdownItem>
     </DropdownMenu>
   );
@@ -303,10 +290,6 @@ export function AdminLayout({ children }: Props) {
       <UserStoreModal
         isOpen={isUserStoreModalOpen}
         onOpenChange={onUserStoreModalOpenChange}
-      />
-      <UserHealModal
-        isOpen={isUserHealModalOpen}
-        onOpenChange={onUserHealModalOpenChange}
       />
 
       <Modal

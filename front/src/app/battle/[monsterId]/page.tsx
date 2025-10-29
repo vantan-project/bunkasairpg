@@ -4,13 +4,14 @@ import { monsterShow } from "@/api/monster-show";
 import { BattleLog, BattlePage } from "@/components/feature/battle/battle-page";
 import { useGlobalContext } from "@/hooks/use-global-context";
 import { Battle } from "@/utils/battle";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
   const [battle, setBattle] = useState<Battle | null>(null);
   const { user, setUser } = useGlobalContext();
   const router = useRouter();
+  const pathname = usePathname();
   const { monsterId } = useParams<{
     monsterId: string;
   }>();
@@ -55,7 +56,14 @@ export default function Page() {
         if (takeDamageData.userHitPoint === 0) {
           logs.push({
             message: `${user.name}は死んでしまった！`,
-            action: () => router.push("/camera"),
+            action: () => {
+              if (pathname === "/battle/boss") {
+                location.href = "/camera";
+                return;
+              }
+              setUser({ ...user, hitPoint: user.maxHitPoint });
+              router.push("/camera");
+            },
           });
         }
         return logs;

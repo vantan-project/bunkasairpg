@@ -288,8 +288,18 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 {[
                   {
                     label: "アイテム一覧",
-                    onClick: () =>
-                      setBattlePhase({ status: "first", action: "item" }),
+                    onClick: () => {
+                      if (items.length === 0) {
+                        setBattleQueue([
+                          {
+                            message: "アイテムがありません。",
+                            action: () => {},
+                          },
+                        ]);
+                        return;
+                      }
+                      setBattlePhase({ status: "first", action: "item" });
+                    },
                   },
                   {
                     label: "装備変更",
@@ -301,7 +311,6 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                             action: () => {},
                           },
                         ]);
-                        setIsStandBy(true);
                         return;
                       }
                       setBattlePhase({ status: "first", action: "weapon" });
@@ -406,8 +415,18 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                   { label: "攻撃", onClick: handleAttack },
                   {
                     label: "アイテム",
-                    onClick: () =>
-                      setBattlePhase({ status: "command", action: "item" }),
+                    onClick: () => {
+                      if (items.length === 0) {
+                        setBattleQueue([
+                          {
+                            message: "アイテムがありません。",
+                            action: () => {},
+                          },
+                        ]);
+                        return;
+                      }
+                      setBattlePhase({ status: "command", action: "item" });
+                    },
                   },
                   {
                     label: "装備の変更",
@@ -419,7 +438,6 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                             action: () => {},
                           },
                         ]);
-                        setIsStandBy(true);
                         return;
                       }
                       setBattlePhase({ status: "command", action: "weapon" });
@@ -531,10 +549,12 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
               {
                 message: `${user.name}は逃げ出した！`,
                 action: () => {
+                  if (pathname === "/battle/boss") {
+                    location.href = "/camera";
+                    return;
+                  }
                   setUser({ ...user, hitPoint: user.maxHitPoint });
-                  pathname === "/battle/boss"
-                    ? (location.href = "/camera")
-                    : router.push("/camera");
+                  router.push("/camera");
                 },
               },
             ]);
