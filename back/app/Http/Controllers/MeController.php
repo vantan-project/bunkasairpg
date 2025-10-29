@@ -372,7 +372,7 @@ class MeController extends Controller
                 'success' => true,
                 'messages' => ['クリア時間の追加が成功しました'],
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'messages' => ['クリア時間の追加が失敗しました']
