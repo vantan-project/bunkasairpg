@@ -83,6 +83,10 @@ export class Battle {
   public attack(): {
     monsterHitPoint: number;
     damage: number;
+    monsterResistance: {
+      physics: number;
+      element: number;
+    };
   } {
     const physicsType = this.user.weapon.physicsType;
     const elementType = this.user.weapon.elementType;
@@ -111,6 +115,10 @@ export class Battle {
     return {
       monsterHitPoint: this.monster.hitPoint,
       damage: damage,
+      monsterResistance: {
+        physics: this.monster[physicsType],
+        element: this.monster[elementType],
+      },
     };
   }
 

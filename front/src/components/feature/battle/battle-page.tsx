@@ -99,6 +99,15 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
           }),
       });
     } else {
+      if (
+        attackData.monsterResistance.physics < 0 ||
+        attackData.monsterResistance.element < 0
+      ) {
+        logs.push({
+          message: "弱点を突いた！",
+          action: () => {},
+        });
+      }
       logs.push({
         message: `${attackData.damage}のダメージを\n与えた！`,
         action: () =>
