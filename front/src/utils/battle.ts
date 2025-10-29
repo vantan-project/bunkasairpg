@@ -43,7 +43,7 @@ type DebuffItem = {
 
 export class Battle {
   protected user: User;
-  protected monster: MonsterShowResponse;
+  protected monster: MonsterShowResponse & { maxHitPoint: number };
   protected buffs = {
     slash: 0.0,
     blow: 0.0,
@@ -68,12 +68,15 @@ export class Battle {
   };
   protected isBoss = false;
 
-  constructor(user: User, monster: MonsterShowResponse) {
+  constructor(
+    user: User,
+    monster: MonsterShowResponse & { maxHitPoint: number }
+  ) {
     this.user = user;
     this.monster = monster;
   }
 
-  public getMonster(): MonsterShowResponse {
+  public getMonster(): MonsterShowResponse & { maxHitPoint: number } {
     return this.monster;
   }
 
@@ -122,7 +125,6 @@ export class Battle {
       this.user.hitPoint + item.amount,
       this.user.maxHitPoint
     );
-    this.isBoss || meUpdate({ hitPoint: this.user.hitPoint });
   }
 
   public useBuffItem(item: BuffItem): void {
@@ -146,7 +148,6 @@ export class Battle {
     );
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
-    this.isBoss || meUpdate({ hitPoint: this.user.hitPoint });
     return {
       userHitPoint: this.user.hitPoint,
       damage: damage,
@@ -156,7 +157,6 @@ export class Battle {
   public reward(weaponIds: number[]): {
     level: number;
     hitPoint: number;
-    maxHitPoint: number;
     experiencePoint: number;
     drop: "weapon" | "item" | null;
   } {
@@ -183,21 +183,18 @@ export class Battle {
         0
       );
       this.user.level = level;
-      this.user.hitPoint += increasedHitPoint;
-      this.user.maxHitPoint = this.user.hitPoint;
+      this.user.maxHitPoint += increasedHitPoint;
     }
     this.user.experiencePoint += this.monster.experiencePoint;
     meUpdate({
       level: this.user.level,
-      hitPoint: this.user.hitPoint,
-      maxHitPoint: this.user.maxHitPoint,
+      hitPoint: this.user.maxHitPoint,
       experiencePoint: this.user.experiencePoint,
     });
 
     return {
       level: this.user.level,
-      hitPoint: this.user.hitPoint,
-      maxHitPoint: this.user.maxHitPoint,
+      hitPoint: this.user.maxHitPoint,
       experiencePoint: this.user.experiencePoint,
       drop: drop,
     };

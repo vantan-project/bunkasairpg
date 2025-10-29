@@ -30,7 +30,6 @@ class User extends Authenticatable
         'name',
         'image_url',
         'level',
-        'max_hit_point',
         'hit_point',
         'experience_point',
     ];

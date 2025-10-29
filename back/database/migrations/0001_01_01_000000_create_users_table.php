@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('image_url')->nullable();
             $table->unsignedInteger('level')->default(1);
-            $table->unsignedInteger('max_hit_point');
             $table->unsignedInteger('hit_point');
             $table->unsignedInteger('experience_point')->default(0);
             $table->rememberToken();

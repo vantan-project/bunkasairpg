@@ -37,7 +37,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   });
 
   Route::post('/user', [UserController::class, 'store']);
-  Route::patch('/user/heal/{id}', [UserController::class, 'heal']);
   Route::get('/item', [ItemController::class, 'index']);
   Route::post('/item', [ItemController::class, 'store']);
   Route::delete('/item/{id}', [ItemController::class, 'destroy']);

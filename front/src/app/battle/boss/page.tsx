@@ -21,7 +21,9 @@ export default function Page() {
   };
 
   useEffect(() => {
-    setBattle(new BossBattle(structuredClone(user)));
+    setBattle(
+      new BossBattle(structuredClone({ ...user, maxHitPoint: user.hitPoint }))
+    );
   }, []);
 
   if (!battle) return null;

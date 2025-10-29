@@ -37,7 +37,7 @@ type Props = {
   battle: Battle;
   monsterAttackLogs: (
     setBattlePhase: (bp: BattlePhase) => void,
-    setMonster: (m: MonsterShowResponse) => void
+    setMonster: (m: MonsterShowResponse & { maxHitPoint: number }) => void
   ) => BattleLog[];
 };
 
@@ -45,8 +45,13 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
   const { user, setUser, weapons, items, setItems } = useGlobalContext();
   const router = useRouter();
   const pathname = usePathname();
-  const [monster, setMonster] = useState<MonsterShowResponse>(
-    structuredClone(battle.getMonster())
+  const [monster, setMonster] = useState<
+    MonsterShowResponse & { maxHitPoint: number }
+  >(
+    structuredClone({
+      ...battle.getMonster(),
+      maxHitPoint: battle.getMonster().hitPoint,
+    })
   );
   const [battlePhase, setBattlePhase] = useState<BattlePhase>({
     status: "first",
@@ -144,7 +149,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
           level: rewardData.level,
           experiencePoint: rewardData.experiencePoint,
           hitPoint: rewardData.hitPoint,
-          maxHitPoint: rewardData.maxHitPoint,
+          maxHitPoint: rewardData.hitPoint,
         });
       },
     });
@@ -282,7 +287,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 <div className={clsx("h-1", dotBorderClassName)} />
                 {[
                   {
-                    label: "アイテム使用",
+                    label: "アイテム一覧",
                     onClick: () =>
                       setBattlePhase({ status: "first", action: "item" }),
                   },
@@ -331,16 +336,6 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 </button>
                 <button
                   onClick={() => {
-                    if (user.hitPoint <= 0) {
-                      setBattleQueue([
-                        {
-                          message:
-                            "アイテムもしくは4階の教会でHPを回復してください！",
-                          action: () => {},
-                        },
-                      ]);
-                      return;
-                    }
                     setBattleQueue([
                       {
                         message: `${monster.name}が\n現れた！`,
@@ -385,20 +380,14 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 onClose={() =>
                   setBattlePhase({ status: "first", action: null })
                 }
-                useItem={(i) => {
-                  if (i.effectType !== "heal") {
-                    setBattlePhase({ status: "first", action: null });
-                    setBattleQueue([
-                      {
-                        message: "戦闘前は回復アイテム以外使えない！",
-                        action: () => {},
-                      },
-                    ]);
-                    return;
-                  }
+                useItem={() => {
                   setBattlePhase({ status: "first", action: null });
-                  const logs = useItemLogs(i);
-                  setBattleQueue(logs);
+                  setBattleQueue([
+                    {
+                      message: "戦闘前にアイテムは使えない！",
+                      action: () => {},
+                    },
+                  ]);
                 }}
               />
             </BattleConsole>
@@ -542,6 +531,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
               {
                 message: `${user.name}は逃げ出した！`,
                 action: () => {
+                  setUser({ ...user, hitPoint: user.maxHitPoint });
                   pathname === "/battle/boss"
                     ? (location.href = "/camera")
                     : router.push("/camera");

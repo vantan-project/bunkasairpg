@@ -170,7 +170,6 @@ class MonsterController extends Controller
         'name' => $monster->name,
         'imageUrl' => $monster->image_url,
         'attack' => (int) $monster->attack,
-        'maxHitPoint' => (int) $monster->hit_point,
         'hitPoint' => (int) $monster->hit_point,
         'experiencePoint' => (int) $monster->experience_point,
         'slash' => (float) $monster->slash,

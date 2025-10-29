@@ -28,7 +28,6 @@ class UpdateUserRequest extends FormRequest
             'name' => 'nullable|string|max:255' . ($user ? $user->id : ''),
             'imageFile' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'level' => 'nullable|integer|min:1',
-            'maxHitPoint' => 'nullable|integer|min:1',
             'hitPoint' => 'nullable|integer|min:0',
             'experiencePoint' => 'nullable|integer|min:0',
             'weaponId' => 'nullable|integer|exists:weapons,id',

@@ -45,7 +45,6 @@ class MeController extends Controller
             'name' => $user->name,
             'imageUrl' => $user->image_url,
             'level' => $user->level,
-            'maxHitPoint' => $user->max_hit_point,
             'hitPoint' => $user->hit_point,
             'experiencePoint' => $user->experience_point,
             'weapon' => null
@@ -133,7 +132,6 @@ class MeController extends Controller
                 'name' => $validated['name'] ?? $user->name,
                 'level' => $validated['level'] ?? $user->level,
                 'image_url' => $user->image_url,
-                'max_hit_point' => $validated['maxHitPoint'] ?? $user->max_hit_point,
                 'hit_point' => $validated['hitPoint'] ?? $user->hit_point,
                 'experience_point' => $validated['experiencePoint'] ?? $user->experience_point,
                 'weapon_id' => $validated['weaponId'] ?? $user->weapon_id,

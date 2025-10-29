@@ -17,7 +17,12 @@ export default function Page() {
 
   useEffect(() => {
     monsterShow(monsterId).then((monster) => {
-      setBattle(new Battle(structuredClone(user), monster));
+      setBattle(
+        new Battle(structuredClone({ ...user, maxHitPoint: user.hitPoint }), {
+          ...monster,
+          maxHitPoint: monster.hitPoint,
+        })
+      );
     });
   }, []);
 

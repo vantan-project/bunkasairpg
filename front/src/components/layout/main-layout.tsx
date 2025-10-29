@@ -29,18 +29,9 @@ export function MainLayout({ children }: Props) {
     );
   }
 
-  const [user, _setUser] = useState<MeIndexResponse>();
-  const setUser = (user: MeIndexResponse) => {
-    _setUser(user);
-  };
-  const [weapons, _setWeapons] = useState<MeWeaponResponse>();
-  const setWeapons = (weapons: MeWeaponResponse) => {
-    _setWeapons(weapons);
-  };
-  const [items, _setItems] = useState<MeItemResponse>();
-  const setItems = (items: MeItemResponse) => {
-    _setItems(items);
-  };
+  const [user, setUser] = useState<MeIndexResponse & { maxHitPoint: number }>();
+  const [weapons, setWeapons] = useState<MeWeaponResponse>();
+  const [items, setItems] = useState<MeItemResponse>();
   const router = useRouter();
 
   useEffect(() => {
@@ -48,7 +39,7 @@ export function MainLayout({ children }: Props) {
       try {
         await Promise.all([
           meIndex().then((user) => {
-            if (user) setUser(user);
+            if (user) setUser({ ...user, maxHitPoint: user.hitPoint });
           }),
           meWeapon().then((weapons) => {
             if (weapons) setWeapons(weapons);

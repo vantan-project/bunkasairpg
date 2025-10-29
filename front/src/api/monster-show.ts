@@ -8,7 +8,6 @@ export type MonsterShowResponse = {
   name: string;
   imageUrl: string;
   attack: number;
-  maxHitPoint: number;
   hitPoint: number;
   experiencePoint: number;
   slash: number;

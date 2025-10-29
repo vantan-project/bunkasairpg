@@ -15,7 +15,6 @@ use Exception;
 
 class UserController extends Controller
 {
-    protected int $DEFAULT_MAX_HIT_POINT = 35;
     protected int $DEFAULT_HIT_POINT = 35;
 
     private function getAuthenticatedUser(): User
@@ -33,7 +32,6 @@ class UserController extends Controller
         try {
             $user = User::create([
                 'name' => $validated['name'],
-                'max_hit_point' => $this->DEFAULT_MAX_HIT_POINT,
                 'hit_point' => $this->DEFAULT_HIT_POINT,
             ]);
 
@@ -50,17 +48,6 @@ class UserController extends Controller
         }
     }
 
-    public function heal($id)
-    {
-        $user = User::findOrFail($id);
-        $user->hit_point = $user->max_hit_point;
-        $user->save();
-
-        return response()->json([
-            'success' => true,
-            'messages' => ['ユーザーを全回復しました']
-        ]);
-    }
     public function clearRanking()
     {
         $user = $this->getAuthenticatedUser();
