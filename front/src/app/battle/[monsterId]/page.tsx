@@ -40,7 +40,14 @@ export default function Page() {
             message: `${monster.name}の\n攻撃！`,
             action: () => {},
           },
-          {
+        ];
+        if (takeDamageData.damage === 0) {
+          logs.push({
+            message: `${monster.name}はダメージを与えられなかった！`,
+            action: () => {},
+          });
+        } else {
+          logs.push({
             message: `${takeDamageData.damage}のダメージを\n受けた！`,
             action: () => {
               if (takeDamageData.userHitPoint === 0) {
@@ -51,8 +58,8 @@ export default function Page() {
               }
               setUser({ ...user, hitPoint: takeDamageData.userHitPoint });
             },
-          },
-        ];
+          });
+        }
         if (takeDamageData.userHitPoint === 0) {
           logs.push({
             message: `${user.name}は死んでしまった！`,
