@@ -21,7 +21,7 @@ class TestUserSeeder extends Seeder
       $users[] = [
         "id" => $level,
         "name" => "レベル{$level}ユーザー",
-        'hit_point' => $DEFAULT_HIT_POINT + ($level - 1) * 17,
+        'hit_point' => $DEFAULT_HIT_POINT + ($level - 1) * 8,
         "created_at" => $now,
         "updated_at" => $now,
         "level" => $level,

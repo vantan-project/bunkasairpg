@@ -183,7 +183,7 @@ export class Battle {
       const increasedHitPoint = Array.from({
         length: level - this.user.level,
       }).reduce<number>(
-        (sum) => sum + [17, 18, 19][Math.floor(Math.random() * 3)],
+        (sum) => sum + [6, 7, 8, 9, 10][Math.floor(Math.random() * 5)],
         0
       );
       this.user.level = level;
