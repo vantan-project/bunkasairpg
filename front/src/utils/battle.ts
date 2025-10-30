@@ -98,13 +98,14 @@ export class Battle {
       (this.user.weapon.elementAttack || 1) *
       (1 + this.buffs[elementType]) *
       (1 - this.monster[elementType] * (1 - this.debuffs[elementType]));
+    const levelFactor = 1 + Math.log10(this.user.level);
     const random = 0.95 + Math.random() * 0.1;
 
     // (武器攻撃力*(1+物理バフ)*(1-物理耐性*(1-物理デバフ))) *
     // (武器属性値*(1+属性バフ)*(1-属性耐性*(1-属性デバフ))) *
-    // レベル *
-    // 乱数
-    const damage = Math.floor(physics * element * this.user.level * random);
+    // (1+log10(レベル)) *
+    // 乱数(0.95〜1.05)
+    const damage = Math.floor(physics * element * levelFactor * random);
 
     this.monster.hitPoint =
       damage < 0
@@ -147,9 +148,10 @@ export class Battle {
     userHitPoint: number;
     damage: number;
   } {
-    // モンスター攻撃力 * (100/レベル) * 乱数
+    // モンスター攻撃力 * 乱数(0.95〜1.05) / (1+log10(レベル))
     const random = 0.95 + Math.random() * 0.1;
-    const damage = Math.floor((this.monster.attack * random) / this.user.level);
+    const levelFactor = 1 + Math.log10(this.user.level);
+    const damage = Math.floor((this.monster.attack * random) / levelFactor);
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
     return {
