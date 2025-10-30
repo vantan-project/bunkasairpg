@@ -102,11 +102,9 @@ export class Battle {
 
     // (武器攻撃力*(1+物理バフ)*(1-物理耐性*(1-物理デバフ))) *
     // (武器属性値*(1+属性バフ)*(1-属性耐性*(1-属性デバフ))) *
-    // (レベル/100) *
+    // レベル *
     // 乱数
-    const damage = Math.floor(
-      physics * element * (this.user.level / 100) * random
-    );
+    const damage = Math.floor(physics * element * this.user.level * random);
 
     this.monster.hitPoint =
       damage < 0
@@ -151,9 +149,7 @@ export class Battle {
   } {
     // モンスター攻撃力 * (100/レベル) * 乱数
     const random = 0.95 + Math.random() * 0.1;
-    const damage = Math.floor(
-      this.monster.attack * (100 / this.user.level) * random
-    );
+    const damage = Math.floor((this.monster.attack * random) / this.user.level);
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
     return {
@@ -194,11 +190,12 @@ export class Battle {
       this.user.maxHitPoint += increasedHitPoint;
     }
     this.user.experiencePoint += this.monster.experiencePoint;
-    meUpdate({
-      level: this.user.level,
-      hitPoint: this.user.maxHitPoint,
-      experiencePoint: this.user.experiencePoint,
-    });
+    process.env.NEXT_PUBLIC_ALLOW_LEVEL_UP === "true" &&
+      meUpdate({
+        level: this.user.level,
+        hitPoint: this.user.maxHitPoint,
+        experiencePoint: this.user.experiencePoint,
+      });
 
     return {
       level: this.user.level,
