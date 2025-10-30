@@ -22,7 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::patch('/me/use-item', [MeController::class, 'useItem']);
   Route::get('/me/weapon', [MeController::class, 'weapon']);
   Route::patch('/me/change-weapon', [MeController::class, 'changeWeapon']);
+  Route::post('/me/clear-boss', [MeController::class, 'clearBoss']);
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
+  Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
+  Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
 });
 
 // 管理者系
@@ -34,7 +37,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
   });
 
   Route::post('/user', [UserController::class, 'store']);
-  Route::patch('/user/heal/{id}', [UserController::class, 'heal']);
   Route::get('/item', [ItemController::class, 'index']);
   Route::post('/item', [ItemController::class, 'store']);
   Route::delete('/item/{id}', [ItemController::class, 'destroy']);

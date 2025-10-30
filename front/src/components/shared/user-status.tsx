@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { UserIcon } from "./icons/user-icon";
 import clsx from "clsx";
+import { hpBgColor } from "@/utils/hp-bg-color";
 
 type UserStatusProps = {
   name: string | null;
@@ -17,14 +18,6 @@ export function UserStatus({
   hitPoint = 0,
   maxHitPoint = 0,
 }: UserStatusProps) {
-  const ratio = hitPoint / maxHitPoint;
-
-  const getHpColor = () => {
-    if (ratio > 0.5) return "oklch(89.7% 0.196 126.665)"; // 緑
-    if (ratio > 0.25) return "oklch(90.5% 0.182 98.111)"; // 黄
-    return "oklch(70.4% 0.191 22.216)"; // 赤
-  };
-
   return (
     <div className="flex justify-center pt-2 px-8">
       <div className="w-full relative h-18 flex items-center p-2">
@@ -69,7 +62,7 @@ export function UserStatus({
                 className="absolute top-0 left-0 h-full transition-all duration-300"
                 style={{
                   width: `calc(${hitPoint} / ${maxHitPoint} * 100%)`,
-                  backgroundColor: getHpColor(),
+                  backgroundColor: hpBgColor(hitPoint, maxHitPoint),
                 }}
               />
               <p className="pr-2 z-10 text-sm">

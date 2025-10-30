@@ -5,7 +5,6 @@ export type MeUpdateRequest = {
   name?: string;
   imageFile?: File | null;
   level?: number;
-  maxHitPoint?: number;
   hitPoint?: number;
   experiencePoint?: number;
   weaponId?: number;

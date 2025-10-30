@@ -18,30 +18,23 @@
   --color-shoot: var(--color-gray-400);
 
   --color-neutral: var(--color-gray-400);
-  --color-neutral-dark: var(--color-gray-900);
+  --color-neutral-dark: var(--color-gray-600);
   --color-flame: var(--color-red-400);
-  --color-flame-dark: var(--color-red-900);
+  --color-flame-dark: var(--color-red-600);
   --color-water: var(--color-blue-400);
-  --color-water-dark: var(--color-blue-900);
+  --color-water-dark: var(--color-blue-600);
   --color-wood: var(--color-green-400);
-  --color-wood-dark: var(--color-green-900);
+  --color-wood-dark: var(--color-green-600);
   --color-shine: var(--color-yellow-400);
-  --color-shine-dark: var(--color-yellow-900);
+  --color-shine-dark: var(--color-yellow-600);
   --color-dark: var(--color-violet-400);
-  --color-dark-dark: var(--color-violet-900);
+  --color-dark-dark: var(--color-violet-600);
   --color-heal: var(--color-pink-400);
-  --color-heal-dark: var(--color-pink-900);
+  --color-heal-dark: var(--color-pink-600);
   --color-buff: var(--color-red-400);
-  --color-buff-dark: var(--color-red-900);
+  --color-buff-dark: var(--color-red-600);
   --color-debuff: var(--color-sky-400);
-  --color-debuff-dark: var(--color-sky-900);
-
-  --color-hp-height: #bdff16;
-  --color-hp-middle: #ffd916;
-  --color-hp-low: #ff1622;
-  --color-label: #bababa;
-  --color-border: #666666;
-  --color-reward: #dac49d;
+  --color-debuff-dark: var(--color-sky-600);
 
   --font-dotgothic: "DotGothic16", sans-serif;
   --font-abhaya: "Abhaya Libre", serif;

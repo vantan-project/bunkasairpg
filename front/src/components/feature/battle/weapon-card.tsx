@@ -77,7 +77,7 @@ export function WeaponCard({ weapon }: Props) {
               "flex justify-between items-end px-1"
             )}
           >
-            <p className="text-label text-sm pb-0.5">{label}</p>
+            <p className="text-[#bababa] text-sm pb-0.5">{label}</p>
             <p className="text-lg">{value}</p>
           </div>
         ))}

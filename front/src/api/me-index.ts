@@ -8,7 +8,6 @@ export type MeIndexResponse = {
   name: string;
   imageUrl: string;
   level: number;
-  maxHitPoint: number;
   hitPoint: number;
   experiencePoint: number;
   weapon: {

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class AllSeeder extends Seeder
 {
@@ -14,9 +13,9 @@ class AllSeeder extends Seeder
      */
     public function run(): void
     {
-        $user1Id = (string) Str::uuid();
-        $user2Id = (string) Str::uuid();
-        $user3Id = (string) Str::uuid();
+        $user1Id = '93c6e877-36ac-44a7-b1ff-a82df298e092';
+        $user2Id = '6df6bb51-aad9-4b7d-bdf7-263037f920c7';
+        $user3Id = '9fd9170a-93d8-4842-bd37-784d59fb058c';
 
         DB::table('weapons')->insert([
             [
@@ -60,7 +59,6 @@ class AllSeeder extends Seeder
                 'weapon_id' => null,
                 'name' => '勇者くん',
                 'level' => 3,
-                'max_hit_point' => 100,
                 'hit_point' => 85,
                 'experience_point' => 200,
                 'created_at' => now(),
@@ -71,7 +69,6 @@ class AllSeeder extends Seeder
                 'weapon_id' => 1,
                 'name' => 'ふくしなさん',
                 'level' => 1,
-                'max_hit_point' => 35,
                 'hit_point' => 35,
                 'experience_point' => 0,
                 'created_at' => now(),
@@ -82,7 +79,6 @@ class AllSeeder extends Seeder
                 'weapon_id' => null,
                 'name' => 'テストくん',
                 'level' => 10,
-                'max_hit_point' => 150,
                 'hit_point' => 20,
                 'experience_point' => 900,
                 'created_at' => now(),
@@ -128,7 +124,7 @@ class AllSeeder extends Seeder
 
         DB::table('monsters')->insert([
             [
-                'id' => Str::uuid(),
+                'id' => '39fd4180-bb20-4dca-a94c-7c529e473682',
                 'weapon_id' => 1,
                 'item_id' => 1,
                 'index_number' => '001',
@@ -150,7 +146,7 @@ class AllSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '853be6b1-8e34-4208-878e-68c7f515251c',
                 'weapon_id' => 2,
                 'item_id' => null,
                 'index_number' => '002',
@@ -172,7 +168,7 @@ class AllSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => 'd016cbed-1e63-47ef-ae97-a7cbfba0e085',
                 'weapon_id' => null,
                 'item_id' => null,
                 'index_number' => '003',
@@ -207,7 +203,7 @@ class AllSeeder extends Seeder
         DB::table('buff_items')->insert([
             [
                 'item_id' => 2,
-                'rate' => 1.5,
+                'rate' => 1.0,
                 'target' => 'slash',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -216,7 +212,7 @@ class AllSeeder extends Seeder
         DB::table('debuff_items')->insert([
             [
                 'item_id' => 3,
-                'rate' => 1.5,
+                'rate' => 0.5,
                 'target' => 'shoot',
                 'created_at' => now(),
                 'updated_at' => now(),
