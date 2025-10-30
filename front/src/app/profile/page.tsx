@@ -93,7 +93,7 @@ export default function Page() {
         style={{ backgroundImage: `url(${"/bg-profile.png"})` }}
       >
         <div className="relative w-[90%] flex flex-col items-center px-2">
-          <div className="mt-[20%] text-xl">マイページ</div>
+          <h1 className="mt-[20%] text-xl">マイページ</h1>
           <Image
             className="w-[70%] h-[2px]"
             width={100}
