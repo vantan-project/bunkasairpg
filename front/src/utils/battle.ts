@@ -148,9 +148,9 @@ export class Battle {
     userHitPoint: number;
     damage: number;
   } {
-    // モンスター攻撃力 * 乱数(0.95〜1.05) / (1+log10(レベル))
     const random = 0.95 + Math.random() * 0.1;
-    const levelFactor = 1 + Math.log10(this.user.level);
+    const levelFactor = 1 + Math.sqrt(this.user.level) / 1.7;
+    // モンスター攻撃力 * 乱数(0.95〜1.05) / (1+√(ユーザーレベル)/1.7)
     const damage = Math.floor((this.monster.attack * random) / levelFactor);
 
     this.user.hitPoint = Math.max(this.user.hitPoint - damage, 0);
