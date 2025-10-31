@@ -42,8 +42,8 @@ export class BossBattle extends Battle {
       shine: 1.4,
       dark: 1.4,
     };
-    resistance[physicsType] *= 0.7;
-    resistance[elementType] *= 0.9;
+    resistance[physicsType] = 0.7;
+    resistance[elementType] = 0.9;
     this.monster = {
       ...this.monster,
       slash: resistance.slash,
