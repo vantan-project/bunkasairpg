@@ -16,8 +16,8 @@ class Weapon extends Model
         'element_type',
     ];
 
-    public function users()
+    public function weaponEntries()
     {
-        return $this->belongsToMany(User::class,'monster_entries', 'weapon_id', 'user_id');
+        return $this->belongsToMany(User::class, 'weapon_entries', 'weapon_id', 'user_id')->withTimestamps();
     }
 }

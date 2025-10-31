@@ -28,8 +28,9 @@ class Item extends Model
     {
         return $this->hasOne(DebuffItem::class, 'item_id');
     }
-    public function users()
+
+    public function itemEntries()
     {
-        return $this->belongsToMany(User::class, 'item_entries', 'item_id', 'user_id');
+        return $this->belongsToMany(User::class, 'item_entries', 'item_id', 'user_id')->withTimestamps();
     }
 }

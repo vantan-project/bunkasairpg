@@ -46,8 +46,19 @@ class Monster extends Model
             }
         });
     }
-    public function users()
+
+    public function monsterEntries()
     {
-        return $this->belongsToMany(User::class, 'weapon_entries', 'weapon_id', 'user_id');
+        return $this->belongsToMany(User::class, 'monster_entries', 'monster_id', 'user_id')->withTimestamps();
+    }
+
+    public function weapon()
+    {
+        return $this->belongsTo(Weapon::class);
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
     }
 }

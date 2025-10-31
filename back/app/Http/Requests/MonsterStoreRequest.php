@@ -105,9 +105,9 @@ class MonsterStoreRequest extends FormRequest
       'shine.numeric' => 'shineは数値で入力してください。',
       'shine.between' => 'shineは0以上1以下で指定してください。',
 
-      'dack.required' => 'dackは必須です。',
-      'dack.numeric' => 'dackは数値で入力してください。',
-      'dack.between' => 'dackは0以上1以下で指定してください。',
+      'dark.required' => 'darkは必須です。',
+      'dark.numeric' => 'darkは数値で入力してください。',
+      'dark.between' => 'darkは0以上1以下で指定してください。',
 
       'weaponId.integer' => 'weaponIdは整数で入力してください。',
       'weaponId.exists' => '指定されたweaponIdは存在しません。',
