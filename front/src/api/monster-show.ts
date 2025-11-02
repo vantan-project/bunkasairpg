@@ -1,8 +1,7 @@
-import { EffectType } from "@/types/effect-type";
-import { ElementType } from "@/types/element-type";
-import { PhysicsType } from "@/types/physics-type";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { MeWeaponResponse } from "./me-weapon";
+import { MeItemResponse } from "./me-item";
 
 export type MonsterShowResponse = {
   id: string;
@@ -20,19 +19,8 @@ export type MonsterShowResponse = {
   wood: number;
   shine: number;
   dark: number;
-  weapon: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    physicsType: PhysicsType;
-    elementType: ElementType;
-  } | null;
-  item: {
-    id: number;
-    name: string;
-    imageUrl: string;
-    effectType: EffectType;
-  } | null;
+  weapon: MeWeaponResponse[number] | null;
+  item: Omit<MeItemResponse[number], "count"> | null;
 };
 
 export function monsterShow(id: string): Promise<MonsterShowResponse> {

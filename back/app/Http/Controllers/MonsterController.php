@@ -128,19 +128,14 @@ class MonsterController extends Controller
     try {
       $weapon = null;
       if (isset($monster->weapon_id)) {
-        $weaponModel = Weapon::query()->select([
-          'id',
-          'name',
-          'image_url',
-          'physics_type',
-          'element_type'
-        ])
-          ->find($monster->weapon_id);
+        $weaponModel = Weapon::query()->find($monster->weapon_id);
         if ($weaponModel) {
           $weapon = [
             'id' => (int) $weaponModel->id,
             'name' => $weaponModel->name,
             'imageUrl' => $weaponModel->image_url,
+            'physicsAttack' => $weaponModel->physics_attack,
+            'elementAttack' => $weaponModel->element_attack,
             'physicsType' => $weaponModel->physics_type,
             'elementType' => $weaponModel->element_type,
           ];
@@ -149,13 +144,10 @@ class MonsterController extends Controller
 
       $item = null;
       if (isset($monster->item_id)) {
-        $itemModel = Item::query()->select([
-          'id',
-          'name',
-          'image_url',
-          'effect_type'
-        ])
+        $itemModel = Item::query()
+          ->select(['id', 'name', 'image_url', 'effect_type'])
           ->find($monster->item_id);
+
         if ($itemModel) {
           $item = [
             'id' => (int) $itemModel->id,
@@ -163,6 +155,20 @@ class MonsterController extends Controller
             'imageUrl' => $itemModel->image_url,
             'effectType' => $itemModel->effect_type,
           ];
+
+          switch ($itemModel->effect_type) {
+            case 'heal':
+              $item['amount'] = (int) $itemModel->healItem->amount;
+              break;
+            case 'buff':
+              $item['rate'] = (float) $itemModel->buffItem->rate;
+              $item['target'] = $itemModel->buffItem->target;
+              break;
+            case 'debuff':
+              $item['rate'] = (float) $itemModel->debuffItem->rate;
+              $item['target'] = $itemModel->debuffItem->target;
+              break;
+          }
         }
       }
 
