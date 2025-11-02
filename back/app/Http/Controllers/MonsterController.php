@@ -167,6 +167,7 @@ class MonsterController extends Controller
       }
 
       return response()->json([
+        'id' => (string) $monster->id,
         'name' => $monster->name,
         'imageUrl' => $monster->image_url,
         'attack' => (int) $monster->attack,

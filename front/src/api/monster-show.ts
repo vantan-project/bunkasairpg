@@ -5,6 +5,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export type MonsterShowResponse = {
+  id: string;
   name: string;
   imageUrl: string;
   attack: number;
