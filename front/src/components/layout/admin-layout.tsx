@@ -27,6 +27,8 @@ import {
 import { SearchIcon } from "../shared/icons/search-icon";
 import { UserIcon } from "../shared/icons/user-icon";
 import { UserStoreModal } from "../feature/admin/user-store-modal";
+import { generateMonsterQRs } from "@/utils/generate-monster-qrs";
+import { DownloadIcon } from "../shared/icons/download";
 
 type Props = {
   children: React.ReactNode;
@@ -73,6 +75,13 @@ export function AdminLayout({ children }: Props) {
         onPress={onMonsterDrawerOpenChange}
       >
         モンスター追加
+      </DropdownItem>
+      <DropdownItem
+        endContent={<DownloadIcon />}
+        key="export"
+        onPress={generateMonsterQRs}
+      >
+        モンスターQR一括出力
       </DropdownItem>
     </DropdownMenu>
   );

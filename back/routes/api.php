@@ -12,6 +12,27 @@ use App\Http\Controllers\MonsterController;
 Route::post('/auth/user-login', [AuthController::class, 'userLogin']);
 Route::post('/auth/admin-login', [AuthController::class, 'adminLogin']);
 
+// 管理者系
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+  Route::get('/admin-token', function (Request $request) {
+    return response()->json([
+      'success' => true,
+    ]);
+  });
+
+  Route::post('/user', [UserController::class, 'store']);
+  Route::get('/item', [ItemController::class, 'index']);
+  Route::post('/item', [ItemController::class, 'store']);
+  Route::delete('/item/{id}', [ItemController::class, 'destroy']);
+  Route::get('/weapon', [WeaponController::class, 'index']);
+  Route::post('/weapon', [WeaponController::class, 'store']);
+  Route::delete('/weapon/{id}', [WeaponController::class, 'destroy']);
+  Route::get('/monster', [MonsterController::class, 'index']);
+  Route::get('/monster/ids', [MonsterController::class, 'ids']);
+  Route::post('/monster', [MonsterController::class, 'store']);
+  Route::delete('/monster/{id}', [MonsterController::class, 'destroy']);
+});
+
 // ユーザー系
 Route::middleware('auth:sanctum')->group(function () {
   Route::get('/me', [MeController::class, 'index']);
@@ -31,24 +52,4 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
   Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
   Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
-});
-
-// 管理者系
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
-  Route::get('/admin-token', function (Request $request) {
-    return response()->json([
-      'success' => true,
-    ]);
-  });
-
-  Route::post('/user', [UserController::class, 'store']);
-  Route::get('/item', [ItemController::class, 'index']);
-  Route::post('/item', [ItemController::class, 'store']);
-  Route::delete('/item/{id}', [ItemController::class, 'destroy']);
-  Route::get('/weapon', [WeaponController::class, 'index']);
-  Route::post('/weapon', [WeaponController::class, 'store']);
-  Route::delete('/weapon/{id}', [WeaponController::class, 'destroy']);
-  Route::get('/monster', [MonsterController::class, 'index']);
-  Route::post('/monster', [MonsterController::class, 'store']);
-  Route::delete('/monster/{id}', [MonsterController::class, 'destroy']);
 });

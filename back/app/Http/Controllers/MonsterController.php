@@ -208,4 +208,11 @@ class MonsterController extends Controller
       ], 500);
     }
   }
+
+  public function ids()
+  {
+    return response()->json([
+      'ids' => Monster::pluck('id')->toArray()
+    ]);
+  }
 }
