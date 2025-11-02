@@ -7,7 +7,7 @@ import {
   WeaponDrawer,
 } from "@/components/feature/battle/weapon-drawer";
 import { MonsterShowResponse } from "@/api/monster-show";
-import { ItemDrawer, MeItem } from "@/components/feature/battle/item-drawer";
+import { ItemDrawer } from "@/components/feature/battle/item-drawer";
 import { Modal } from "@/components/feature/battle/modal";
 import Image from "next/image";
 import clsx from "clsx";
@@ -199,7 +199,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     return logs;
   };
   // アイテム使用ログ
-  const useItemLogs = (item: MeItem) => {
+  const useItemLogs = (item: MeItemResponse[number]) => {
     if (item.count === 1) {
       setItems(items.filter((prev) => prev.id !== item.id));
     } else {

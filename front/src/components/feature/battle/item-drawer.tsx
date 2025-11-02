@@ -1,48 +1,21 @@
 import { Modal } from "@/components/feature/battle/modal";
 import { useState, useRef, useEffect } from "react";
-import { ElementType } from "@/types/element-type";
-import { PhysicsType } from "@/types/physics-type";
 import { ItemCard } from "./item-card";
 import Image from "next/image";
 import { useGlobalContext } from "@/hooks/use-global-context";
-
-export type MeItem =
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "heal";
-      amount: number;
-      count: number;
-    }
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "buff";
-      rate: number;
-      target: PhysicsType | ElementType;
-      count: number;
-    }
-  | {
-      id: number;
-      name: string;
-      imageUrl: string;
-      effectType: "debuff";
-      rate: number;
-      target: PhysicsType | ElementType;
-      count: number;
-    };
+import { MeItemResponse } from "@/api/me-item";
 
 type Props = {
   onClose: () => void;
-  useItem: (item: MeItem) => void;
+  useItem: (item: MeItemResponse[number]) => void;
 };
 
 export function ItemDrawer({ onClose, useItem }: Props) {
   const { items } = useGlobalContext();
 
-  const [selectedItem, setSelectedItem] = useState<MeItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<
+    MeItemResponse[number] | null
+  >(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 2;
