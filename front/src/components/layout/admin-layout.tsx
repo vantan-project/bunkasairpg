@@ -217,7 +217,15 @@ export function AdminLayout({ children }: Props) {
       </div>
 
       <div className="lg:hidden">
-        <div className="fixed left-2 top-1/2 flex flex-col gap-2 z-20">
+        <div
+          className={clsx(
+            isSelected && "opacity-50",
+            "fixed left-2 top-1/2 flex flex-col gap-2 z-20"
+          )}
+        >
+          {isSelected && (
+            <div className="absolute w-full h-full hover:cursor-not-allowed z-20" />
+          )}
           {[
             {
               Menu: MonsterDropdownMenu,
