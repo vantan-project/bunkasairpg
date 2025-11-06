@@ -72,7 +72,7 @@ export function RankingPage() {
       )}
 
       <div
-        className="relative h-[80%] w-full bg-cover bg-center bg-no-repeat flex flex-col items-center"
+        className="relative h-[80%] w-full bg-cover bg-center bg-no-repeat flex flex-col items-center [box-shadow:0_-8px_10px_-1px_rgba(0,0,0,0.25)]"
         style={{ backgroundImage: `url(${"/bg-reward.png"})` }}
       >
         <div className="h-[83%] w-full p-6">

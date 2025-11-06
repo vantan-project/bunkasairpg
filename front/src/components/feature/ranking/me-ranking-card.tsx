@@ -9,7 +9,7 @@ export function MeRankingCard({ rank, name, mode, value, imageUrl }: Props) {
   };
   return (
     <div
-      className="flex h-full w-full border-2 border-black"
+      className="flex h-full w-full border-2 border-black [box-shadow:0_-8px_4px_-1px_rgba(0,0,0,0.6)]"
       style={{ backgroundImage: meStyle.bgColor }}
     >
       <div className="flex justify-center items-center text-4xl text-white text-shadow-outline w-[20%]">
