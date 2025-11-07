@@ -7,7 +7,7 @@ import { GlobalContext } from "@/hooks/use-global-context";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoadingScreen } from "./loading-screen";
+import { LoadingScreen } from "../shared/loading-screen";
 
 type Props = {
   children: React.ReactNode;
