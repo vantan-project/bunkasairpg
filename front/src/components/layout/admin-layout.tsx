@@ -27,6 +27,8 @@ import {
 import { SearchIcon } from "../shared/icons/search-icon";
 import { UserIcon } from "../shared/icons/user-icon";
 import { UserStoreModal } from "../feature/admin/user-store-modal";
+import { generateMonsterQRs } from "@/utils/generate-monster-qrs";
+import { DownloadIcon } from "../shared/icons/download";
 
 type Props = {
   children: React.ReactNode;
@@ -73,6 +75,13 @@ export function AdminLayout({ children }: Props) {
         onPress={onMonsterDrawerOpenChange}
       >
         モンスター追加
+      </DropdownItem>
+      <DropdownItem
+        endContent={<DownloadIcon />}
+        key="export"
+        onPress={generateMonsterQRs}
+      >
+        モンスターQR一括出力
       </DropdownItem>
     </DropdownMenu>
   );
@@ -208,7 +217,15 @@ export function AdminLayout({ children }: Props) {
       </div>
 
       <div className="lg:hidden">
-        <div className="fixed left-2 top-1/2 flex flex-col gap-2 z-20">
+        <div
+          className={clsx(
+            isSelected && "opacity-50",
+            "fixed left-2 top-1/2 flex flex-col gap-2 z-20"
+          )}
+        >
+          {isSelected && (
+            <div className="absolute w-full h-full hover:cursor-not-allowed z-20" />
+          )}
           {[
             {
               Menu: MonsterDropdownMenu,

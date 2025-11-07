@@ -7,7 +7,7 @@ import {
   WeaponDrawer,
 } from "@/components/feature/battle/weapon-drawer";
 import { MonsterShowResponse } from "@/api/monster-show";
-import { ItemDrawer, MeItem } from "@/components/feature/battle/item-drawer";
+import { ItemDrawer } from "@/components/feature/battle/item-drawer";
 import { Modal } from "@/components/feature/battle/modal";
 import Image from "next/image";
 import clsx from "clsx";
@@ -23,6 +23,7 @@ import {
 } from "@/components/feature/battle/treasure-box-button";
 import { hpBgColor } from "@/utils/hp-bg-color";
 import { useZxing } from "react-zxing";
+import { MeItemResponse } from "@/api/me-item";
 
 export type BattlePhase =
   | { status: "first"; action: null | "weapon" | "item" }
@@ -42,7 +43,8 @@ type Props = {
 };
 
 export function BattlePage({ battle, monsterAttackLogs }: Props) {
-  const { user, setUser, weapons, items, setItems } = useGlobalContext();
+  const { user, setUser, weapons, setWeapons, items, setItems } =
+    useGlobalContext();
   const router = useRouter();
   const pathname = usePathname();
   const [monster, setMonster] = useState<
@@ -135,6 +137,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         elementType: monster.weapon.elementType,
         imageUrl: monster.imageUrl,
       };
+      setWeapons([...weapons, monster.weapon]);
     }
     if (rewardData.drop === "item" && monster.item) {
       drop = {
@@ -142,6 +145,24 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         effectType: monster.item.effectType,
         imageUrl: monster.imageUrl,
       };
+      setItems(
+        items.some((item) => item.id === monster.item!.id)
+          ? items.map((item) => {
+              if (item.id !== monster.item!.id) return item;
+              switch (item.effectType) {
+                case "heal":
+                  return { ...item, count: item.count + 1 };
+                case "buff":
+                  return { ...item, count: item.count + 1 };
+                case "debuff":
+                  return { ...item, count: item.count + 1 };
+              }
+            })
+          : [
+              ...items,
+              { ...(monster.item as MeItemResponse[number]), count: 1 },
+            ]
+      );
     }
     logs.push({
       message: `${monster.name}を\n倒した！`,
@@ -178,7 +199,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     return logs;
   };
   // アイテム使用ログ
-  const useItemLogs = (item: MeItem) => {
+  const useItemLogs = (item: MeItemResponse[number]) => {
     if (item.count === 1) {
       setItems(items.filter((prev) => prev.id !== item.id));
     } else {

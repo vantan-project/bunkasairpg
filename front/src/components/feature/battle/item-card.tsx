@@ -1,12 +1,39 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { MeItem } from "./item-drawer";
 import { assetGradation } from "@/utils/asset-gradation";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
 import { ITEM_TARGET_LABEL_MAP } from "@/const/item-target-label-map";
+import { ElementType } from "@/types/element-type";
+import { PhysicsType } from "@/types/physics-type";
 
 type Props = {
-  item: MeItem;
+  item:
+    | {
+        id: number;
+        name: string;
+        imageUrl: string;
+        effectType: "heal";
+        amount: number;
+        count?: number;
+      }
+    | {
+        id: number;
+        name: string;
+        imageUrl: string;
+        effectType: "buff";
+        rate: number;
+        target: PhysicsType | ElementType;
+        count?: number;
+      }
+    | {
+        id: number;
+        name: string;
+        imageUrl: string;
+        effectType: "debuff";
+        rate: number;
+        target: PhysicsType | ElementType;
+        count?: number;
+      };
 };
 
 export function ItemCard({ item }: Props) {
@@ -50,10 +77,12 @@ export function ItemCard({ item }: Props) {
         </div>
 
         <div className="w-full flex justify-end items-end gap-[1px] pr-2 pb-2">
-          <p className={clsx(dotBorderClassName, "w-12 text-center")}>
-            <span>×</span>
-            <span className="text-white text-xl">{item.count}</span>
-          </p>
+          {item.count && (
+            <p className={clsx(dotBorderClassName, "w-12 text-center")}>
+              <span>×</span>
+              <span className="text-white text-xl">{item.count}</span>
+            </p>
+          )}
         </div>
       </div>
     </div>

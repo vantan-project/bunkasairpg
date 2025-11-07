@@ -6,6 +6,7 @@ import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import { calculateLevel } from "./calculate-level";
 import { MonsterShowResponse } from "@/api/monster-show";
+import { meMonsterEntry } from "@/api/me-monster-entry";
 
 export type User = {
   level: number;
@@ -70,10 +71,14 @@ export class Battle {
 
   constructor(
     user: User,
-    monster: MonsterShowResponse & { maxHitPoint: number }
+    monster: MonsterShowResponse & { maxHitPoint: number },
+    isBoss: boolean = false
   ) {
     this.user = user;
     this.monster = monster;
+    this.isBoss = isBoss;
+
+    this.isBoss || meMonsterEntry({ monsterId: this.monster.id });
   }
 
   public getMonster(): MonsterShowResponse & { maxHitPoint: number } {
