@@ -7,6 +7,7 @@ import { GlobalContext } from "@/hooks/use-global-context";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LoadingScreen } from "../shared/loading-screen";
 
 type Props = {
   children: React.ReactNode;
@@ -58,11 +59,7 @@ export function MainLayout({ children }: Props) {
   }, []);
 
   if (!user || !weapons || !items) {
-    return (
-      <div className="h-screen flex justify-center items-center text-4xl">
-        Loading...
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DotGothic16&display=swap");
 @import "tailwindcss";
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
@@ -35,6 +36,7 @@
   --color-debuff-dark: var(--color-sky-600);
 
   --font-abhaya: "Abhaya Libre", serif;
+  --font-dot-gothic: "DotGothic16", sans-serif;
   --text-shadow-outline: -1px -1px 0 #410606, 1px -1px 0 #410606,
     -1px 1px 0 #410606, 1px 1px 0 #410606;
 }
@@ -52,28 +54,22 @@ html.admin::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: repeating-linear-gradient(
-      135deg,
+  background-image: repeating-linear-gradient(135deg,
       rgb(0, 0, 0) 0,
       rgb(0, 0, 0) 10px,
       transparent 10px,
-      transparent 11px
-    ),
-    repeating-linear-gradient(
-      22.5deg,
+      transparent 11px),
+    repeating-linear-gradient(22.5deg,
       rgb(0, 0, 0) 0,
       rgb(0, 0, 0) 10px,
       transparent 10px,
-      transparent 11px
-    ),
-    linear-gradient(
-      90deg,
+      transparent 11px),
+    linear-gradient(90deg,
       hsl(194, 74%, 56%),
       hsl(266, 74%, 56%),
       hsl(338, 74%, 56%),
       hsl(50, 74%, 56%),
-      hsl(122, 74%, 56%)
-    );
+      hsl(122, 74%, 56%));
   animation: hueShift 3s linear infinite;
 }
 
@@ -81,7 +77,22 @@ html.admin::before {
   0% {
     filter: hue-rotate(0deg);
   }
+
   100% {
     filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: translateY(-12px) scale(1.2);
+    opacity: 1
   }
 }
