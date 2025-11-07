@@ -1,11 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function () {
-  const searchParams = useSearchParams();
-  const isNotLoggedIn = searchParams.has("notLoggedIn");
+  const [isNotLoggedIn, setIsNotLoggedIn] = useState<boolean>();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setIsNotLoggedIn(params.has("notLoggedIn"));
+  }, []);
+
+  if (isNotLoggedIn === undefined) return null;
 
   return (
     <>
