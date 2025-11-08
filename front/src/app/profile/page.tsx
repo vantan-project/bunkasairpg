@@ -12,7 +12,7 @@ import {
   WeaponDrawer,
 } from "@/components/feature/battle/weapon-drawer";
 import { ItemDrawer } from "@/components/feature/battle/item-drawer";
-import { MeItem } from "@/components/feature/battle/item-drawer";
+import { MeItemResponse } from "@/api/me-item";
 import { meUseItem } from "@/api/me-use-item";
 import { ProfileConsole } from "@/components/feature/profile/profile-console";
 import { UserStatus } from "@/components/shared/user-status";
@@ -53,26 +53,6 @@ export default function Page() {
     setWeaponDrawerOpen(false);
   };
 
-  const handleUseItem = (item: MeItem) => {
-    setItemDrawerOpen(false);
-    if (item.effectType !== "heal") {
-      return;
-    }
-    meUseItem({ itemId: item.id }).then(() => {
-      if (item.count === 1) {
-        setItems(items.filter((prev) => prev.id !== item.id));
-      } else {
-        setItems(
-          items.map((prev) =>
-            prev.id === item.id ? { ...prev, count: prev.count - 1 } : prev
-          )
-        );
-      }
-      const hitPoint = Math.min(user.hitPoint + item.amount, user.maxHitPoint);
-      meUpdate({ hitPoint: hitPoint });
-      setUser({ ...user, hitPoint });
-    });
-  };
 
   return (
     <div
@@ -200,9 +180,10 @@ export default function Page() {
         <ProfileConsole setClose={setItemDrawerOpen}>
           <ItemDrawer
             onClose={() => setItemDrawerOpen(false)}
-            useItem={(i) => {
-              handleUseItem(i);
+            useItem={() => {
+              {}
             }}
+            invalid={true}
           />
         </ProfileConsole>
       )}

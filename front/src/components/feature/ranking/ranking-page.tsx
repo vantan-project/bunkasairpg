@@ -5,24 +5,29 @@ import { ClearRankingItem, userClearRanking } from "@/api/user-clear-ranking";
 import { CollectedRankingItem, userCollectedRanking } from "@/api/user-collected-ranking";
 import { useEffect, useState } from "react";
 import { MeRankingCard } from "./me-ranking-card";
+import {Skeleton} from "@heroui/skeleton";
 export function RankingPage() {
   const [collectedRankings, setCollectedRankings] = useState<CollectedRankingItem[]>([]);
   const [meCollectedRanking, setMeCollectedRanking] = useState<CollectedRankingItem>();
   const [clearRankings, setclearRankings] = useState<ClearRankingItem[]>([]);
   const [meClearRanking, setMeClearRanking] = useState<ClearRankingItem>();
   const [mode, setMode] = useState(true);
+  const [loadingClearRanking, setLoadingClearRanking] = useState(true);
+const [loadingCollectedRanking, setLoadingCollectedRanking] = useState(true);
 
   useEffect(() => {
     userClearRanking().then((res) => {
       setMeClearRanking(res.userRanking);
       setclearRankings(res.rankings);
-    });
+    }).finally(() => setLoadingClearRanking(false));;
     userCollectedRanking().then((res) => {
       setMeCollectedRanking(res.userRanking);
       setCollectedRankings(res.rankings);
-    });
+    }).finally(() => setLoadingCollectedRanking(false));;
   }, []);
+  const loading = loadingClearRanking || loadingCollectedRanking;
 
+  if(loading) return <div>ローディング...</div>;
   return (
     <div className="h-full w-full flex flex-col items-center justify-end">
       <h1 className="text-xl">ランキング</h1>
