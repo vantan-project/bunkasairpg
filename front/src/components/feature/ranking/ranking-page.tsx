@@ -6,6 +6,7 @@ import { CollectedRankingItem, userCollectedRanking } from "@/api/user-collected
 import { useEffect, useState } from "react";
 import { MeRankingCard } from "./me-ranking-card";
 import {Skeleton} from "@heroui/skeleton";
+import { LoadingScreen } from "@/components/shared/loading-screen";
 export function RankingPage() {
   const [collectedRankings, setCollectedRankings] = useState<CollectedRankingItem[]>([]);
   const [meCollectedRanking, setMeCollectedRanking] = useState<CollectedRankingItem>();
@@ -27,7 +28,8 @@ const [loadingCollectedRanking, setLoadingCollectedRanking] = useState(true);
   }, []);
   const loading = loadingClearRanking || loadingCollectedRanking;
 
-  if(loading) return <div>ローディング...</div>;
+  if(loading) return <LoadingScreen />;
+  
   return (
     <div className="h-full w-full flex flex-col items-center justify-end">
       <h1 className="text-xl">ランキング</h1>
