@@ -46,7 +46,7 @@ export function UserStatus({
             <div className="flex justify-between px-1">
               <p
                 className={clsx(
-                  "whitespace-nowrap text-base font-bold",
+                  "whitespace-nowrap text-base font-bold truncate w-40",
                   hitPoint === 0 && "text-red-600"
                 )}
               >

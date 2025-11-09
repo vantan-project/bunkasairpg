@@ -8,9 +8,10 @@ import { MeItemResponse } from "@/api/me-item";
 type Props = {
   onClose: () => void;
   useItem: (item: MeItemResponse[number]) => void;
+  invalid?: boolean;
 };
 
-export function ItemDrawer({ onClose, useItem }: Props) {
+export function ItemDrawer({ onClose, useItem, invalid=false }: Props) {
   const { items } = useGlobalContext();
 
   const [selectedItem, setSelectedItem] = useState<
@@ -62,7 +63,7 @@ export function ItemDrawer({ onClose, useItem }: Props) {
           <div
             key={index}
             onClick={() => {
-              setSelectedItem(item);
+              {!invalid && setSelectedItem(item)};
             }}
             className="snap-start"
           >

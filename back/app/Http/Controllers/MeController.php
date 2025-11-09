@@ -534,19 +534,27 @@ class MeController extends Controller
   {
     $user = $this->getAuthenticatedUser();
     $validated = $request->validated();
+
     try {
-      BossRecord::create([
-        'user_id' => $user->id,
-        'clear_time' => $validated['clearTime'],
-      ]);
+      $record = BossRecord::where('user_id', $user->id)->first();
+
+      if ($record) {
+        $record->update(['clear_time' => $validated['clearTime']]);
+      } else {
+        BossRecord::create([
+          'user_id' => $user->id,
+          'clear_time' => $validated['clearTime'],
+        ]);
+      }
+
       return response()->json([
         'success' => true,
-        'messages' => ['クリア時間の追加が成功しました'],
+        'messages' => ['クリア時間の登録が成功しました'],
       ]);
     } catch (\Exception $e) {
       return response()->json([
         'success' => false,
-        'messages' => ['クリア時間の追加が失敗しました']
+        'messages' => ['クリア時間の登録が失敗しました'],
       ], 500);
     }
   }

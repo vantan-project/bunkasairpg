@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@800&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=DotGothic16&display=swap");
+
 @import "tailwindcss";
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
@@ -35,8 +36,10 @@
   --color-debuff: var(--color-sky-400);
   --color-debuff-dark: var(--color-sky-600);
 
-  --font-abhaya: "Abhaya Libre", serif;
   --font-dot-gothic: "DotGothic16", sans-serif;
+  --font-dotgothic: "DotGothic16", sans-serif;
+  --font-abhaya: "Abhaya Libre", serif;
+
   --text-shadow-outline: -1px -1px 0 #410606, 1px -1px 0 #410606,
     -1px 1px 0 #410606, 1px 1px 0 #410606;
 }

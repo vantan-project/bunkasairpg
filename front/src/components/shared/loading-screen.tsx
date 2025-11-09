@@ -2,7 +2,7 @@
 
 export function LoadingScreen() {
     return (
-        <div className="h-screen flex flex-col justify-center items-center text-4xl bg-[url('/bg-reward.png')] bg-[length:108%_108%] bg-no-repeat bg-center">
+        <div className="h-screen w-screen flex flex-col justify-center items-center text-4xl bg-[url('/bg-reward.png')] bg-[length:108%_108%] bg-no-repeat bg-center">
             <p className="font-dot-gothic">
                 <span className="tracking-[8px]">Loading</span> ...
             </p>
