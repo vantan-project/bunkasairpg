@@ -1,38 +1,47 @@
-"use client";
 import Image from "next/image";
 import { RankingCard } from "./ranking-card";
 import { ClearRankingItem, userClearRanking } from "@/api/user-clear-ranking";
-import { CollectedRankingItem, userCollectedRanking } from "@/api/user-collected-ranking";
+import {
+  CollectedRankingItem,
+  userCollectedRanking,
+} from "@/api/user-collected-ranking";
 import { useEffect, useState } from "react";
 import { MeRankingCard } from "./me-ranking-card";
-import {Skeleton} from "@heroui/skeleton";
 import { LoadingScreen } from "@/components/shared/loading-screen";
+import Link from "next/link";
 export function RankingPage() {
-  const [collectedRankings, setCollectedRankings] = useState<CollectedRankingItem[]>([]);
-  const [meCollectedRanking, setMeCollectedRanking] = useState<CollectedRankingItem>();
+  const [collectedRankings, setCollectedRankings] = useState<
+    CollectedRankingItem[]
+  >([]);
+  const [meCollectedRanking, setMeCollectedRanking] =
+    useState<CollectedRankingItem>();
   const [clearRankings, setclearRankings] = useState<ClearRankingItem[]>([]);
   const [meClearRanking, setMeClearRanking] = useState<ClearRankingItem>();
   const [mode, setMode] = useState(true);
   const [loadingClearRanking, setLoadingClearRanking] = useState(true);
-const [loadingCollectedRanking, setLoadingCollectedRanking] = useState(true);
+  const [loadingCollectedRanking, setLoadingCollectedRanking] = useState(true);
 
   useEffect(() => {
-    userClearRanking().then((res) => {
-      setMeClearRanking(res.userRanking);
-      setclearRankings(res.rankings);
-    }).finally(() => setLoadingClearRanking(false));;
-    userCollectedRanking().then((res) => {
-      setMeCollectedRanking(res.userRanking);
-      setCollectedRankings(res.rankings);
-    }).finally(() => setLoadingCollectedRanking(false));;
+    userClearRanking()
+      .then((res) => {
+        setMeClearRanking(res.userRanking);
+        setclearRankings(res.rankings);
+      })
+      .finally(() => setLoadingClearRanking(false));
+    userCollectedRanking()
+      .then((res) => {
+        setMeCollectedRanking(res.userRanking);
+        setCollectedRankings(res.rankings);
+      })
+      .finally(() => setLoadingCollectedRanking(false));
   }, []);
   const loading = loadingClearRanking || loadingCollectedRanking;
 
-  if(loading) return <LoadingScreen />;
-  
+  if (loading) return <LoadingScreen />;
+
   return (
     <div className="h-full w-full flex flex-col items-center justify-end">
-      <h1 className="text-xl">ランキング</h1>
+      <h1 className="text-xl text-white">ランキング</h1>
       <Image
         className="w-[70%] h-[2px]"
         width={100}
@@ -118,31 +127,34 @@ const [loadingCollectedRanking, setLoadingCollectedRanking] = useState(true);
           </div>
         </div>
         <div className="absolute bottom-[13%] w-full h-20 px-6 z-50">
-            {mode ? (
-              <MeRankingCard
-                rank={meCollectedRanking?.rank ?? 0}
-                imageUrl={meCollectedRanking?.image_url ?? null}
-                mode={true}
-                name={meCollectedRanking?.name ?? ""}
-                value={meCollectedRanking?.collection_rate ?? 0}
-              />
-            ) : (
-              <MeRankingCard
-                rank={meClearRanking?.rank ?? 0}
-                imageUrl={meClearRanking?.imageUrl ?? null}
-                mode={false}
-                name={meClearRanking?.name ?? ""}
-                value={meClearRanking?.clearTime ?? ""}
-              />
-            )}
+          {mode ? (
+            <MeRankingCard
+              rank={meCollectedRanking?.rank ?? 0}
+              imageUrl={meCollectedRanking?.image_url ?? null}
+              mode={true}
+              name={meCollectedRanking?.name ?? ""}
+              value={meCollectedRanking?.collection_rate ?? 0}
+            />
+          ) : (
+            <MeRankingCard
+              rank={meClearRanking?.rank ?? 0}
+              imageUrl={meClearRanking?.imageUrl ?? null}
+              mode={false}
+              name={meClearRanking?.name ?? ""}
+              value={meClearRanking?.clearTime ?? ""}
+            />
+          )}
         </div>
-        <Image
-          className="absolute bottom-[2%] w-[30%] h-auto"
-          width={100}
-          height={100}
-          src="/back-button.png"
-          alt="戻るボタン"
-        />
+
+        <Link href="/camera" className="absolute bottom-[2%] w-[30%]">
+          <Image
+            className="w-full h-auto"
+            width={100}
+            height={100}
+            src="/back-button.png"
+            alt="戻るボタン"
+          />
+        </Link>
       </div>
     </div>
   );

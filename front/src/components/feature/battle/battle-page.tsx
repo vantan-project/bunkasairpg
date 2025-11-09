@@ -22,8 +22,8 @@ import {
   TreasureBoxButton,
 } from "@/components/feature/battle/treasure-box-button";
 import { hpBgColor } from "@/utils/hp-bg-color";
-import { useZxing } from "react-zxing";
 import { MeItemResponse } from "@/api/me-item";
+import { BgCamera } from "@/components/shared/bg-camera";
 
 export type BattlePhase =
   | { status: "first"; action: null | "weapon" | "item" }
@@ -256,24 +256,12 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     "bg-[linear-gradient(to_right,#666_6px,transparent_2px,transparent_5px)] bg-[length:10px_2px] bg-bottom bg-repeat-x";
   const buttonGradationClassName =
     "bg-[linear-gradient(to_right,rgba(102,102,102,0)_0%,rgba(102,_102,_102,_0.8)_20%,rgba(102,102,102,0.8)_80%,rgba(102,102,102,0)_100%)]";
-  const { ref } = useZxing();
   return (
-    <div
-    // className="h-screen w-screen bg-cover bg-center bg-no-repeat text-xl"
-    // style={{ backgroundImage: `url(${"/bg-battle.png"})` }}
-    >
-      <div className="fixed inset-0 -z-10">
-        <video
-          ref={ref}
-          className="w-full h-full object-cover"
-          autoPlay
-          muted
-          playsInline
-        />
-      </div>
+    <div>
       {/* モンスター画面 */}
+      <BgCamera />
       <div
-        className={`h-[calc(100vh-320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
+        className={`h-[calc(100vh_-_320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
         style={{ opacity: monster.hitPoint > 0 ? 1 : 0 }}
       >
         <div className="relative w-[24vh] h-auto aspect-square mb-2">

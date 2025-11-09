@@ -7,6 +7,7 @@ import { monsterShow, MonsterShowResponse } from "@/api/monster-show";
 import { ItemCard } from "@/components/feature/battle/item-card";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
+import { BgCamera } from "@/components/shared/bg-camera";
 import { QuestionIcon } from "@/components/shared/icons/question-icon";
 import { Modal } from "@/components/shared/modal";
 import { assetBgColor } from "@/utils/asset-bg-color";
@@ -54,6 +55,7 @@ export default function () {
 
   return (
     <>
+      <BgCamera />
       <div className="grid grid-cols-3 gap-2">
         {category === "monster" &&
           monsterIndex.length > 0 &&

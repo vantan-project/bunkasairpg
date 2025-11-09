@@ -12,14 +12,13 @@ import {
   WeaponDrawer,
 } from "@/components/feature/battle/weapon-drawer";
 import { ItemDrawer } from "@/components/feature/battle/item-drawer";
-import { MeItemResponse } from "@/api/me-item";
-import { meUseItem } from "@/api/me-use-item";
 import { ProfileConsole } from "@/components/feature/profile/profile-console";
 import { UserStatus } from "@/components/shared/user-status";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
+import { BgCamera } from "@/components/shared/bg-camera";
 
 export default function Page() {
-  const { user, setUser, items, setItems } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
   const [name, setName] = useState(user.name);
   const [nameOpen, setNameOpen] = useState(false);
   const [qrModalOpen, setQrModalOpen] = useState(false);
@@ -53,13 +52,10 @@ export default function Page() {
     setWeaponDrawerOpen(false);
   };
 
-
   return (
-    <div
-      className="flex justify-center items-center h-screen w-screen bg-cover bg-center bg-no-repeat text-xl"
-      style={{ backgroundImage: `url(${"/bg-battle.png"})` }}
-    >
-      <div className="fixed top-0 w-full p-2">
+    <div className="flex justify-center items-center h-screen w-screen bg-cover bg-center bg-no-repeat text-xl">
+      <BgCamera />
+      <div className="fixed top-0 w-full p-2 z-30">
         <UserStatus
           name={user.name}
           imageUrl={user.imageUrl}
@@ -68,21 +64,27 @@ export default function Page() {
           maxHitPoint={user.maxHitPoint}
         />
       </div>
-      <div
-        className="w-[90%] aspect-[380/605] bg-cover bg-center bg-no-repeat flex justify-center"
-        style={{ backgroundImage: `url(${"/bg-profile.png"})` }}
-      >
-        <div className="relative w-[90%] flex flex-col items-center px-2">
-          <h1 className="mt-[20%] text-xl">マイページ</h1>
+      <div className="relative mt-2 mx-2 pr-1 w-full h-[490px] bg-cover bg-center bg-no-repeat flex justify-center rounded-2xl overflow-hidden">
+        <Image
+          className="absolute -z-10 h-full"
+          src="/bg-profile.png"
+          alt="bg-profile"
+          fill
+          priority
+        />
+        <div className="w-full relative flex flex-col items-center px-4">
+          <h1 className="mt-12 text-xl">マイページ</h1>
           <Image
             className="w-[70%] h-[2px]"
             width={100}
             height={100}
-            src="/profile-border.png"
+            src="/profile-border2.png"
             alt="マイページの下線"
           />
-          <div className="p-2 mt-[2%] bg-black/60 w-full rounded-md text-white">
-            <WeaponCard weapon={user.weapon} />
+          <div className="px-4 w-full">
+            <div className="p-2 mt-[2%] bg-black/60 w-full rounded-md text-white">
+              <WeaponCard weapon={user.weapon} />
+            </div>
           </div>
 
           <div className="mt-[5%] flex w-full px-[5%] justify-between items-end">
@@ -102,7 +104,7 @@ export default function Page() {
                 ) : (
                   <input
                     type="text"
-                    className="w-[80%] truncate px-1"
+                    className="w-[80%] truncate px-1 outline-none"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     onBlur={(e) => handleNameChange(e.target.value)}
@@ -138,27 +140,35 @@ export default function Page() {
               />
             </label>
           </div>
-          <div className="w-full px-[5%] flex justify-between mt-[10%]">
-            <div
-              className="relative w-[45%] aspect-[111/45]"
-              onClick={() => setWeaponDrawerOpen(true)}
-            >
-              <Image src="/weapon-btn.png" alt="武器変更表示画像" fill />
-            </div>
-            <div
-              className="relative w-[45%] aspect-[111/45]"
-              onClick={() => setItemDrawerOpen(true)}
-            >
-              <Image src="/item-btn.png" alt="アイテム一覧表示画像" fill />
-            </div>
-          </div>
-          <div className="w-full flex justify-start px-[5%] mt-[6%]">
-            <div
-              className="relative w-[45%] aspect-[111/45]"
-              onClick={() => setQrModalOpen(true)}
-            >
-              <Image src="/qr-btn.png" alt="QR表示画像" fill />
-            </div>
+          <div className="w-full p-4 grid grid-cols-2 gap-2">
+            {[
+              {
+                label: "武器変更",
+                onClick: () => setWeaponDrawerOpen(true),
+              },
+              {
+                label: "アイテム一覧",
+                onClick: () => setItemDrawerOpen(true),
+              },
+              {
+                label: "QRコード",
+                onClick: () => setQrModalOpen(true),
+              },
+            ].map((i) => (
+              <div
+                key={i.label}
+                className="relative h-12 flex items-center justify-center"
+                onClick={i.onClick}
+              >
+                <Image
+                  className="absolute -z-10"
+                  src="/profile-btn.png"
+                  alt="プロフィールボタン背景画像"
+                  fill
+                />
+                <p className="text-sm font-bold">{i.label}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -181,7 +191,8 @@ export default function Page() {
           <ItemDrawer
             onClose={() => setItemDrawerOpen(false)}
             useItem={() => {
-              {}
+              {
+              }
             }}
             invalid={true}
           />
