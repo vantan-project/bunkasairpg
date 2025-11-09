@@ -24,6 +24,7 @@ import {
 import { hpBgColor } from "@/utils/hp-bg-color";
 import { MeItemResponse } from "@/api/me-item";
 import { BgCamera } from "@/components/shared/bg-camera";
+import { meClearBoss } from "@/api/me-clear-boss";
 
 export type BattlePhase =
   | { status: "first"; action: null | "weapon" | "item" }
@@ -69,6 +70,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     level: number;
     experiencePoint: number;
     drop: Drop | null;
+    clearTime: string;
   } | null>(null);
   const [startDate, setStartDate] = useState<Date>();
 
@@ -167,12 +169,18 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     logs.push({
       message: `${monster.name}を\n倒した！`,
       action: () => {
+        let clearTime = "??:??:??";
+        if (startDate) {
+          clearTime = formatDuration(startDate, new Date());
+          battle.getIsBoss() && meClearBoss({ clearTime });
+        }
         setReward({
           restLevel: user.level,
           restExperiencePoint: user.experiencePoint,
           level: rewardData.level,
           experiencePoint: rewardData.experiencePoint,
           drop: drop,
+          clearTime: clearTime,
         });
         setUser({
           ...user,
@@ -593,10 +601,23 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 {reward.drop && <TreasureBoxButton drop={reward.drop} />}
               </div>
             }
-            startDate={startDate}
+            clearTime={reward.clearTime}
           />
         </div>
       )}
     </div>
   );
+}
+
+function formatDuration(startDate: Date, endDate: Date): string {
+  const diff = endDate.getTime() - startDate.getTime();
+
+  const minutes = Math.floor(diff / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+  const milliseconds = Math.floor((diff % 1000) / 10); // 0〜99 に変換
+
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+    2,
+    "0"
+  )}:${String(milliseconds).padStart(2, "0")}`;
 }

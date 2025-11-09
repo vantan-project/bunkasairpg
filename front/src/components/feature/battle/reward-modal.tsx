@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { calculateExperience } from "@/utils/calculate-experience";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { meClearBoss } from "@/api/me-clear-boss";
 
 type Props = {
   restLevel: number;
@@ -10,7 +11,7 @@ type Props = {
   level: number;
   experiencePoint: number;
   drop: React.ReactNode;
-  startDate: Date;
+  clearTime: string;
 };
 
 export function RewardModal({
@@ -19,7 +20,7 @@ export function RewardModal({
   level,
   experiencePoint,
   drop,
-  startDate,
+  clearTime,
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
@@ -34,7 +35,6 @@ export function RewardModal({
     level,
     expBarAnimation.transition.duration * 100
   );
-  const clearTime = formatDuration(startDate, new Date());
 
   return (
     <div className="w-full flex justify-center items-center h-full text-sm">
@@ -157,17 +157,4 @@ function useCountUp(start: number, end: number, duration: number) {
   }, [count, end]);
 
   return count;
-}
-
-function formatDuration(startDate: Date, endDate: Date): string {
-  const diff = endDate.getTime() - startDate.getTime();
-
-  const minutes = Math.floor(diff / 60000);
-  const seconds = Math.floor((diff % 60000) / 1000);
-  const milliseconds = Math.floor((diff % 1000) / 10); // 0〜99 に変換
-
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
-    2,
-    "0"
-  )}:${String(milliseconds).padStart(2, "0")}`;
 }

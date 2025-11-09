@@ -85,6 +85,10 @@ export class Battle {
     return this.monster;
   }
 
+  public getIsBoss(): boolean {
+    return this.isBoss;
+  }
+
   public attack(): {
     monsterHitPoint: number;
     damage: number;

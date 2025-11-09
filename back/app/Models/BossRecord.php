@@ -7,13 +7,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BossRecord extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'clear_time',
-    ];
+  protected $primaryKey = 'user_id';
+  public $incrementing = false;
+  protected $keyType = 'string';
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
+  protected $fillable = [
+    'user_id',
+    'clear_time',
+  ];
+
+  public function user()
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
 }
