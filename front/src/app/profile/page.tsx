@@ -82,7 +82,17 @@ export default function Page() {
             alt="マイページの下線"
           />
           <div className="px-4 w-full">
-            <div className="p-2 mt-[2%] bg-black/60 w-full rounded-md text-white">
+            <div className="p-2 mt-[2%] w-full rounded-md text-white relative overflow-hidden">
+              <div className="absolute inset-0 -z-10">
+                <Image
+                  className="w-full h-full"
+                  src="/bg-weapon.png"
+                  alt="bg-weapon"
+                  width={500}
+                  height={300}
+                />
+              </div>
+              <div className="absolute inset-0 -z-10 bg-black/50" />
               <WeaponCard weapon={user.weapon} />
             </div>
           </div>

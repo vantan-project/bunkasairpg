@@ -73,7 +73,7 @@ export function RankingCard({ rank, name, mode, value, imageUrl }: Props) {
       </div>
       <div className="flex-grow p-2 flex flex-col justify-between">
         <div className="p-1 text-center bg-[#1F1D00] border border-[#CCC4AF] text-[#B29F8E] rounded-lg text-sm">
-          {name}
+          <p className="truncate w-36">{name}</p>
         </div>
         <div className="flex justify-between items-center">
           {mode ? (
