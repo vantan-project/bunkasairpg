@@ -71,21 +71,21 @@ export function Footer() {
               alt="home"
             />
           </Link>
-          <Link className="w-18 h-auto" href="/profile">
-            <Image
-              className="w-full h-full"
-              width={100}
-              height={100}
-              src="/btn-profile.png"
-              alt="home"
-            />
-          </Link>
           <Link className="w-18 h-auto" href="/ranking">
             <Image
               className="w-full h-full"
               width={100}
               height={100}
               src="/btn-ranking.png"
+              alt="home"
+            />
+          </Link>
+          <Link className="w-18 h-auto" href="/profile">
+            <Image
+              className="w-full h-full"
+              width={100}
+              height={100}
+              src="/btn-profile.png"
               alt="home"
             />
           </Link>
