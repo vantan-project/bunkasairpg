@@ -17,10 +17,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-// TODO: 図鑑ページ
-// - 図鑑の切り替え
-// - ページネーション
-// - 背景をカメラにするかどうか
 export default function () {
   const [category, setCategory] = useState<"monster" | "weapon" | "item">(
     "monster"
