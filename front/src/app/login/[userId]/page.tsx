@@ -14,10 +14,10 @@ export default function Page() {
     authUserLogin({ id: userId })
       .then((res) => {
         Cookies.set("authToken", res.authToken);
-        window.location.href = "/camera";
+        window.location.href = "/";
       })
       .catch(() => {
-        window.location.href = "/guide";
+        window.location.href = "/?notLoggedIn=1";
       });
   }, [userId]);
 

@@ -4,8 +4,8 @@ import { MeWeaponResponse } from "@/api/me-weapon";
 import { createContext, useContext } from "react";
 
 type GlobalContextType = {
-  user: MeIndexResponse;
-  setUser: (user: MeIndexResponse) => void;
+  user: MeIndexResponse & { maxHitPoint: number };
+  setUser: (user: MeIndexResponse & { maxHitPoint: number }) => void;
   weapons: MeWeaponResponse;
   setWeapons: (weapons: MeWeaponResponse) => void;
   items: MeItemResponse;

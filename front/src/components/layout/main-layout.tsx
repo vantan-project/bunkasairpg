@@ -7,6 +7,7 @@ import { GlobalContext } from "@/hooks/use-global-context";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LoadingScreen } from "../shared/loading-screen";
 
 type Props = {
   children: React.ReactNode;
@@ -14,8 +15,13 @@ type Props = {
 
 export function MainLayout({ children }: Props) {
   const pathname = usePathname();
-  const allowedPaths = ["/admin", "/login", "/guide"];
-  if (allowedPaths.some((path) => pathname.startsWith(path))) {
+  const allowedPaths = ["/admin", "/login"];
+  if (
+    pathname === "/" ||
+    allowedPaths.some(
+      (path) => pathname === path || pathname.startsWith(path + "/")
+    )
+  ) {
     return (
       <HeroUIProvider>
         <ToastProvider placement="top-center" />
@@ -24,18 +30,9 @@ export function MainLayout({ children }: Props) {
     );
   }
 
-  const [user, _setUser] = useState<MeIndexResponse>();
-  const setUser = (user: MeIndexResponse) => {
-    _setUser(user);
-  };
-  const [weapons, _setWeapons] = useState<MeWeaponResponse>();
-  const setWeapons = (weapons: MeWeaponResponse) => {
-    _setWeapons(weapons);
-  };
-  const [items, _setItems] = useState<MeItemResponse>();
-  const setItems = (items: MeItemResponse) => {
-    _setItems(items);
-  };
+  const [user, setUser] = useState<MeIndexResponse & { maxHitPoint: number }>();
+  const [weapons, setWeapons] = useState<MeWeaponResponse>();
+  const [items, setItems] = useState<MeItemResponse>();
   const router = useRouter();
 
   useEffect(() => {
@@ -43,7 +40,7 @@ export function MainLayout({ children }: Props) {
       try {
         await Promise.all([
           meIndex().then((user) => {
-            if (user) setUser(user);
+            if (user) setUser({ ...user, maxHitPoint: user.hitPoint });
           }),
           meWeapon().then((weapons) => {
             if (weapons) setWeapons(weapons);
@@ -54,7 +51,7 @@ export function MainLayout({ children }: Props) {
         ]);
       } catch (err) {
         console.warn(err);
-        router.push("/guide");
+        router.push("/?notLoggedIn=1");
       }
     };
 
@@ -62,11 +59,7 @@ export function MainLayout({ children }: Props) {
   }, []);
 
   if (!user || !weapons || !items) {
-    return (
-      <div className="h-screen flex justify-center items-center text-4xl">
-        Loading...
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

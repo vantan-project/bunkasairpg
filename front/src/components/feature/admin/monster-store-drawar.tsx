@@ -81,27 +81,23 @@ export function MonsterStoreDrawer({
     { value: 0.8, label: "" },
     { value: 0.9, label: "" },
     { value: 1.0, label: "無効\n0%" },
-    { value: 1.1, label: "" },
-    { value: 1.2, label: "" },
-    { value: 1.3, label: "" },
-    { value: 1.4, label: "" },
-    { value: 1.5, label: "吸収\n50%" },
-    { value: 1.6, label: "" },
-    { value: 1.7, label: "" },
-    { value: 1.8, label: "" },
-    { value: 1.9, label: "" },
-    { value: 2.0, label: "吸収\n100%" },
   ];
 
-  const resistanceFields: {
+  const physicsFields: {
     label: string;
     color: SliderProps["color"];
-    value: PhysicsType | ElementType;
+    value: PhysicsType | "neutral";
   }[] = [
     { label: "斬撃耐性", color: "foreground", value: "slash" },
     { label: "打撃耐性", color: "foreground", value: "blow" },
     { label: "射撃耐性", color: "foreground", value: "shoot" },
     { label: "無属性耐性", color: "foreground", value: "neutral" },
+  ];
+  const elementFields: {
+    label: string;
+    color: SliderProps["color"];
+    value: ElementType;
+  }[] = [
     { label: "炎属性耐性", color: "danger", value: "flame" },
     { label: "水属性耐性", color: "primary", value: "water" },
     { label: "木属性耐性", color: "success", value: "wood" },
@@ -253,8 +249,36 @@ export function MonsterStoreDrawer({
                     />
                   </div>
                 </div>
-                <div className="flex flex-col gap-12 px-2">
-                  {resistanceFields.map((field) => (
+                <div className="flex flex-col gap-14 px-3">
+                  {physicsFields.map((field) => (
+                    <div key={field.label}>
+                      <Slider
+                        label={field.label}
+                        color={field.color}
+                        formatOptions={{ style: "percent" }}
+                        maxValue={1.0}
+                        minValue={-1.0}
+                        showSteps={true}
+                        step={0.1}
+                        marks={sliderMarks}
+                        classNames={{
+                          mark: "!whitespace-pre !break-normal",
+                        }}
+                        value={watch(field.value)}
+                        onChange={(v) => {
+                          if (Array.isArray(v)) {
+                            setValue(field.value, v[0]);
+                          } else {
+                            setValue(field.value, v);
+                          }
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="h-14" />
+                <div className="flex flex-col gap-14 px-3">
+                  {elementFields.map((field) => (
                     <div key={field.label}>
                       <Slider
                         label={field.label}
@@ -264,9 +288,21 @@ export function MonsterStoreDrawer({
                         minValue={-1.0}
                         showSteps={true}
                         step={0.1}
-                        marks={sliderMarks}
+                        marks={[
+                          ...sliderMarks,
+                          { value: 1.1, label: "" },
+                          { value: 1.2, label: "" },
+                          { value: 1.3, label: "" },
+                          { value: 1.4, label: "" },
+                          { value: 1.5, label: "吸収\n50%" },
+                          { value: 1.6, label: "" },
+                          { value: 1.7, label: "" },
+                          { value: 1.8, label: "" },
+                          { value: 1.9, label: "" },
+                          { value: 2.0, label: "吸収\n100%" },
+                        ]}
                         classNames={{
-                          mark: "!whitespace-pre-line",
+                          mark: "!whitespace-pre !break-normal",
                         }}
                         value={watch(field.value)}
                         onChange={(v) => {

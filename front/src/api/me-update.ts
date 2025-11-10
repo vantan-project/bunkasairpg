@@ -5,7 +5,6 @@ export type MeUpdateRequest = {
   name?: string;
   imageFile?: File | null;
   level?: number;
-  maxHitPoint?: number;
   hitPoint?: number;
   experiencePoint?: number;
   weaponId?: number;
@@ -21,13 +20,14 @@ export function meUpdate(req: MeUpdateRequest): Promise<MeUpdateResponse> {
   const authToken = Cookie.get("authToken");
 
   return axios
-    .patch<MeUpdateResponse>(apiUrl, req, {
+    .post<MeUpdateResponse>(apiUrl, req, {
       headers: {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "multipart/form-data",
       },
     })
     .then((res) => {
+      console.log(res);
       return res.data;
     })
     .catch((err) => {
