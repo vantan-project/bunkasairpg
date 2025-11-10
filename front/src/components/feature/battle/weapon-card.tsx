@@ -4,6 +4,7 @@ import { MeWeapon } from "./weapon-drawer";
 import { assetGradation } from "@/utils/asset-gradation";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
 import { useGlobalContext } from "@/hooks/use-global-context";
+import { motion } from "framer-motion";
 
 type Props = {
   weapon: MeWeapon;
@@ -48,9 +49,26 @@ export function WeaponCard({ weapon }: Props) {
         </div>
       </div>
 
-      <div className="h-full flex flex-col justify-between">
-        <div className="text-white text-lg font-bold">
-          <p>{weapon.name}</p>
+      <div className="h-full flex flex-col justify-between overflow-hidden">
+        <div className="w-full overflow-hidden">
+          <motion.div
+            className="flex whitespace-nowrap font-bold text-lg"
+            style={{ display: "inline-flex" }}
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 10,
+                ease: "linear",
+              },
+            }}
+          >
+            <span className="pr-12">{weapon.name}</span>
+            <span className="pr-12">{weapon.name}</span>
+            <span className="pr-12">{weapon.name}</span>
+            <span className="pr-12">{weapon.name}</span>
+          </motion.div>
         </div>
         {[
           {
@@ -78,7 +96,7 @@ export function WeaponCard({ weapon }: Props) {
             )}
           >
             <p className="text-[#bababa] text-sm pb-0.5">{label}</p>
-            <p className="text-lg">{value}</p>
+            <p className="text-base">{value}</p>
           </div>
         ))}
       </div>
