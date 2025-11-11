@@ -133,6 +133,105 @@ class ProdMonsterSeeder extends Seeder
           ]
         ],
         [
+          "id" => 14,
+          "name" => "スラッシュアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/rt1O4b4YtJ6kCvL1vEDIaHGu5e2ZLTbpEBGvRIpf.png",
+          "index_number" => "011",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "slash",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 15,
+          "name" => "ブロウアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/3mmrxG8b4kWQBJ5gfyMX6HSRO3I05igCutzp8hjy.png",
+          "index_number" => "021",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "blow",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 16,
+          "name" => "シュートアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/ON2Rs3Dn8tTq1hb0q4uxQHaGPpDVhcJ779XEwASY.png",
+          "index_number" => "031",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "shoot",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 17,
+          "name" => "ニュートラルアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/MdtvGwHqnbIJ5CGQO3gD9g7kbSG60PyLkM3DM47q.png",
+          "index_number" => "041",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "neutral",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 18,
+          "name" => "フレイムアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/lrPeLGOMg5FuLGnj8WxkU57XYBnWGBv2IPs5Vp7D.png",
+          "index_number" => "051",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "flame",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 19,
+          "name" => "ウォーターアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/FgqzUsbTxC2esh9bTLyMpNa1bXq72H3LG827OgOL.png",
+          "index_number" => "061",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "water",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 20,
+          "name" => "ウッドアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/UKABzAMVLkfoO2uGLdxd3eZ1bpOwfDVKvKHLwlKR.png",
+          "index_number" => "071",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "wood",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 21,
+          "name" => "シャインアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/pHHIu8lOamBuV1UI6piwsLGCirGcSwur5oDRhzI2.png",
+          "index_number" => "081",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "shine",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 22,
+          "name" => "ダークアッパー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/gvPGxGwgaRdKmoJxvVjllarOsdtyEZAuBTmki4T0.png",
+          "index_number" => "091",
+          "effect_type" => "buff",
+          "buff" => [
+            "target" => "dark",
+            "rate" => 0.6
+          ]
+        ],
+        [
           "id" => 23,
           "name" => "スラッシュダウナー",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/63w6Q9sky21e4e2uSFz67qCUChxvbYmxa83JfMWV.png",
