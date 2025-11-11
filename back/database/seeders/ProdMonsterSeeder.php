@@ -132,6 +132,105 @@ class ProdMonsterSeeder extends Seeder
             "rate" => 0.3
           ]
         ],
+        [
+          "id" => 23,
+          "name" => "スラッシュダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/63w6Q9sky21e4e2uSFz67qCUChxvbYmxa83JfMWV.png",
+          "index_number" => "100",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "slash",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 24,
+          "name" => "ブロウダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/wlSI0KJK3PKReauUFpcb89okI2bnkzrPeNbxLekl.png",
+          "index_number" => "110",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "blow",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 25,
+          "name" => "シュートダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/mx8J3OSglP6T9ZiTVYpJx2xWFDbgEmnAOi6B0OV6.png",
+          "index_number" => "120",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "shoot",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 26,
+          "name" => "ニュートラルダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/4NHM4J3rfDKQhsPxh8LG5JJTdJ7QTlJ0qjHc7JAC.png",
+          "index_number" => "130",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "neutral",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 27,
+          "name" => "フレイムダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/n2p2Rhse4NF99eqlLHXHfIdNPlSpjW1Mo8rFax0K.png",
+          "index_number" => "140",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "flame",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 28,
+          "name" => "ウォーターダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/AqeCBHjGOBf056usvpHonQVBTnWGioTrSv4GXtTO.png",
+          "index_number" => "150",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "water",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 29,
+          "name" => "ウッドダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/7JeHeHTiurX1B0FXE7FHCDVWIJr5xc5GazLFhQv8.png",
+          "index_number" => "160",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "wood",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 30,
+          "name" => "シャインダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/ce5sz16BU1JKo0yvS82X7XIeg9XE1BcDQm6yG1Jp.png",
+          "index_number" => "170",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "shine",
+            "rate" => 0.3
+          ]
+        ],
+        [
+          "id" => 31,
+          "name" => "ダークダウナー",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/mg6LudiIIb8EYTAjXf9EtDjHTZV2Lm5fbTETfeKG.png",
+          "index_number" => "180",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "dark",
+            "rate" => 0.3
+          ]
+        ],
       ];
       foreach ($items as $itemData) {
         $item = Item::create([

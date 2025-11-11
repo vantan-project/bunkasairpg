@@ -42,6 +42,16 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/YRBGLNRIjVBAMAG3EHCIyBHsaTrbm0lWMNyU2u1n.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/VcQrEmZDhze9gC6Lv6wpWoO2ZCHjMgoZF5FTBVyQ.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/m6Y0u7efE0zp8pDJbx3IzrgBYDy96LTzIyweZMcI.png",
+      // デバフ
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/63w6Q9sky21e4e2uSFz67qCUChxvbYmxa83JfMWV.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/wlSI0KJK3PKReauUFpcb89okI2bnkzrPeNbxLekl.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/mx8J3OSglP6T9ZiTVYpJx2xWFDbgEmnAOi6B0OV6.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/4NHM4J3rfDKQhsPxh8LG5JJTdJ7QTlJ0qjHc7JAC.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/n2p2Rhse4NF99eqlLHXHfIdNPlSpjW1Mo8rFax0K.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/AqeCBHjGOBf056usvpHonQVBTnWGioTrSv4GXtTO.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/7JeHeHTiurX1B0FXE7FHCDVWIJr5xc5GazLFhQv8.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/ce5sz16BU1JKo0yvS82X7XIeg9XE1BcDQm6yG1Jp.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/mg6LudiIIb8EYTAjXf9EtDjHTZV2Lm5fbTETfeKG.png",
 
       // スライム
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/SCLq6q85F2PEC3qBAvOiVaP7UogUNiw4taT7cVNE.png",
