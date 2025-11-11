@@ -107,6 +107,13 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/Ez7GMvNrJwFJQ1gvqOgO58ZYFzfItXM8NtneabUn.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/OVgUPMcGi5GijZWFF2yjiCXyXNaDi9YGOZbexjgX.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/NgAWTw8TFO57BIx6TUBma8nvoWibbqG6vn5Q0kvq.png",
+      // ウィザード
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/eC8Yj7H5kUuS8flJhsUGuZzMBVFOAeINP2paeehC.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/3xiG7WMSxiKrNNj6YGm723GUkn42w2PZWIIJpquB.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/LH4xZk8PHZEkRgswnORcvwoBmZpn3Vwocfj8xi5U.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/2sG32fjWGoyuFZ7YM5WOz51bRo4NYpEdyOF6x0zN.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/jf54fvzECaITiUJLyXY6ZqwrifiLLAXOBx1Z9B9F.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/3iFDAJ4mKtoIIcxOCSaVubmKAPMqzSoAWuK5nOzn.png",
       // スカル
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/2evhp330Mmi9LaYtXadCXCEvRuVsxsokVTecEwQs.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/0rz3vH57uC05ps4NmCfWzwrNiKR6DMkbiUbEvdfg.png",
