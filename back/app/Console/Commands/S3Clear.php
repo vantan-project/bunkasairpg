@@ -133,7 +133,13 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/18nDTaQ7Tl6zBqVzeEoScpaMbFRwsD2YdEmvVyyF.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/2pxFhlDmfiRUvZhtlPO4YIdURqxhHl3Tb8mLYU7h.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/jPN6cEc3ZcezTDr2OdFCarvVwb13YOjSigH6v7Vf.png",
-
+      // クラブ
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/ZM8gi7ZIL5Co4lyQTPDCdPY5fxOGfzg5uyaijUWz.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/IAEz9KwyKz947uuQFBEmKZGvexNclZUh875l68QZ.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/6P70BPa3GmI1hItoP5r03BcBc08s4As0XEdCuAeb.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/N4PTvR5DjkSBdKvfdnpT91NL2CIN5nidLsjF6B67.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/YU7WdgwaaZzctWLbr1o82JLV5NkhZcjLnD3W5hcm.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/qwN22Cgnm1CzDi7npGIaBrJD9e40MKZ7BCeUzXnD.png"      
     ];
 
     $targets = [
