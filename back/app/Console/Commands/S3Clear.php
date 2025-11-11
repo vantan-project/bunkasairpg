@@ -127,6 +127,13 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/8VMwbIw4xmX3YZJHeiYgRvEcEVoqTdtueRh43Wcn.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/h24bPjEjxchJmFi1qCAK2X9rGXrGy0XacBe1D7sh.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/w8dA31Iqc1BvNqObgYyAYX67gQZ7dXBYYk3VyF7f.png",
+      // シャークマン
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/kcnoksrkjkTc4lGcS3DKJNvl5cpaJnXdrfedrVoK.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/zYZ2mb61ZkVrIwjdIFWSbwOINAwciG24Dx2maPUV.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/18nDTaQ7Tl6zBqVzeEoScpaMbFRwsD2YdEmvVyyF.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/2pxFhlDmfiRUvZhtlPO4YIdURqxhHl3Tb8mLYU7h.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/jPN6cEc3ZcezTDr2OdFCarvVwb13YOjSigH6v7Vf.png",
+
     ];
 
     $targets = [
