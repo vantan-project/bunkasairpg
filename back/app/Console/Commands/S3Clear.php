@@ -154,7 +154,12 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/vWffcasSZesfHuzT8wW9ykmCGAd5TzmOSCEk1LWd.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/zSbivCzcHZfrZLsxCDHWpElFK6EWoslA0hasMuLH.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/8FlFOiBltOiG91fdfjE6pArogfl9YMWjuV4rQnjq.png",
-      // ガンイノセント 
+      // イノセント ガン 
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/DC8N6NnkTWtQbzlg3pVxsgAc8lgIAGtllwH2jMkF.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/B4UMKH0F0basevYxVjRUCsBiLAr02wnLWvcpj7ZG.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/nvuFOAe7ZN7sQE66dUyF9ldopOodCFdVgBb4U1jF.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/FtUjVRkcu9DRfE38ZoXvta8DPA5EgHMydoCdZVit.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/8633BBMk7vvanICwxYNOf9FtSXALq9h3m2wdPWHd.png",
     ];
 
     $targets = [
