@@ -165,7 +165,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         type: "weapon",
         physicsType: monster.weapon.physicsType,
         elementType: monster.weapon.elementType,
-        imageUrl: monster.imageUrl,
+        imageUrl: monster.weapon.imageUrl,
       };
       setWeapons([...weapons, monster.weapon]);
     }
@@ -173,7 +173,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
       drop = {
         type: "item",
         effectType: monster.item.effectType,
-        imageUrl: monster.imageUrl,
+        imageUrl: monster.item.imageUrl,
       };
       setItems(
         items.some((item) => item.id === monster.item!.id)

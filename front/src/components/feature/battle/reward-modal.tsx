@@ -138,7 +138,7 @@ function createExpBarAnimation(
       scaleX,
     },
     transition: {
-      duration: scaleX.length / 2,
+      duration: scaleX.length / 15,
       times,
       ease,
     },
