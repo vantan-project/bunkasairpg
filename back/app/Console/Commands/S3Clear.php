@@ -137,6 +137,102 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/8VMwbIw4xmX3YZJHeiYgRvEcEVoqTdtueRh43Wcn.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/h24bPjEjxchJmFi1qCAK2X9rGXrGy0XacBe1D7sh.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/w8dA31Iqc1BvNqObgYyAYX67gQZ7dXBYYk3VyF7f.png",
+      // START: kaito
+      // ガンロボ
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/KDWUte1ZimktbnFibbvajindaAQs7p73LwKzpXcc.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/V1vpJiVgXxI95eqI99FqbhBFma8LpnEILQLcVmbc.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/cTOEhfCnbGI1r3kLfk07CgwiXaosD0JSBbE2l0UG.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/HICl0qAW4DooK3IY9tnvcOetB5JztPQkhDR0PzeE.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/lXZHkZDQTe4XfzQbJvPOaXEW57XQsIdvAn493Pgm.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/URfPxlQYkPxL3ybQ6PeHZqE3RCecIkChzzie1hKD.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/4Ytp1ziUx1DXpUfsHgCRNJUSFiXtQIeRqgSmXu7P.png",
+      // カマキリ（モンスター）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/MGyrado4Ne3169RLT5H7nT65Zu2t2kUXiIqXBcvb.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/cIv6b38R6zOskqi3HCILDQ7GGveJF9WBctr23kVE.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/WGiKKoYHgsaorlDcRzctm6HIJEnlp3x4p7EBGvam.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/dCPyRafjd7RFMj8oaxmi6VY0VZ8kO4aVJeKxOZYm.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/LEeHWo23Q0469388p8hjYIuS1yeYZj3S5YHszC75.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/1vC713lXxeFhJ3kWDXx2iHroV4tnA5XsmPQL9OEQ.png",
+      // カマキリ 双剣
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/uMrfTCtV7Hza5YKszMaEBPLLcQCujbnsrTmFEkTz.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/cCY3dCUcdTeE23EGwt9YBi7W2RynFnldGjN8KpdU.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/Iyx0p4hmSCpECEMycMZJQz7iOzjmQAZ0R1EHeyB7.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/Ag6VpCe8bhNPBjPLd6DG5rJccuSltFtwZV4OZerq.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/3KoqgXpIQhoKKStAi7UxBohADR6jq9UVBqvIvu1U.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/tFqe99NfV6VBJyZUdqJuHenVBlR84ZVBnUOm2NOh.png",
+      // ロボット（武器）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/kKD5geOVbm1D2GgaEBplyaV00vSKOUD4T7kYjpLc.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/dW66bJNPvOnNF9pDxMuQYLa6u1hVgIlPnfRnnGDs.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/esDuRE6BI5CRDpsxOLTrSJ42JzoRg6njNCAp3XIM.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/OLGYtHYMAgc2S6lNeLirBkayfUMlE9zrVaA4RFaX.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/PNfa0nLpVcWzHGDalfRBDSiuExsxamimhJAMupmy.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/5wqVKXh48t3TduNQ8OSvj9aYJAjZpOTxc0t6liWz.png",
+
+      // ドラゴンナイト（武器）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/xaNsSQZs5zW25r5Pvjjg9xSJM9zat77Y44zf6Q1P.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/PH035Sl4AFOwt2APK2LtsmFVrFbNqF2jHaOC2MYE.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/Ysw5S1GdeyQaEZjgSPChhk2f4hGaJc5i7X2lVt5o.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/ZBP9IDPWD3rBlrMZyKjub5nM1lqkV5yEksi6mcVc.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/1Ry1C4NCyNhWdwql8Gr8ytG3g9wcOYhnRwOb2y4l.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/6pnSPw6sZsAKITSRBBTluVrnbE2oa5Ah9LOG0EJS.png",
+
+      // ドラゴン（武器）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/qdRdR7ZnRIO1lfrbZJSGeMLs2n5prVWMN93yKoN5.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/jJMBfITbTReWV8MPtAOsD3CYeucTbtj05iRv30lj.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/wxiykeIGEVrxaFf8PAY0FizXYFTH1X6t2gb3evWk.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/AqYQCAsNCPKCpvyhWVZxRLL650d3tsBbUsfMWu4Q.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/mIPLEP1Mv0CFZQdSz5ugCn0ojAUzfXzw3oOMCTYZ.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/93yZuyXehJyb9pA50xiXT1jSYJcbNk6dgUReUSsp.png",
+
+      // ドラゴンナイト（モンスター）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/jozTzH6btyE3sPlcnFFpF3jfMS5I20DoeXKQ79BU.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/LMxQOQjRS22PuGBMyhugsGV8Ir6UwhnnmXElhkOf.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/HzG1inwzr1NC8a4fWLBJNgNT5LYNjCfQHlrl5Qtz.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/KUdBguo8uq7SisxacNLjBMTEtwwNZYgw0phRbhJb.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/SJBhDDoTd3E2QfQiW6wIfCTPYQtkZ9MGfTPVeJRg.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/WeomH2CRgmJySPbZy2ujg8KfrjheQm40wHA45Utc.png",
+
+      // ゴーレム（武器）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/UYLmQXWnkdKdMG5bkkLs7CuJvp2F6oaAne9MhrqC.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/fgGYRTce1LKOxBitXpUdnXzsPPRFDwnOhcLzKEf7.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/dkBZSmWPZLw923srMxnVBV9d7ughLG7h3kkA401g.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/r0cEXzXFGp3ZlQ07eKcJwZAROthy9VmcbLijuH4A.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/uGhJgkfYyffdxLTU9xk5o0l7vNREcUf4Z3CdzFZ7.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/xxziASeRfOFGfDBk3QL3eiUlgI6qYXZGNKBZt5Mw.png",
+
+      // サイクロプス（武器）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/1PK54iPbkLuZAnAVa6Zc6MKcjBnXf9Cvm5VF8Hbe.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/Q90wAEAObaZPDcTzY95A3gsekjqoYGooNbbzdNc4.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/Z7y4mgiedPHwaoq4H4gplTxDFrWbdDivAUwW87PP.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/DDSLxZ4m70EfTDruVHPgiqyj8CMwSYXr0Rd3LrYB.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/IJhT1JlZ86R3pJlJIzAhIkf1Wn9uv0gscp3A9Xob.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/weapon_images/zx9pdw6yTXZPK7x722QSS406B7pRHUvlq3B1lqDj.png",
+
+      // ドラゴン（モンスター）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/0qaKSzoPv85IRrWLiYcVydRogUktsis8ge7qzCsw.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/BR3Wazf7l408824A7Qf9klD6YholMxi59w2jd81K.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/uB4VC4D3FLWqambudYEfZ5vurv63IeaCVCkqJoOL.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/EfolQPLcUBbHse0bar6TfkuGIlzDm7mNlf2EgE1U.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/tUriwuZQ8PVgNqIQTEJgScDfCODaYpbpCRKs4RPy.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/eDo31eVAj4ga8lcx73UUuMx2JN1rfu40aTuDBjsh.png",
+
+      // サイクロプス（モンスター）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/jjFBH0ewFD5Jq6mzxODImZVbeBwc6ru0qjhawhd0.jpg",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/NF2xYVBpiTxEOuR0ROFYZnVvI20wRK7kLCSxd1hu.jpg",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/1lXgD480v5fzpw6qJqqoRrOFUfnh0qNEvBgrRpiC.jpg",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/0CxSadcctWE0C9PKDbzpjEY1SU7KyOmMaDRSYDdW.jpg",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/Dd0WqOzO4RNcwXrhdxQMXz5rFaKzqipXtOkxHwDX.jpg",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/SW8Vj5TlinptyTLQqg4J63hM1UEmAfZXIr2ZuW73.jpg",
+
+      // ゴーレム（モンスター）
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/gZyIDNtTzMhYPZudhj8Ls2BZK3ADLdkcfxSB1whJ.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/1cxHOTXZ98ra7DIn5bGw55V0QmRNhbwwHfME8ALa.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/VdaVdaAdwuW3NvNYoEMK6wrHMvMeSR3xKhZmMeTf.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/biMq2J8JY2drMLDsuoSWSbhTtbJKxF3ffoOjAApx.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/vAZLSOdzFZ2hRRJDsfwBi8YketjT96VcY6flNrod.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/L5cqWmLQUoV5a10mgMSH5MoHbBBZa6AXmyxzCidK.png",
+      // END: kaito
+
       // シャークマン
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/kcnoksrkjkTc4lGcS3DKJNvl5cpaJnXdrfedrVoK.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/zYZ2mb61ZkVrIwjdIFWSbwOINAwciG24Dx2maPUV.png",
