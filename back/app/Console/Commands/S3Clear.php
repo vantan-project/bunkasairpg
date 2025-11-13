@@ -183,6 +183,11 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/O9P1lAiyFCAhg5iFCfWlUYhxV4ERFhes6CwcrY98.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/RZWidVDZy7rSj6fFPn41NY2R3Y3aHet3aVTthXiZ.png",
       // オートマター
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/Qkqrrm6WhCj9pjhp1PuTWTgSglmTH7kqnCibhbC7.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/yi51maARvGAApkQIWtKJEr1Jd0XSTQjGxAdPnR6f.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/81osYyliza8gXg8oQD93q0UlZMCXnmlwD3M3l0fP.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/iTfTzGawX5u8S2gh6iWbqtCJa3heXR18CeuxzQAU.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/P6bluU8tkCNyHjomWVU37Wp3RloxwbrQkicji33S.png",
     ];
 
     $targets = [
