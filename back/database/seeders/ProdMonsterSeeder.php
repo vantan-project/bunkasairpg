@@ -340,6 +340,105 @@ class ProdMonsterSeeder extends Seeder
             "rate" => 0.3
           ]
         ],
+        [
+          "id" => 32,
+          "name" => "スラッシュダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/HUYO7eOJCxaGPKiLIig7N8J8PLAoSVkI786FlX7B.png",
+          "index_number" => "101",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "slash",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 33,
+          "name" => "ブロウダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/1QLlhaMsEg5QvA4MMsVZ9xTfZhIW2bsSYqqfeUfP.png",
+          "index_number" => "111",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "blow",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 34,
+          "name" => "シュートダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/0x4rvV1ThaNbLWrUGjtnXwLcm2z3AZJgD8Y1poL5.png",
+          "index_number" => "121",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "shoot",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 35,
+          "name" => "ニュートラルダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/f8LyXUdUvSSETdyEQuv9qyunf8LCLXsyxOmzO5j2.png",
+          "index_number" => "131",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "neutral",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 36,
+          "name" => "フレイムダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/aAb2XVcPI04ov0MEzcGkHUKsSJReq2zEGSuzc5ml.png",
+          "index_number" => "141",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "flame",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 37,
+          "name" => "ウォーターダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/RTQpZjZ3KkMDcWwZj9ZlB9WtWzhgf4oKpf9JLlRS.png",
+          "index_number" => "151",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "water",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 38,
+          "name" => "ウッドダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/VZRYMKGx9FZsMJCGJGBz840XLVyT2Cir3AcmBMmh.png",
+          "index_number" => "161",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "wood",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 39,
+          "name" => "シャインダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/HLzsjMIqEAawG5ovXAvnch9R9fxKSIuS5eQOiGxD.png",
+          "index_number" => "171",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "shine",
+            "rate" => 0.6
+          ]
+        ],
+        [
+          "id" => 40,
+          "name" => "ダークダウナー＋",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/ZTDuJVytfQ79yvYJirg7DFVVFhw0uhNS5aVP9Px4.png",
+          "index_number" => "181",
+          "effect_type" => "debuff",
+          "debuff" => [
+            "target" => "dark",
+            "rate" => 0.6
+          ]
+        ],
       ];
       foreach ($items as $itemData) {
         $item = Item::create([
@@ -1803,7 +1902,7 @@ class ProdMonsterSeeder extends Seeder
           "name" => "ブレイズイノセント ガン",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/DC8N6NnkTWtQbzlg3pVxsgAc8lgIAGtllwH2jMkF.png",
           "index_number" => "131",
-          "attack" => 200,
+          "attack" => 280,
           "hit_point" => 1,
           "experience_point" => 275,
           "slash" => -0.5,
@@ -1823,7 +1922,7 @@ class ProdMonsterSeeder extends Seeder
           "name" => "アクアイノセント ガン",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/B4UMKH0F0basevYxVjRUCsBiLAr02wnLWvcpj7ZG.png",
           "index_number" => "132",
-          "attack" => 200,
+          "attack" => 280,
           "hit_point" => 1,
           "experience_point" => 275,
           "slash" => -0.5,
@@ -1843,7 +1942,7 @@ class ProdMonsterSeeder extends Seeder
           "name" => "リーフイノセント ガン",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/nvuFOAe7ZN7sQE66dUyF9ldopOodCFdVgBb4U1jF.png",
           "index_number" => "133",
-          "attack" => 200,
+          "attack" => 280,
           "hit_point" => 1,
           "experience_point" => 275,
           "slash" => -0.5,
@@ -1863,7 +1962,7 @@ class ProdMonsterSeeder extends Seeder
           "name" => "グロウイノセント ガン",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/FtUjVRkcu9DRfE38ZoXvta8DPA5EgHMydoCdZVit.png",
           "index_number" => "134",
-          "attack" => 200,
+          "attack" => 280,
           "hit_point" => 1,
           "experience_point" => 275,
           "slash" => -0.5,
@@ -1883,7 +1982,7 @@ class ProdMonsterSeeder extends Seeder
           "name" => "ダークイノセント ガン",
           "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/8633BBMk7vvanICwxYNOf9FtSXALq9h3m2wdPWHd.png",
           "index_number" => "135",
-          "attack" => 200,
+          "attack" => 280,
           "hit_point" => 1,
           "experience_point" => 275,
           "slash" => -0.5,
@@ -1896,6 +1995,126 @@ class ProdMonsterSeeder extends Seeder
           "shine" => -0.2,
           "dark" => 1.0,
           "item_id" => 2,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "07826f63-bee5-41e0-9b55-edec75336b27",
+          "name" => "ニルクラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/hhCJYoiOyhOlkN2SgWEemQ6piuJP5hFlN8QNqbKd.png",
+          "index_number" => "140",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => -0.5,
+          "flame" => 0.0,
+          "water" => 1.5,
+          "wood" => 0.0,
+          "shine" => 0.0,
+          "dark" => 0.0,
+          "item_id" => 35,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "fff8ef8c-04ba-464d-9d9b-7ffdae99a39c",
+          "name" => "ブレイズクラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/TeY4MrGunXjdwim7bi5xw0uXEt8hSQNq6MfTf4e8.png",
+          "index_number" => "141",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => 0.0,
+          "flame" => 1.2,
+          "water" => 1.2,
+          "wood" => 0.0,
+          "shine" => 0.0,
+          "dark" => 0.0,
+          "item_id" => 36,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "bcb6095b-26b8-4981-ba98-80f228026b3c",
+          "name" => "アクアクラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/XGLK6ja9WZH7d0Yt6w7n7qCTID5wOMtt50HNJued.png",
+          "index_number" => "142",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => 0.0,
+          "flame" => 0.0,
+          "water" => 1.5,
+          "wood" => -0.5,
+          "shine" => 0.0,
+          "dark" => 0.0,
+          "item_id" => 37,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "90da34fc-6e14-46ab-98f9-8c9da0ac9848",
+          "name" => "リーフクラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/L6uwq50iM3ejPt1IPnbFYnzXwwWHHjRnrAdDnS2e.png",
+          "index_number" => "143",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => 0.0,
+          "flame" => -0.5,
+          "water" => 1.5,
+          "wood" => 1.2,
+          "shine" => 0.0,
+          "dark" => 0.0,
+          "item_id" => 38,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "d0b3c997-24ca-4ceb-b1df-4f87672ba47b",
+          "name" => "グロウクラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/8rFoFkSUP3xoj8V2xVVXXlSRZ78whsEtyWiDMtnT.png",
+          "index_number" => "144",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => 0.0,
+          "flame" => 0.0,
+          "water" => 1.5,
+          "wood" => 0.0,
+          "shine" => 1.2,
+          "dark" => -0.5,
+          "item_id" => 39,
+          "weapon_id" => null,
+        ],
+        [
+          "id" => "6cbff96c-4777-4928-8779-a7acd56b8557",
+          "name" => "ダーククラーケン",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/uic5vgGvDBQ61aygadzow2MMRma4EdXZpscEv3KO.png",
+          "index_number" => "145",
+          "attack" => 240,
+          "hit_point" => 1,
+          "experience_point" => 385,
+          "slash" => -0.5,
+          "blow" => 1.0,
+          "shoot" => -0.5,
+          "neutral" => 0.0,
+          "flame" => 0.0,
+          "water" => 1.5,
+          "wood" => 0.0,
+          "shine" => -0.5,
+          "dark" => 1.2,
+          "item_id" => 40,
           "weapon_id" => null,
         ],
       ]);
