@@ -3,6 +3,7 @@ import { EffectType } from "@/types/effect-type";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import { assetGradation } from "@/utils/asset-gradation";
+import { playSound } from "@/utils/play-sound/play-sound";
 import clsx from "clsx";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -33,12 +34,14 @@ export function TreasureBoxButton({ drop }: Props) {
     const openTimer = setTimeout(() => {
       setShowClosedBox(false);
       setShowOpenedBox(true);
+      playSound("/sounds/reward-open.mp3");
     }, 1000);
-
+    
     const dropTimer = setTimeout(() => {
       setShowOpenedBox(false);
       setShowDrop(true);
     }, 1500);
+    
 
     return () => {
       clearTimeout(openTimer);

@@ -2,10 +2,12 @@
 
 import { monsterShow } from "@/api/monster-show";
 import { BattleLog, BattlePage } from "@/components/feature/battle/battle-page";
+import { playSound } from "@/utils/play-sound/play-sound";
 import { useGlobalContext } from "@/hooks/use-global-context";
 import { Battle } from "@/utils/battle";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { monsterAttackSound } from "@/utils/play-sound/monster-attack-sound";
 
 export default function Page() {
   const [battle, setBattle] = useState<Battle | null>(null);
@@ -38,13 +40,13 @@ export default function Page() {
         const logs: BattleLog[] = [
           {
             message: `${monster.name}の\n攻撃！`,
-            action: () => {},
+            action: () => { monsterAttackSound({ takeDamage: takeDamageData.damage }) },
           },
         ];
         if (takeDamageData.damage === 0) {
           logs.push({
             message: `${monster.name}はダメージを与えられなかった！`,
-            action: () => {},
+            action: () => { },
           });
         } else {
           logs.push({
@@ -55,6 +57,7 @@ export default function Page() {
                   status: "command",
                   action: null,
                 });
+                playSound("/sounds/monster-down.mp3");
               }
               setUser({ ...user, hitPoint: takeDamageData.userHitPoint });
             },

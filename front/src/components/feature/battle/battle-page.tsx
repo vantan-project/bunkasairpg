@@ -25,6 +25,13 @@ import { hpBgColor } from "@/utils/hp-bg-color";
 import { MeItemResponse } from "@/api/me-item";
 import { BgCamera } from "@/components/shared/bg-camera";
 import { meClearBoss } from "@/api/me-clear-boss";
+import { playAttackSound } from "../../../utils/play-sound/play-attack-sound";
+import { playSound } from "../../../utils/play-sound/play-sound";
+import { useItemSound } from "@/utils/play-sound/use-item-sound";
+import { EffectMode, changeAttackEffect } from "@/utils/change-effect/change-attack-effect";
+import { AttackEffect } from "./attack-effect";
+import { changeUseItemEffect } from "@/utils/change-effect/change-use-item-effect";
+import { UseItemEffect } from "./use-item-effect";
 
 export type BattlePhase =
   | { status: "first"; action: null | "weapon" | "item" }
@@ -63,6 +70,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
   const [battleQueue, setBattleQueue] = useState<BattleLog[]>([]);
   const [isStandBy, setIsStandBy] = useState(false);
   const [isItemUsed, setIsItemUsed] = useState(false);
+  const [effectMode, setEffectMode] = useState<EffectMode>("none");
   const [showAwayModal, setShowAwayModal] = useState(false);
   const [reward, setReward] = useState<{
     restLevel: number;
@@ -81,17 +89,30 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
 
   // 攻撃メソッド
   const handleAttack = () => {
+    const attackData = battle.attack();
     const logs: BattleLog[] = [
       {
         message: `${monster.name}を\n攻撃した！`,
-        action: () => {},
+        action: () => {
+          if (!(
+            attackData.monsterResistance.physics < 0 ||
+            attackData.monsterResistance.element < 0
+          )) {
+            playAttackSound({
+              physicsType: user.weapon.physicsType,
+              attackDamage: attackData.damage,
+            });
+            changeAttackEffect({ setChangeEffect: setEffectMode, attackDamage: attackData.damage });
+          }
+
+        },
       },
     ];
-    const attackData = battle.attack();
+
     if (attackData.damage === 0) {
       logs.push({
         message: "モンスターの防御に\n阻まれた！",
-        action: () => {},
+        action: () => { },
       });
     } else if (attackData.damage < 0) {
       logs.push({
@@ -109,16 +130,23 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
       ) {
         logs.push({
           message: "弱点を突いた！",
-          action: () => {},
+          action: () => {
+            playSound("/sounds/weakness.mp3");
+            changeAttackEffect({ setChangeEffect: setEffectMode, attackDamage: attackData.damage });
+          },
         });
       }
       logs.push({
         message: `${attackData.damage}のダメージを\n与えた！`,
-        action: () =>
+        action: () => {
           setMonster({
             ...monster,
             hitPoint: attackData.monsterHitPoint,
-          }),
+          });
+          if (attackData.monsterHitPoint === 0) {
+            playSound("/sounds/monster-down.mp3");
+          }
+        }
       });
     }
     if (attackData.monsterHitPoint !== 0) {
@@ -150,20 +178,20 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
       setItems(
         items.some((item) => item.id === monster.item!.id)
           ? items.map((item) => {
-              if (item.id !== monster.item!.id) return item;
-              switch (item.effectType) {
-                case "heal":
-                  return { ...item, count: item.count + 1 };
-                case "buff":
-                  return { ...item, count: item.count + 1 };
-                case "debuff":
-                  return { ...item, count: item.count + 1 };
-              }
-            })
+            if (item.id !== monster.item!.id) return item;
+            switch (item.effectType) {
+              case "heal":
+                return { ...item, count: item.count + 1 };
+              case "buff":
+                return { ...item, count: item.count + 1 };
+              case "debuff":
+                return { ...item, count: item.count + 1 };
+            }
+          })
           : [
-              ...items,
-              { ...(monster.item as MeItemResponse[number]), count: 1 },
-            ]
+            ...items,
+            { ...(monster.item as MeItemResponse[number]), count: 1 },
+          ]
       );
     }
     logs.push({
@@ -201,6 +229,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         message: `${weapon.name}を\n装備した！`,
         action: () => {
           setUser({ ...user, weapon: weapon });
+          playSound("/sounds/weapon-change.mp3");
         },
       },
     ];
@@ -220,7 +249,20 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     let logs: BattleLog[] = [
       {
         message: `${item.name}を\n使った！`,
-        action: () => {},
+        action: () => {
+          if (item.effectType === "heal") {
+            useItemSound({
+              effectType: item.effectType,
+              healedAmount: Math.min(
+                item.amount,
+                user.maxHitPoint - user.hitPoint
+              ),
+            });
+          } else {
+            useItemSound({ effectType: item.effectType })
+          };
+          changeUseItemEffect({setChangeEffect: setEffectMode, effectType: item.effectType})
+        }
       },
     ];
     if (item.effectType === "heal") {
@@ -242,19 +284,17 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
     if (item.effectType === "buff") {
       battle.useBuffItem(item);
       logs.push({
-        message: `${user.name}の${
-          ITEM_TARGET_LABEL_MAP[item.target]
-        }火力が${Math.floor(item.rate * 100)}%上昇した!`,
-        action: () => {},
+        message: `${user.name}の${ITEM_TARGET_LABEL_MAP[item.target]
+          }火力が${Math.floor(item.rate * 100)}%上昇した!`,
+        action: () => { },
       });
     }
     if (item.effectType === "debuff") {
       battle.useDebuffItem(item);
       logs.push({
-        message: `${monster.name}の${
-          ITEM_TARGET_LABEL_MAP[item.target]
-        }耐性が$${Math.floor(item.rate * 100)}低下した！`,
-        action: () => {},
+        message: `${monster.name}の${ITEM_TARGET_LABEL_MAP[item.target]
+          }耐性が${Math.floor(item.rate * 100)}%低下した！`,
+        action: () => { },
       });
     }
     return logs;
@@ -272,8 +312,11 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         className={`h-[calc(100vh_-_320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
         style={{ opacity: monster.hitPoint > 0 ? 1 : 0 }}
       >
-        <div className="relative w-[24vh] h-auto aspect-square mb-2">
+        <div className="relative flex justify-center items-center w-[24vh] h-auto aspect-square mb-2">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
+          {["attack", "monsterHeal", "monsterGuard"].includes(effectMode) && (
+            <AttackEffect elementType={user.weapon.elementType} physicsType={user.weapon.physicsType} effectMode={effectMode}/>
+          )}
         </div>
         <div className="w-[70%] bg-white/60 p-3">
           <div className="relative w-full bg-white border border-black h-3 flex items-center ">
@@ -319,7 +362,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                         setBattleQueue([
                           {
                             message: "アイテムがありません。",
-                            action: () => {},
+                            action: () => { },
                           },
                         ]);
                         return;
@@ -334,7 +377,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                         setBattleQueue([
                           {
                             message: "武器がありません。",
-                            action: () => {},
+                            action: () => { },
                           },
                         ]);
                         return;
@@ -420,7 +463,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                   setBattleQueue([
                     {
                       message: "戦闘前にアイテムは使えない！",
-                      action: () => {},
+                      action: () => { },
                     },
                   ]);
                 }}
@@ -446,7 +489,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                         setBattleQueue([
                           {
                             message: "アイテムがありません。",
-                            action: () => {},
+                            action: () => { },
                           },
                         ]);
                         return;
@@ -461,7 +504,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                         setBattleQueue([
                           {
                             message: "武器がありません。",
-                            action: () => {},
+                            action: () => { },
                           },
                         ]);
                         return;
@@ -515,7 +558,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                     setBattleQueue([
                       {
                         message: "アイテムは1ターンに1回しか使えない！",
-                        action: () => {},
+                        action: () => { },
                       },
                     ]);
                     return;
@@ -588,7 +631,6 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
           title={`本当に逃げますか？`}
         />
       )}
-
       {reward && startDate && (
         <div className="fixed top-0 w-screen h-screen z-10 bg-black/70">
           <RewardModal
@@ -603,6 +645,11 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
             }
             clearTime={reward.clearTime}
           />
+        </div>
+      )}
+      {["heal", "buff", "debuff"].includes(effectMode) && (
+        <div className="fixed top-0  w-screen h-screen -z-10">
+          <UseItemEffect effectMode={effectMode} />
         </div>
       )}
     </div>

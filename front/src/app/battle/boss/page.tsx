@@ -6,6 +6,7 @@ import { useGlobalContext } from "@/hooks/use-global-context";
 import { ElementType } from "@/types/element-type";
 import { PhysicsType } from "@/types/physics-type";
 import { BossBattle } from "@/utils/boss-battle";
+import { playSound } from "@/utils/play-sound/play-sound";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -49,26 +50,34 @@ export default function Page() {
         const logs: BattleLog[] = [
           {
             message: `${monster.name}の姿が変わっていく！`,
-            action: () =>
+            action: () => {
               setMonster({ ...monster, imageUrl: bossImageMap[elementType] }),
+                playSound("/sounds/debuff.mp3");
+            }
           },
           {
             message: `${monster.name}の${ITEM_TARGET_LABEL_MAP[physicsType]}耐性が下がった！`,
-            action: () => {},
+            action: () => { playSound("/sounds/debuff.mp3"); },
           },
           {
             message: `${monster.name}の${ITEM_TARGET_LABEL_MAP[elementType]}耐性が下がった！`,
-            action: () => {},
+            action: () => { },
           },
           {
             message: `${monster.name}の\n攻撃！`,
-            action: () => {},
+            action: () => {
+              if (takeDamageData.damage === 0) {
+                playSound("/sounds/prevent.mp3")
+              } else {
+                playSound("/sounds/monster-attack.mp3")
+              };
+            },
           },
         ];
         if (takeDamageData.damage === 0) {
           logs.push({
             message: `${monster.name}はダメージを与えられなかった！`,
-            action: () => {},
+            action: () => { },
           });
         } else {
           logs.push({
@@ -79,6 +88,7 @@ export default function Page() {
                   status: "command",
                   action: null,
                 });
+                playSound("/sounds/monster-down.mp3");
               }
               setUser({ ...user, hitPoint: takeDamageData.userHitPoint });
             },
