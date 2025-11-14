@@ -68,6 +68,8 @@ export function WeaponCard({ weapon }: Props) {
             <span className="pr-12">{weapon.name}</span>
             <span className="pr-12">{weapon.name}</span>
             <span className="pr-12">{weapon.name}</span>
+            <span className="pr-12">{weapon.name}</span>
+            <span className="pr-12">{weapon.name}</span>
           </motion.div>
         </div>
         {[
