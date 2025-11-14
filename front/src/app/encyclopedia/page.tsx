@@ -55,7 +55,7 @@ export default function () {
   return (
     <>
       <BgCamera />
-      <div className="h-screen w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
+      <div className="h-[100dvh] w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
         <div className="h-full w-full flex flex-col items-center justify-end">
           <h1 className="text-xl text-white">図鑑</h1>
           <Image
@@ -243,7 +243,7 @@ export default function () {
                     </div>
                   ))}
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-[10%]">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-[9%]">
                 <Pagination
                   page={currentPage}
                   total={totalPage}
@@ -257,7 +257,7 @@ export default function () {
               </div>
               <Link
                 href="/camera"
-                className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[30%]"
+                className="absolute left-1/2 -translate-x-1/2 -bottom-[3%] w-[30%]"
               >
                 <Image
                   className="w-full h-auto"
