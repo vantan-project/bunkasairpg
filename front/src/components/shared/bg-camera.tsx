@@ -8,6 +8,7 @@ export function BgCamera() {
   const { ref } = useZxing({
     onDecodeResult(result) {
       if (pathname === "/camera") return;
+      console.log("camera")
       const text = result.getText();
 
       const url = new URL(text, window.location.origin);

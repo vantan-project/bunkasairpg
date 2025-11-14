@@ -14,7 +14,7 @@ export default function Page() {
 
     authUserLogin({ id: userId })
       .then((res) => {
-        Cookies.set("authToken", res.authToken);
+        Cookies.set("authToken", res.authToken, { expires: 7, path: "/" });
         window.location.href = "/";
       })
       .catch(() => {
