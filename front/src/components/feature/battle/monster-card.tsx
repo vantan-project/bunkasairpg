@@ -29,7 +29,7 @@ export function MonsterCard({ monster, setMonster }: Props) {
             />
           </div>
         </div>
-        <div>
+        <div className="flex flex-col gap-4">
           <div className="h-full flex flex-col justify-between overflow-hidden">
             <div className="w-full overflow-hidden">
               <motion.div
@@ -129,27 +129,27 @@ export function MonsterCard({ monster, setMonster }: Props) {
                 <p className="h-full flex items-center justify-end text-base w-10">{value}</p>
               </div>
             ))}
-            <div className="flex justify-between px-5 mt-5">
-              <div
-                className="relative w-30 h-12 flex justify-center items-center"
-                onClick={() => {setMonster(null) }}>
-                <Image
-                  src={"/profile-btn.png"}
-                  fill
-                  alt="戻る"
-                />
-                <div className="relative text-black text-sm font-bold">戻る</div>
-              </div>
-              <div
-                className="relative w-30 h-12 flex justify-center items-center"
-                onClick={() => { router.push(`/battle/${monster.id}`) }}>
-                <Image
-                  src={"/profile-btn.png"}
-                  fill
-                  alt="挑戦する"
-                />
-                <div className="relative text-black text-sm font-bold">挑戦する</div>
-              </div>
+          </div>
+          <div className="flex gap-5">
+            <div
+              className="relative w-30 h-12 flex justify-center items-center"
+              onClick={() => { setMonster(null) }}>
+              <Image
+                src={"/profile-btn.png"}
+                fill
+                alt="戻る"
+              />
+              <div className="relative text-black text-sm font-bold">戻る</div>
+            </div>
+            <div
+              className="relative w-30 h-12 flex justify-center items-center"
+              onClick={() => { router.push(`/battle/${monster.id}`) }}>
+              <Image
+                src={"/profile-btn.png"}
+                fill
+                alt="挑戦する"
+              />
+              <div className="relative text-black text-sm font-bold">挑戦する</div>
             </div>
           </div>
         </div>
