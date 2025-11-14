@@ -19,7 +19,7 @@ import { BgCamera } from "@/components/shared/bg-camera";
 import { playSound } from "@/utils/play-sound/play-sound";
 
 export default function Page() {
-  const { user, setUser } = useGlobalContext();
+  const { user, setUser, items, weapons } = useGlobalContext();
   const [name, setName] = useState(user.name);
   const [nameOpen, setNameOpen] = useState(false);
   const [qrModalOpen, setQrModalOpen] = useState(false);
@@ -187,7 +187,7 @@ export default function Page() {
       <Footer />
       {qrModalOpen && <QrModal setOpen={setQrModalOpen} userId={user.id} />}
       {weaponDrawerOpen && (
-        <ProfileConsole setClose={setWeaponDrawerOpen}>
+        <ProfileConsole setClose={setWeaponDrawerOpen} weapons={weapons}>
           <WeaponDrawer
             onClose={() => {
               setWeaponDrawerOpen(false);
@@ -199,7 +199,7 @@ export default function Page() {
         </ProfileConsole>
       )}
       {itemDrawerOpen && (
-        <ProfileConsole setClose={setItemDrawerOpen}>
+        <ProfileConsole setClose={setItemDrawerOpen} items={items}>
           <ItemDrawer
             onClose={() => setItemDrawerOpen(false)}
             useItem={() => {
