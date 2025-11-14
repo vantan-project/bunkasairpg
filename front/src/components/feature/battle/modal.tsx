@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type Props = {
   onClose: () => void;
   onConfirm: () => void;
@@ -11,20 +13,28 @@ export function Modal({ onClose, onConfirm, title }: Props) {
       onClick={onClose}
     >
       <div
-        className="bg-white p-8 rounded shadow-lg text-center"
+        className="flex flex-col justify-center items-center h-64 gap-8 p-10 rounded shadow-lg text-center bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${"/bg-reward.png"})` }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 text-black whitespace-pre-wrap">{title}</div>
+        <div className="mb-4 text-black whitespace-pre-wrap text-xl">{title}</div>
         <div className="flex gap-8 justify-center">
-          <button
-            className="bg-blue-600 text-white px-5 py-2 rounded"
+          <Image
+            className="w-[130px] h-auto rounded"
+            src={"/btn-yes.png"}
+            alt="はい"
+            width={400}
+            height={400}
             onClick={onConfirm}
-          >
-            はい
-          </button>
-          <button className="bg-gray-300 px-5 py-2 rounded" onClick={onClose}>
-            いいえ
-          </button>
+          />
+          <Image
+            className="w-[130px] h-auto rounded"
+            src={"/btn-no.png"}
+            alt="いいえ"
+            width={400}
+            height={400}
+            onClick={onClose}
+          />
         </div>
       </div>
     </div>

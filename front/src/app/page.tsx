@@ -16,12 +16,17 @@ export default function () {
   return (
     <>
       <div
-        className="overflow-hidden"
+        className="overflow-hidden flex justify-center"
         onClick={() => {
           location.href = "/camera";
         }}
       >
         <Image src="/start-page.png" alt="start-page" fill unoptimized />
+        {!isNotLoggedIn && (
+          <div className="absolute bottom-40 text-xl text-white font-bold leading-10 tracking-[3.04px] [text-shadow:_2px_2px_0_#333,_-2px_-2px_0_#333,_2px_-2px_0_#333,_-2px_2px_0_#333]">
+            タップして始める
+          </div>
+        )}
       </div>
       {isNotLoggedIn ? (
         <div className="fixed w-full h-full flex items-center justify-center bg-black/70">

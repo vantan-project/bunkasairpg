@@ -28,7 +28,7 @@ class MeController extends Controller
 {
   const HTTP_UNAUTHORIZED = 401;
   const HTTP_SERVER_ERROR = 500;
-  private const CATALOG_PER_PAGE = 20;
+  private const CATALOG_PER_PAGE = 24;
 
   private function getAuthenticatedUser(): User
   {

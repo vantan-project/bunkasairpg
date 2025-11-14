@@ -77,23 +77,24 @@ export function RewardModal({
 
           <div className="pt-[5vh]">{drop}</div>
         </div>
-        <button
-          className="absolute -bottom-[8vh] left-1/2 -translate-x-1/2"
-          onClick={() =>
-            pathname === "/battle/boss"
-              ? (location.href = "/camera")
-              : router.push("/camera")
-          }
-        >
-          <Image
-            className="w-[130px] h-auto"
-            src={"/back-button.png"}
-            alt="戻る"
-            width={1000}
-            height={1000}
-          />
-        </button>
       </div>
+
+      <button
+        className="fixed bottom-4 left-1/2 -translate-x-1/2"
+        onClick={() =>
+          pathname === "/battle/boss"
+            ? (location.href = "/camera")
+            : router.push("/camera")
+        }
+      >
+        <Image
+          className="w-[130px] h-auto"
+          src={"/back-button.png"}
+          alt="戻る"
+          width={1000}
+          height={1000}
+        />
+      </button>
     </div>
   );
 }

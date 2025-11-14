@@ -108,7 +108,7 @@ export function ItemDrawer({ onClose, useItem, invalid=false }: Props) {
             useItem(selectedItem);
             setSelectedItem(null);
           }}
-          title={`本当に「${selectedItem.name}」に\n変更しますか？`}
+          title={`本当に「${selectedItem.name}」を\n使用しますか？`}
         />
       )}
     </div>

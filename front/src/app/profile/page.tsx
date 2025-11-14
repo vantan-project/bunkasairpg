@@ -16,6 +16,7 @@ import { ProfileConsole } from "@/components/feature/profile/profile-console";
 import { UserStatus } from "@/components/shared/user-status";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
 import { BgCamera } from "@/components/shared/bg-camera";
+import { playSound } from "@/utils/play-sound/play-sound";
 
 export default function Page() {
   const { user, setUser } = useGlobalContext();
@@ -49,6 +50,7 @@ export default function Page() {
     meUpdate({ weaponId: weapon.id }).then(() => {
       setUser({ ...user, weapon });
     });
+    playSound("/sounds/weapon-change.mp3");
     setWeaponDrawerOpen(false);
   };
 
