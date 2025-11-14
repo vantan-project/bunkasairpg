@@ -5,7 +5,6 @@ import clsx from "clsx";
 import { boss } from "@/const/boss";
 import { assetBgColor } from "@/utils/asset-bg-color";
 import { useRouter } from "next/navigation";
-import { set } from "react-hook-form";
 
 type Props = {
   monster: MonsterShowResponse;
