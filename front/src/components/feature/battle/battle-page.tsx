@@ -253,7 +253,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
       logs.push({
         message: `${monster.name}の${
           ITEM_TARGET_LABEL_MAP[item.target]
-        }耐性が$${Math.floor(item.rate * 100)}低下した！`,
+        }耐性が${Math.floor(item.rate * 100)}%低下した！`,
         action: () => {},
       });
     }
