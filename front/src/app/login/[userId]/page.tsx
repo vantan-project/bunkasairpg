@@ -4,6 +4,7 @@ import { authUserLogin } from "@/api/auth-user-login";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { LoadingScreen } from "@/components/shared/loading-screen";
 
 export default function Page() {
   const { userId } = useParams();
@@ -21,9 +22,5 @@ export default function Page() {
       });
   }, [userId]);
 
-  return (
-    <div className="h-screen flex justify-center items-center text-4xl">
-      Loading...
-    </div>
-  );
+  return <LoadingScreen />;
 }
