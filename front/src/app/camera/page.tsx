@@ -3,14 +3,34 @@
 import { UserStatus } from "@/components/shared/user-status";
 import { useGlobalContext } from "@/hooks/use-global-context";
 import { Footer } from "@/components/shared/footer";
-import { BgCamera } from "@/components/shared/bg-camera";
+import { useZxing } from "react-zxing";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const { user } = useGlobalContext();
+  const { ref } = useZxing({
+    onDecodeResult(result) {
+      const text = result.getText();
+      const url = new URL(text, window.location.origin);
+      const currentOrigin = window.location.origin;
+      if (url.origin === currentOrigin && url.pathname.startsWith("/battle")) {
+        router.push(url.pathname + url.search + url.hash);
+      }
+    },
+  });
 
   return (
     <div>
-      <BgCamera />
+      <div className="fixed inset-0 -z-10">
+        <video
+          ref={ref}
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          playsInline
+        />
+      </div>
 
       <div className="fixed top-0 w-full p-2">
         <UserStatus
