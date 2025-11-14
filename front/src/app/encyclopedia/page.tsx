@@ -6,6 +6,7 @@ import { meWeaponIndex, MeWeaponIndexResponse } from "@/api/me-weapon-index";
 import { monsterShow, MonsterShowResponse } from "@/api/monster-show";
 import { ItemCard } from "@/components/feature/battle/item-card";
 import { WeaponCard } from "@/components/feature/battle/weapon-card";
+import { MonsterCard } from "@/components/feature/battle/monster-card";
 import { AssetTypeIcon } from "@/components/shared/asset-type-icon";
 import { BgCamera } from "@/components/shared/bg-camera";
 import { QuestionIcon } from "@/components/shared/icons/question-icon";
@@ -72,7 +73,7 @@ export default function () {
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => setCategory("weapon")}
+                onClick={() => {setCategory("weapon"), setCurrentPage(1)}}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">武器</div>
@@ -102,7 +103,7 @@ export default function () {
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => setCategory("item")}
+                onClick={() => {setCategory("item"), setCurrentPage(1)}}
               >
                 Ï
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
@@ -114,14 +115,14 @@ export default function () {
             <div className="w-[80%] mt-10 grid grid-cols-3 items-end">
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => setCategory("monster")}
+                onClick={() => {setCategory("monster"), setCurrentPage(1)}}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">モンスター</div>
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => setCategory("weapon")}
+                onClick={() => {setCategory("weapon"), setCurrentPage(1)}}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">武器</div>
@@ -167,7 +168,9 @@ export default function () {
                           <QuestionIcon className="text-white w-16 h-16" />
                         </div>
                       )}
+                      
                     </div>
+                    
                   ))}
                 {category === "weapon" &&
                   weaponIndex.length > 0 &&
@@ -272,7 +275,11 @@ export default function () {
 
       {monster && (
         <Modal onClose={() => setMonster(null)}>
-          <div>{monster.name}</div>
+          <div className="w-screen px-2 text-white">
+            <div className="w-full bg-black/70 p-10 rounded-2xl">
+              <MonsterCard monster={monster} />
+            </div>
+          </div>
         </Modal>
       )}
 
