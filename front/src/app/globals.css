@@ -99,3 +99,12 @@ html.admin::before {
     opacity: 1
   }
 }
+:root {
+  --vh: 100%;
+}
+
+@supports (-webkit-touch-callout: none) {
+  :root {
+    --vh: 1vh;
+  }
+}
