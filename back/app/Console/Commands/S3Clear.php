@@ -225,7 +225,7 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/NXsRbJ02o7fUb7WC4XgpXM4gEay5AVeR4iuVEPq9.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/W6g0LoL2kLlivYSbuY8yAMIYs80kn23BROHD096s.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/BDogYbiBb5N0QnI7XuJDgzgIwUINHkRVyEpNCd66.png",
-      
+
       // ゴーレム（モンスター）
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/gZyIDNtTzMhYPZudhj8Ls2BZK3ADLdkcfxSB1whJ.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/1cxHOTXZ98ra7DIn5bGw55V0QmRNhbwwHfME8ALa.png",
@@ -307,6 +307,13 @@ class S3Clear extends Command
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/ik7QORbxSC9P2V6i0hxRfP7spKuwuE8i7hHXNhdV.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/r5YtEHHDY8fKzyy9FvW7KI5xxxIBGhhfh6QEyZdE.png",
       "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/DEQ9igXTJoGPGVTY58yx6lQhWwAOUe9Tf0jpEOJa.png",
+      // レックス
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/ZYZdsU9KaficMg5zhbO0TAFQsWlYODKI5zsJngtD.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/2Q67pFuFudSHxurHoGasVVjcuJQaT5D6hW6cyb55.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/QVmUKDKAAqILGcITlL2YGFgbjLo4iKpSzh0L9U12.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/j8BvkAm4BI81mQXaV3e5tVao6DRhXyYVdcvNKRQD.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/kdOuKSeDqelIeKz4aDyujYsaE95sd6e1lfR73C3r.png",
+      "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/monster_images/7CSKQxo0R0xqEQkWlkb2LoYmZnYD0xRZGyoQ38Ap.png",
     ];
 
     $targets = [
