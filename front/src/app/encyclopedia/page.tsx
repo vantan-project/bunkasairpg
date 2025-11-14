@@ -243,7 +243,7 @@ export default function () {
                     </div>
                   ))}
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-[10%]">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-[9%]">
                 <Pagination
                   page={currentPage}
                   total={totalPage}
@@ -257,7 +257,7 @@ export default function () {
               </div>
               <Link
                 href="/camera"
-                className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[30%]"
+                className="absolute left-1/2 -translate-x-1/2 -bottom-[3%] w-[30%]"
               >
                 <Image
                   className="w-full h-auto"
