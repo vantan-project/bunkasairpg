@@ -130,7 +130,7 @@ export function MonsterCard({ monster, setMonster }: Props) {
               </div>
             ))}
           </div>
-          <div className="flex gap-5">
+          <div className="flex gap-5 justify-center">
             <div
               className="relative w-30 h-12 flex justify-center items-center"
               onClick={() => { setMonster(null) }}>

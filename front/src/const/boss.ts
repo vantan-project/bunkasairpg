@@ -1,24 +1,5 @@
-export type Boss = {
-    id: string;
-    name: string;
-    imageUrl: string;
-    attack: number;
-    maxHitPoint: number;
-    hitPoint: number;
-    experiencePoint: number;
-    slash: number;
-    blow: number;
-    shoot: number;
-    neutral: number;
-    flame: number;
-    water: number;
-    wood: number;
-    shine: number;
-    dark: number;
-    weapon: null;
-    item: null;
-}
-export const boss: Boss =
+
+export const boss =
 {
     id: "990",
     name: "ラストモンスター",

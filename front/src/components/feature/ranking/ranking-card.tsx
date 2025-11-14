@@ -61,7 +61,7 @@ export function RankingCard({ rank, name, mode, value, imageUrl }: Props) {
       <div className="relative aspect-square w-auto h-full bg-gray-300 border border-white">
         {imageUrl ? (
           <Image
-            className="object-cover w-full h-auto"
+            className="object-cover w-full h-full"
             src={imageUrl}
             alt="user"
             width={150}
