@@ -19,7 +19,7 @@ export function MonsterCard({ monster, setMonster }: Props) {
     <div>
       <div className="flex flex-col gap-6">
         <div className="p-2 bg-neutral w-fit mx-auto rounded-2xl">
-          <div className="relative h-44 w-44 mx-auto bg-gray-300 rounded-xl aspect-square">
+          <div className="relative h-44 w-44 mx-auto bg-gray-300 rounded-xl aspect-square overflow-hidden">
             <Image
               className="object-cover w-full h-auto"
               src={monster.imageUrl}
