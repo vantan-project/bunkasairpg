@@ -1,7 +1,7 @@
 import { PhysicsType } from "@/types/physics-type";
 import { Battle, User } from "./battle";
 import { ElementType } from "@/types/element-type";
-import { Boss, boss } from "@/const/boss";
+import { boss } from "@/const/boss";
 
 export class BossBattle extends Battle {
   constructor(user: User) {
