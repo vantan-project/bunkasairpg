@@ -55,7 +55,7 @@ export default function () {
   return (
     <>
       <BgCamera />
-      <div className="h-screen w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
+      <div className="h-[100dvh] w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
         <div className="h-full w-full flex flex-col items-center justify-end">
           <h1 className="text-xl text-white">図鑑</h1>
           <Image

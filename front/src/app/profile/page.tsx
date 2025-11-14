@@ -55,7 +55,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen bg-cover bg-center bg-no-repeat text-xl">
+    <div className="flex justify-center items-center h-[100dvh] w-screen bg-cover bg-center bg-no-repeat text-xl">
       <BgCamera />
       <div className="fixed top-0 w-full p-2 z-30">
         <UserStatus
