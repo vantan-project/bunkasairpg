@@ -43,11 +43,11 @@ class MonsterController extends Controller
       ];
       $sortColumn = $sortOptions[$validated['sort']];
       $sortDirection = $validated['desc'] ? 'desc' : 'asc';
-      $query->orderBy($sortColumn, $sortDirection);
+      $query->orderBy("index_number", $sortDirection);
 
       // ページネーション（40件/ページ）
       $currentPage = $validated['currentPage'] ?? 1;
-      $monsters = $query->paginate(40, ['*'], 'page', $currentPage);
+      $monsters = $query->paginate(36, ['*'], 'page', $currentPage);
 
       $formattedMonsters = $monsters->map(function ($monster) {
         return [
@@ -219,7 +219,7 @@ class MonsterController extends Controller
   public function ids()
   {
     return response()->json([
-      'ids' => Monster::pluck('id')->toArray()
+      'ids' => Monster::orderBy('index_number')->pluck('id')->toArray()
     ]);
   }
 }
