@@ -277,7 +277,7 @@ export default function () {
         <Modal onClose={() => setMonster(null)}>
           <div className="w-screen px-2 text-white">
             <div className="w-full bg-black/70 p-10 rounded-2xl">
-              <MonsterCard monster={monster} />
+              <MonsterCard monster={monster} setMonster={setMonster} />
             </div>
           </div>
         </Modal>
