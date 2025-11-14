@@ -35,18 +35,18 @@ class RpgClear extends Command
     ];
 
     foreach ($models as $table => $model) {
-      if ($table === 'monsters') {
-        // 特定IDを除いて削除
-        $excludeId = 'd016cbed-1e63-47ef-ae97-a7cbfba0e085';
-        $count = $model::where('id', '!=', $excludeId)->count();
-        $model::where('id', '!=', $excludeId)->delete();
-        $this->info("{$table} テーブルの {$count} 件を削除しました。（{$excludeId} は残しました）");
-      } else {
-        // deleteで全削除
-        $count = $model::count();
-        $model::query()->delete();
-        $this->info("{$table} テーブルの {$count} 件を削除しました。");
-      }
+      // if ($table === 'monsters') {
+      //   // 特定IDを除いて削除
+      //   $excludeId = 'd016cbed-1e63-47ef-ae97-a7cbfba0e085';
+      //   $count = $model::where('id', '!=', $excludeId)->count();
+      //   $model::where('id', '!=', $excludeId)->delete();
+      //   $this->info("{$table} テーブルの {$count} 件を削除しました。（{$excludeId} は残しました）");
+      // } else {
+      // deleteで全削除
+      $count = $model::count();
+      $model::query()->delete();
+      $this->info("{$table} テーブルの {$count} 件を削除しました。");
+      // }
     }
 
     $this->info('items, monsters, weapons のデータをクリアしました。');

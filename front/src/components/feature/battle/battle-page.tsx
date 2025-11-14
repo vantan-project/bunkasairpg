@@ -309,10 +309,10 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
       {/* モンスター画面 */}
       <BgCamera />
       <div
-        className={`h-[calc(100vh_-_320px)] pt-18 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
+        className={`h-[calc(100vh_-_320px)] pt-6 flex flex-col items-center justify-center transition-opacity duration-[2000ms]`}
         style={{ opacity: monster.hitPoint > 0 ? 1 : 0 }}
       >
-        <div className="relative flex justify-center items-center w-[24vh] h-auto aspect-square mb-2">
+        <div className="relative w-[24vh] h-auto aspect-square">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
           {["attack", "monsterHeal", "monsterGuard"].includes(effectMode) && (
             <AttackEffect elementType={user.weapon.elementType} physicsType={user.weapon.physicsType} effectMode={effectMode}/>
