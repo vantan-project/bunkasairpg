@@ -30,7 +30,7 @@ class ProdMonsterSeeder extends Seeder
           "index_number" => "000",
           "effect_type" => "heal",
           "heal" => [
-            "amount" => 35
+            "amount" => 40
           ],
         ],
         [
@@ -40,7 +40,7 @@ class ProdMonsterSeeder extends Seeder
           "index_number" => "001",
           "effect_type" => "heal",
           "heal" => [
-            "amount" => 75
+            "amount" => 80
           ],
         ],
         [
@@ -50,17 +50,17 @@ class ProdMonsterSeeder extends Seeder
           "index_number" => "002",
           "effect_type" => "heal",
           "heal" => [
-            "amount" => 125
+            "amount" => 160
           ],
         ],
         [
           "id" => 4,
           "name" => "極やくそう",
-          "image_url" => "",
+          "image_url" => "https://s3-bunkasairpg.s3.ap-northeast-1.amazonaws.com/item_images/wv8IeFL5cInbikybr1pD3YUFWrimaGQ0ZO0KlFMs.png",
           "index_number" => "003",
           "effect_type" => "heal",
           "heal" => [
-            "amount" => 250
+            "amount" => 320
           ],
         ],
         [
