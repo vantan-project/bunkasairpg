@@ -258,10 +258,19 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
                 user.maxHitPoint - user.hitPoint
               ),
             });
+            changeUseItemEffect({
+              setChangeEffect: setEffectMode,
+              effectType: item.effectType,
+              healedAmount: Math.min(
+                item.amount,
+                user.maxHitPoint - user.hitPoint
+              ),
+            })
           } else {
             useItemSound({ effectType: item.effectType })
+            changeUseItemEffect({ setChangeEffect: setEffectMode, effectType: item.effectType })
           };
-          changeUseItemEffect({setChangeEffect: setEffectMode, effectType: item.effectType})
+
         }
       },
     ];
@@ -315,7 +324,7 @@ export function BattlePage({ battle, monsterAttackLogs }: Props) {
         <div className="relative w-[24vh] h-auto aspect-square">
           <Image src={monster.imageUrl} alt="モンスター画像" fill priority />
           {["attack", "monsterHeal", "monsterGuard"].includes(effectMode) && (
-            <AttackEffect elementType={user.weapon.elementType} physicsType={user.weapon.physicsType} effectMode={effectMode}/>
+            <AttackEffect elementType={user.weapon.elementType} physicsType={user.weapon.physicsType} effectMode={effectMode} />
           )}
         </div>
         <div className="w-[70%] bg-white/60 p-3">

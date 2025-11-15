@@ -55,7 +55,7 @@ export default function () {
   return (
     <>
       <BgCamera />
-      <div className="h-screen w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
+      <div className="h-[100dvh] w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center font-dotgothic">
         <div className="h-full w-full flex flex-col items-center justify-end">
           <h1 className="text-xl text-white">図鑑</h1>
           <Image
@@ -73,7 +73,7 @@ export default function () {
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => {setCategory("weapon"), setCurrentPage(1)}}
+                onClick={() => { setCategory("weapon"), setCurrentPage(1) }}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">武器</div>
@@ -103,7 +103,7 @@ export default function () {
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => {setCategory("item"), setCurrentPage(1)}}
+                onClick={() => { setCategory("item"), setCurrentPage(1) }}
               >
                 Ï
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
@@ -115,14 +115,14 @@ export default function () {
             <div className="w-[80%] mt-10 grid grid-cols-3 items-end">
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => {setCategory("monster"), setCurrentPage(1)}}
+                onClick={() => { setCategory("monster"), setCurrentPage(1) }}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">モンスター</div>
               </div>
               <div
                 className="relative h-12 flex justify-center items-center"
-                onClick={() => {setCategory("weapon"), setCurrentPage(1)}}
+                onClick={() => { setCategory("weapon"), setCurrentPage(1) }}
               >
                 <Image fill src="/ranking-btn.png" alt="ボタン画像" />
                 <div className="absolute">武器</div>
@@ -139,7 +139,7 @@ export default function () {
             style={{ backgroundImage: `url(${"/bg-reward.png"})` }}
           >
             <div className="relative h-[93%] w-full p-6">
-              <div className="overflow-y-scroll w-full [&::-webkit-scrollbar]:hidden grid grid-cols-3 gap-2 pt-2 h-fit max-h-full pb-12">
+              <div className="overflow-y-scroll w-full [&::-webkit-scrollbar]:hidden grid grid-cols-3 gap-2 pt-2 h-fit max-h-[85%] pb-12">
                 {category === "monster" &&
                   monsterIndex.length > 0 &&
                   monsterIndex.map((m, index) => (
@@ -168,9 +168,9 @@ export default function () {
                           <QuestionIcon className="text-white w-16 h-16" />
                         </div>
                       )}
-                      
+
                     </div>
-                    
+
                   ))}
                 {category === "weapon" &&
                   weaponIndex.length > 0 &&
@@ -243,7 +243,7 @@ export default function () {
                     </div>
                   ))}
               </div>
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-8">
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-[9%]">
                 <Pagination
                   page={currentPage}
                   total={totalPage}
@@ -255,24 +255,22 @@ export default function () {
                   onChange={(p) => setCurrentPage(p)}
                 />
               </div>
+              <Link
+                href="/camera"
+                className="absolute left-1/2 -translate-x-1/2 -bottom-[3%] w-[30%]"
+              >
+                <Image
+                  className="w-full h-auto"
+                  width={100}
+                  height={100}
+                  src="/back-button.png"
+                  alt="戻るボタン"
+                />
+              </Link>
             </div>
           </div>
         </div>
       </div>
-
-      <Link
-        href="/camera"
-        className="absolute left-1/2 -translate-x-1/2 bottom-[2%] w-[30%]"
-      >
-        <Image
-          className="w-full h-auto"
-          width={100}
-          height={100}
-          src="/back-button.png"
-          alt="戻るボタン"
-        />
-      </Link>
-
       {monster && (
         <Modal onClose={() => setMonster(null)}>
           <div className="w-screen px-2 text-white">
