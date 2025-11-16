@@ -50,6 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::post('/me/clear-boss', [MeController::class, 'clearBoss']);
 
   Route::get('/monster/{monster}', [MonsterController::class, 'show']);
-  Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
-  Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
+  // Route::get('/user/clear-ranking', [UserController::class, 'clearRanking']);
+  // Route::get('/user/collected-ranking', [UserController::class, 'collectedRanking']);
 });
