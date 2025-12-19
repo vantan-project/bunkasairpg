@@ -15,7 +15,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "js-cookie": "^3.0.5",
-    "next": "15.3.5",
+    "next": "15.3.8",
     "pdfmake": "^0.2.20",
     "qr-code-styling": "^1.9.2",
     "qrcode.react": "^4.2.0",
